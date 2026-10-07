@@ -470,7 +470,6 @@ type ProductCopyProps = {
   tags: string[];
   primaryHref: string;
   primaryLabel: string;
-  sourceHref: string;
 };
 
 function ProductCopy({
@@ -482,7 +481,6 @@ function ProductCopy({
   tags,
   primaryHref,
   primaryLabel,
-  sourceHref,
 }: ProductCopyProps) {
   return (
     <motion.div
@@ -507,10 +505,6 @@ function ProductCopy({
       <div className="product-links">
         <a href={primaryHref} target="_blank" rel="noreferrer">
           {primaryLabel}
-          <ArrowUpRight />
-        </a>
-        <a className="source-link" href={sourceHref} target="_blank" rel="noreferrer">
-          Source
           <ArrowUpRight />
         </a>
       </div>
@@ -546,7 +540,6 @@ function Products() {
             tags={["React", "TypeScript", "Hono", "Supabase", "Applied AI"]}
             primaryHref="https://career.enludus.com"
             primaryLabel="Open Career"
-            sourceHref="https://github.com/naki0227/job-match-analysis"
           />
           <motion.div
             className="product-visual career-visual"
@@ -578,9 +571,8 @@ function Products() {
             headline="Turn effort into something you can see."
             body="StudyReel records the act of studying — not just a number on a timer — and makes progress visible through sessions, statistics, goals, and interactive widgets."
             tags={["Swift", "SwiftUI", "SwiftData", "WidgetKit"]}
-            primaryHref="https://github.com/naki0227/StudyReel"
-            primaryLabel="View project"
-            sourceHref="https://github.com/naki0227/StudyReel"
+            primaryHref="https://apps.apple.com/jp/app/studyreel/id6756177589"
+            primaryLabel="View on App Store"
           />
         </div>
       </article>
@@ -594,9 +586,8 @@ function Products() {
             headline="Choose how to move before opening directions."
             body="UsefulMap compares travel modes and breaks a trip into understandable segments, while handing detailed public-transit directions off to Google Maps when you need them."
             tags={["Swift", "SwiftUI", "MapKit", "Core Location"]}
-            primaryHref="https://github.com/naki0227/useful-map"
-            primaryLabel="View project"
-            sourceHref="https://github.com/naki0227/useful-map"
+            primaryHref="https://apps.apple.com/jp/app/useful-map-%E7%B5%8C%E8%B7%AF%E6%AF%94%E8%BC%83/id6801771854"
+            primaryLabel="View on App Store"
           />
           <motion.div
             className="product-visual map-visual"
