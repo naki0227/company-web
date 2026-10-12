@@ -10,8 +10,8 @@
 <p>このページでは、Enludusが提供するiOSアプリ「StudyReel」（以下「本アプリ」）での情報の取り扱いを説明します。本アプリは、利用者の情報を開発者のサーバーへ送信しません。アカウント登録もありません。</p>
 
 <h2>カメラと動画</h2>
-<p>タイムラプスを記録するとき、端末の前面カメラを使います。撮影中は一定間隔で静止画を取り込み、セッション終了時に端末内でタイムラプス動画に変換します。音声は録音しません。</p>
-<p>できあがった動画は、端末の「写真」ライブラリに自動で保存されます。動画の作成に使った一時ファイルは端末内にだけ置かれ、外部には送信されません。タイムラプスをオフにすると、カメラは使いません。</p>
+<p>録画するとき、端末の前面カメラを使います。タイムラプスでは一定間隔で1コマずつ、全部録画ではすべてのコマを端末内で動画にします。録画後、確認画面を経て、時刻の文字やモザイクを重ねた動画を書き出します。音声は録音しません。</p>
+<p>できあがった動画は、端末の「写真」ライブラリに自動で保存されます。動画の作成に使った一時ファイルは端末内にだけ置かれ、外部には送信されません。「録画なし」を選ぶと、何も記録しません。</p>
 
 <h2>顔の検出とモザイク</h2>
 <p>顔にモザイクやスタンプをかけるために、Appleが端末に標準で用意している画像解析（Vision）で、映像のどこに顔や上半身が映っているかを検出します。検出は端末の中だけで行い、使うのは顔のおおよその位置（四角い範囲）だけです。顔の特徴を使った本人の識別はしません。</p>
@@ -39,7 +39,7 @@
 <h2 id="en" lang="en">English</h2>
 <div lang="en">
 <p>StudyReel does not send any of your data to the developer's servers, and it does not require an account.</p>
-<p><strong>Camera and video.</strong> When time-lapse recording is on, the app uses the front camera, captures still frames at regular intervals, and builds a time-lapse video on your device when the session ends. No audio is recorded. The finished video is saved automatically to your Photos library. Temporary files stay on your device. With time-lapse off, the camera is not used.</p>
+<p><strong>Camera and video.</strong> When recording is on, the app uses the front camera and builds the video on your device: one frame at regular intervals for time-lapse, or every frame for full recording. After a review screen, the app exports the video with the time overlay and any mosaic. No audio is recorded. The finished video is saved automatically to your Photos library. Temporary files stay on your device. With recording off, nothing is recorded.</p>
 <p><strong>Face detection.</strong> To apply a mosaic or sticker over your face, the app uses Apple's on-device Vision framework to find where a face or upper body appears in the frame. Only the approximate position (a rectangle) is used; faces are never used to identify anyone. Positions are used only for the review screen and the export, discarded afterwards, and never sent anywhere.</p>
 <p><strong>Study records.</strong> Study time, subjects, tags, and daily goals are stored only on your device. An App Group on the device is used to share timer state with the Home Screen widget. Deleting the app removes these records. Videos saved to Photos remain until you delete them there.</p>
 <p><strong>Notifications.</strong> If you turn on the study reminder, the app schedules a local notification based on your past study times. Everything is calculated on your device.</p>
