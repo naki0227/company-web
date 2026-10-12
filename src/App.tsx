@@ -470,6 +470,7 @@ type ProductCopyProps = {
   tags: string[];
   primaryHref: string;
   primaryLabel: string;
+  detailPath: string;
 };
 
 function ProductCopy({
@@ -481,6 +482,7 @@ function ProductCopy({
   tags,
   primaryHref,
   primaryLabel,
+  detailPath,
 }: ProductCopyProps) {
   return (
     <motion.div
@@ -503,6 +505,10 @@ function ProductCopy({
         ))}
       </div>
       <div className="product-links">
+        <a href={detailPath} className="source-link">
+          使い方・詳しい紹介を見る
+          <ArrowUpRight />
+        </a>
         <a href={primaryHref} target="_blank" rel="noreferrer">
           {primaryLabel}
           <ArrowUpRight />
@@ -523,7 +529,7 @@ function Products() {
           viewport={{ once: true, amount: 0.5 }}
           transition={{ duration: 0.8, ease }}
         >
-          Three focused products.
+          Five focused products.
           <br />
           One way of building.
         </motion.h2>
@@ -540,6 +546,7 @@ function Products() {
             tags={["React", "TypeScript", "Hono", "Supabase", "Applied AI"]}
             primaryHref="https://career.enludus.com"
             primaryLabel="Open Career"
+            detailPath="/products/career"
           />
           <motion.div
             className="product-visual career-visual"
@@ -573,6 +580,7 @@ function Products() {
             tags={["Swift", "SwiftUI", "SwiftData", "WidgetKit"]}
             primaryHref="https://apps.apple.com/jp/app/studyreel/id6756177589"
             primaryLabel="View on App Store"
+            detailPath="/products/studyreel"
           />
         </div>
       </article>
@@ -588,6 +596,7 @@ function Products() {
             tags={["Swift", "SwiftUI", "MapKit", "Core Location"]}
             primaryHref="https://apps.apple.com/jp/app/useful-map-%E7%B5%8C%E8%B7%AF%E6%AF%94%E8%BC%83/id6801771854"
             primaryLabel="View on App Store"
+            detailPath="/products/useful-map"
           />
           <motion.div
             className="product-visual map-visual"
@@ -600,7 +609,114 @@ function Products() {
           </motion.div>
         </div>
       </article>
+
+      <article className="product product-logiscore">
+        <div className="shell product-grid product-grid-reverse">
+          <motion.div
+            className="product-visual"
+            initial={{ opacity: 0, x: -55 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, amount: 0.28 }}
+            transition={{ duration: 0.85, ease }}
+          >
+            <LogiscoreVisual />
+          </motion.div>
+          <ProductCopy
+            index="04"
+            name="Logiscore"
+            label="Code / Browser / Music"
+            headline="Hear the shape of your source code."
+            body="Logiscore turns source files into MIDI music inside the browser. A Rust/WebAssembly engine processes files locally, while programming languages become different instruments. No source files are uploaded to Enludus servers."
+            tags={["Rust", "WebAssembly", "React", "TypeScript", "MIDI"]}
+            primaryHref="https://logiscore.enludus.com"
+            primaryLabel="Try Logiscore"
+            detailPath="/products/logiscore"
+          />
+        </div>
+      </article>
+      <article className="product product-minesweeper">
+        <div className="shell product-grid">
+          <ProductCopy
+            index="05"
+            name="五十音マインスイーパー"
+            label="Words / Puzzle / Local multiplayer"
+            headline="Read the numbers. Guess the word."
+            body="A kana-board and alphabet word deduction game for two players sharing one screen. Reveal safe letters, read nearby mine counts, and find the hidden answer before your opponent."
+            tags={["Expo", "React Native", "TypeScript", "Web", "iOS"]}
+            primaryHref="https://minesweeper.enludus.com"
+            primaryLabel="Play on the Web"
+            detailPath="/products/gojuon-minesweeper"
+          />
+          <motion.div
+            className="product-visual"
+            initial={{ opacity: 0, x: 55 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, amount: 0.28 }}
+            transition={{ duration: 0.85, ease }}
+          >
+            <MinesweeperVisual />
+          </motion.div>
+        </div>
+      </article>
     </section>
+  );
+}
+
+
+function LogiscoreVisual() {
+  const notes = [
+    { tone: "G", left: "12%", top: "24%" },
+    { tone: "A", left: "27%", top: "48%" },
+    { tone: "C", left: "43%", top: "14%" },
+    { tone: "E", left: "61%", top: "38%" },
+    { tone: "B", left: "79%", top: "22%" },
+  ];
+  return (
+    <div className="logiscore-art" aria-label="ソースコードが音符に変わるイメージ">
+      <div className="logiscore-source">
+        <span>01&nbsp;&nbsp;fn main() &#123;</span>
+        <span>02&nbsp;&nbsp;&nbsp;&nbsp;let sound = code;</span>
+        <span>03&nbsp;&nbsp;&nbsp;&nbsp;play(sound);</span>
+        <span>04&nbsp;&nbsp;&#125;</span>
+      </div>
+      <div className="logiscore-score">
+        <span className="score-head">SOURCE → MIDI</span>
+        <div className="staff-lines" aria-hidden="true">
+          {notes.map((note) => (
+            <span className="score-note" key={note.tone}
+                  style={{ left: note.left, top: note.top }}>♪</span>
+          ))}
+        </div>
+        <div className="instrument-legend">
+          <span>TS · Violin</span><span>Rust · Cello</span><span>Go · Horn</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function MinesweeperVisual() {
+  const characters = [
+    "わ", "ら", "や", "ま", "は", "な", "た", "さ", "か", "あ",
+    "を", "り", "", "み", "ひ", "に", "ち", "し", "き", "い",
+    "ん", "る", "ゆ", "む", "ふ", "ぬ", "つ", "す", "く", "う",
+    "ー", "れ", "", "め", "へ", "ね", "て", "せ", "け", "え",
+    "", "ろ", "よ", "も", "ほ", "の", "と", "そ", "こ", "お",
+  ];
+  const opened = new Map([[8, "2"], [9, "1"], [18, "2"], [27, "1"], [28, "2"], [37, "1"]]);
+  return (
+    <div className="minesweeper-art">
+      <div className="minesweeper-top"><span>ごじゅうおん</span><span>1P ↔ 2P</span></div>
+      <div className="minesweeper-board" aria-label="ゲーム盤のイメージ">
+        {characters.map((char, index) => (
+          <div key={index}
+            className={"minesweeper-cell " + (!char ? "empty" : opened.has(index) ? "opened" : "")}>
+            {char ? (opened.get(index) ?? char) : ""}
+          </div>
+        ))}
+      </div>
+      <div className="minesweeper-caption">数字を読み、答えの文字を推理する。</div>
+    </div>
   );
 }
 
@@ -757,9 +873,8 @@ function Footer() {
       </a>
       <p>Building useful software from Japan.</p>
       <div>
-        <a href="https://github.com/naki0227" target="_blank" rel="noreferrer">
-          GitHub
-        </a>
+        <a href="/privacy">Privacy</a>
+        <a href="mailto:contact@enludus.com">Contact</a>
         <span>© 2026 Enludus</span>
       </div>
     </footer>
