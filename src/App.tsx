@@ -624,10 +624,10 @@ function Products() {
           <ProductCopy
             index="04"
             name="Logiscore"
-            label="Code / Browser / Music"
-            headline="Hear the shape of your source code."
-            body="Logiscore turns source files into MIDI music inside the browser. A Rust/WebAssembly engine processes files locally, while programming languages become different instruments. No source files are uploaded to Enludus servers."
-            tags={["Rust", "WebAssembly", "React", "TypeScript", "MIDI"]}
+            label="Code / Browser / Sound"
+            headline="Send data with sound."
+            body="Logiscore turns text, a source file, or a whole project into music. Play it out loud, record it on another device, and import the recording to restore the exact original. Error correction and optional password encryption run in a Rust/WebAssembly engine inside the browser — nothing is uploaded to Enludus servers."
+            tags={["Rust", "WebAssembly", "React", "TypeScript", "Web Audio"]}
             primaryHref="https://logiscore.enludus.com"
             primaryLabel="Try Logiscore"
             detailPath="/products/logiscore"
@@ -672,7 +672,7 @@ function LogiscoreVisual() {
     { tone: "B", left: "79%", top: "22%" },
   ];
   return (
-    <div className="logiscore-art" aria-label="ソースコードが音符に変わるイメージ">
+    <div className="logiscore-art" aria-label="テキストが音になり、録音から元に戻るイメージ">
       <div className="logiscore-source">
         <span>01&nbsp;&nbsp;fn main() &#123;</span>
         <span>02&nbsp;&nbsp;&nbsp;&nbsp;let sound = code;</span>
@@ -680,7 +680,7 @@ function LogiscoreVisual() {
         <span>04&nbsp;&nbsp;&#125;</span>
       </div>
       <div className="logiscore-score">
-        <span className="score-head">SOURCE → MIDI</span>
+        <span className="score-head">ENCODE → PLAY → RECORD → RESTORE</span>
         <div className="staff-lines" aria-hidden="true">
           {notes.map((note) => (
             <span className="score-note" key={note.tone}
@@ -688,7 +688,7 @@ function LogiscoreVisual() {
           ))}
         </div>
         <div className="instrument-legend">
-          <span>TS · Violin</span><span>Rust · Cello</span><span>Go · Horn</span>
+          <span>Reliable WAV · FEC</span><span>Secure · AEAD</span><span>MIDI · lossless</span>
         </div>
       </div>
     </div>
