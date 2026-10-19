@@ -2,18 +2,19 @@
 
 Official company / studio website for **Enludus**.
 
-A motion-rich single-page site built with Vite, React, TypeScript, and Motion. It presents three current products:
+A quiet single-page site built with Vite, React and TypeScript, laid out in lp-anatomy's "minimal / hardware" mood: real product screens on alternating ink and stone stages, a product index, and almost no motion. It presents five products:
 
-- **Career** — career decision support: https://career.enludus.com
-- **StudyReel** — learning recorder for iOS
-- **UsefulMap** — travel-mode comparison for iOS
+- **StudyReel** — study recorder for iPhone and iPad
+- **UsefulMap** — travel-mode comparison for iPhone and iPad
+- **Career** — job-fit checker: https://career.enludus.com
+- **Logiscore** — sends data as sound: https://logiscore.enludus.com
+- **Gojuon Minesweeper** — word-guessing game: https://minesweeper.enludus.com
 
 ## Stack
 
 - Vite
 - React 19
 - TypeScript
-- Motion (motion/react)
 - Vanilla CSS
 - Vercel
 
@@ -50,7 +51,7 @@ A visitor whose browser prefers Japanese is sent from `/` to `/ja` on the first 
 
 ## Content
 
-Company copy for both languages lives in `src/i18n.ts`. The Japanese object is typed from the English one, so a missing or extra key fails `npm run build`. The visual system and responsive behavior live in `src/styles.css`.
+Company copy and product facts (specs, release months, screenshots) for both languages live in `src/i18n.ts`. Product screenshots are WebP files in `public/img/products/`, two widths each, taken from the App Store listings and the live web apps. The Japanese object is typed from the English one, so a missing or extra key fails `npm run build`. The visual system and responsive behavior live in `src/styles.css`.
 
 The portfolio's facts live in `site/profile.ts`; its look lives in `public/site/site.css` (no build step, no Japanese web font) and `public/site/site.js` (reveal-once, the stack band, the JST clock and the blog tag filter — all off for reduced motion and Save-Data). The design follows the "art / portfolio" mood of lp-anatomy's `lp-quality-bar`.
 
@@ -75,4 +76,3 @@ The portfolio's facts live in `site/profile.ts`; its look lives in `public/site/
 
 The share cards fetch Manrope, Noto Sans JP (subset to the characters used) and DM Mono from Google Fonts during the build. If that fails, every card falls back to `site/og-fallback.png` and the build still succeeds.
 
-The UI mockups are implemented in HTML/CSS/SVG instead of screenshots so the product storytelling remains crisp, animated, responsive, and easy to update.

@@ -2,6 +2,19 @@ export type Lang = "en" | "ja";
 
 export const homePath: Record<Lang, string> = { en: "/", ja: "/ja" };
 
+export type Product = {
+  id: string;
+  name: string;
+  what: string;
+  platform: string;
+  since: string;
+  headline: string;
+  body: string;
+  specs: [string, string][];
+  image: { base: string; widths: number[]; ratio: number; alt: string; shape: "phone" | "screen" };
+  links: { label: string; href: string }[];
+};
+
 const en = {
   meta: {
     homeLabel: "Enludus home",
@@ -10,131 +23,165 @@ const en = {
   },
   nav: {
     products: "Products",
-    about: "About",
-    blog: "Blog",
-    portfolio: "Founder",
+    journal: "Blog",
+    founder: "Founder",
+    company: "Company",
     contact: "Contact",
-  },
-  orbit: {
-    career: "make a clearer choice",
-    study: "make effort visible",
-    map: "compare before moving",
   },
   hero: {
-    eyebrow: "Independent software studio · Japan",
-    lines: ["Building software", "that turns friction", "into better experiences."],
-    lead: "Enludus is a bootstrapped software studio building focused products for learning, movement, and career decisions.",
-    cta: "Explore products",
+    label: "Enludus — Osaka, Japan",
+    title: "Five apps, made and run from Osaka.",
+    lead: "A study recorder, a travel-mode comparer, a job-fit checker, a tool that sends data as sound, and a word-guessing game. Each one started from a specific annoyance.",
+    indexHead: ["No.", "Name", "What it does", "Runs on", "Since"],
   },
-  intro: {
-    label: "How we think",
-    lead: "We start with the",
-    accent: " problem,",
-    rest: "not the stack.",
-    body: [
-      "Good software earns its place by reducing friction. We begin with the decision, routine, or workflow that feels harder than it should, then build the smallest system that makes it meaningfully better.",
-      "AI is part of the toolbox when it improves the experience — never the reason a product exists.",
-    ],
-  },
-  career: {
-    bars: ["Work style", "Growth", "Culture", "Compensation"],
-    role: "Backend Engineer",
-    place: "Sample opportunity · Tokyo / Hybrid",
-    match: "match",
-    insight: "Strong alignment on work style. Check the gap in team structure before deciding.",
-  },
-  study: {
-    total: "3h 24m",
-    delta: "+18% from last week",
-    subject: "System Design",
-    pause: "Pause session",
-    streak: "28 day consistency",
-  },
-  map: {
-    search: "Osaka Station",
-    best: "34 min",
-    arrive: "Arrive 19:42",
-    options: ["Fastest · 31m", "Balanced · 34m", "Walk more · 41m"],
-  },
-  logiscoreArt: "Text becomes sound, and a recording restores the original",
-  minesweeperCaption: "Read the numbers. Deduce the hidden word.",
   products: {
-    label: "Selected products",
-    heading: ["Five focused products.", "One way of building."],
-    guide: "Read the guide (Japanese)",
-    items: {
-      career: {
-        label: "Career decision support",
-        headline: "See the fit before making the leap.",
-        body: "Career compares public job information with what matters to you, turning scattered requirements into a structured view of alignment, differences, and unknowns.",
-        cta: "Open Career",
-      },
-      study: {
-        label: "Learning / iOS",
-        headline: "Turn effort into something you can see.",
-        body: "StudyReel records the act of studying — not just a number on a timer — and makes progress visible through sessions, statistics, goals, and interactive widgets.",
-        cta: "View on App Store",
-      },
-      map: {
-        label: "Mobility / iOS",
-        headline: "Choose how to move before opening directions.",
-        body: "UsefulMap compares travel modes and breaks a trip into understandable segments, while handing detailed public-transit directions off to Google Maps when you need them.",
-        cta: "View on App Store",
-      },
-      logiscore: {
-        label: "Code / Browser / Sound",
-        headline: "Send data with sound.",
-        body: "Logiscore turns text, a source file, or a whole project into music. Play it out loud, record it on another device, and import the recording to restore the exact original. Error correction and optional password encryption run in a Rust/WebAssembly engine inside the browser — nothing is uploaded to Enludus servers.",
-        cta: "Try Logiscore",
-      },
-      minesweeper: {
-        label: "Words / Puzzle / Local multiplayer",
-        headline: "Read the numbers. Guess the word.",
-        body: "A kana-board and alphabet word deduction game for two players sharing one screen. Reveal safe letters, read nearby mine counts, and find the hidden answer before your opponent.",
-        cta: "Play on the Web",
-      },
-    },
-  },
-  principles: {
-    label: "How we build",
+    label: "Products",
+    specsLabel: "Details",
+    guide: "Guide (Japanese)",
     items: [
       {
-        title: "Understand first.",
-        body: "Requirements, constraints, and the person behind the problem come before the implementation.",
+        id: "studyreel",
+        name: "StudyReel",
+        what: "Records how you study",
+        platform: "iPhone / iPad",
+        since: "2025.12",
+        headline: "Put the phone on the desk. Your study session becomes a time-lapse.",
+        body: "A timer alone says “2 hours”. StudyReel also keeps what those two hours looked like — a short time-lapse, saved by date, with faces mosaicked if you want. Recording is optional: it works as a plain timer too.",
+        specs: [
+          ["Platform", "iOS 18.5+, iPhone and iPad"],
+          ["Released", "December 2025 on the App Store"],
+          ["Built with", "Swift, SwiftUI, SwiftData, WidgetKit"],
+          ["Price", "Free, with StudyReel Pro in-app purchase"],
+        ],
+        image: { base: "/img/products/studyreel-en", widths: [400, 800], ratio: 869 / 400, alt: "StudyReel gallery: study sessions listed by date", shape: "phone" },
+        links: [
+          { label: "App Store", href: "https://apps.apple.com/jp/app/studyreel/id6756177589" },
+        ],
       },
       {
-        title: "Design the system.",
-        body: "Performance, reliability, cost, operations, and changeability are product decisions too.",
+        id: "usefulmap",
+        name: "UsefulMap",
+        what: "Compares how to get there",
+        platform: "iPhone / iPad",
+        since: "2026.08",
+        headline: "Walk, train or car — decide before you open directions.",
+        body: "UsefulMap lines up the ways to make a trip and splits a route into segments you can read at a glance. When you need every transfer, it hands the trip to Google Maps instead of rebuilding a transit planner.",
+        specs: [
+          ["Platform", "iOS 17+, iPhone and iPad"],
+          ["Released", "August 2026 on the App Store"],
+          ["Built with", "Swift, SwiftUI, MapKit, Core Location"],
+          ["Price", "Free"],
+        ],
+        image: { base: "/img/products/usefulmap", widths: [400, 800], ratio: 869 / 400, alt: "UsefulMap: a route from Ochanomizu to Tokyo split into walking and train segments", shape: "phone" },
+        links: [
+          { label: "App Store", href: "https://apps.apple.com/jp/app/useful-map-%E7%B5%8C%E8%B7%AF%E6%AF%94%E8%BC%83/id6801771854" },
+        ],
       },
       {
-        title: "Ship and learn.",
-        body: "Working software creates the feedback that diagrams and assumptions cannot.",
+        id: "career",
+        name: "Career",
+        what: "Checks if a job fits you",
+        platform: "Web",
+        since: "Live",
+        headline: "Read job posts against what you actually care about.",
+        body: "Every company writes requirements differently. Career collects public job information and sorts it into what matches you, what doesn't, and what the post never says — so the open questions are clear before you apply.",
+        specs: [
+          ["Platform", "Web, sign in with Google"],
+          ["Address", "career.enludus.com"],
+          ["Built with", "React, TypeScript, Hono, Supabase"],
+        ],
+        image: { base: "/img/products/career", widths: [800, 1440], ratio: 900 / 1440, alt: "Career sign-in screen", shape: "screen" },
+        links: [{ label: "Open Career", href: "https://career.enludus.com" }],
+      },
+      {
+        id: "logiscore",
+        name: "Logiscore",
+        what: "Sends data as sound",
+        platform: "Web",
+        since: "Live",
+        headline: "Play a file out loud. Record it on another device. Get the exact file back.",
+        body: "Logiscore turns text, source code or a whole folder into music. Error correction and optional password encryption run in Rust compiled to WebAssembly, inside your browser — nothing is uploaded.",
+        specs: [
+          ["Platform", "Web (desktop browsers)"],
+          ["Address", "logiscore.enludus.com"],
+          ["Built with", "Rust, WebAssembly, React, Web Audio"],
+          ["Data", "Processed in the browser only"],
+        ],
+        image: { base: "/img/products/logiscore", widths: [800, 1440], ratio: 900 / 1440, alt: "Logiscore: source code on the left, the generated score on the right", shape: "screen" },
+        links: [
+          { label: "Try Logiscore", href: "https://logiscore.enludus.com" },
+          { label: "Source", href: "https://github.com/naki0227/logiscore" },
+        ],
+      },
+      {
+        id: "minesweeper",
+        name: "Gojuon Minesweeper",
+        what: "A word-guessing game",
+        platform: "Web",
+        since: "Live",
+        headline: "Minesweeper on the kana chart. Read the numbers, guess the word.",
+        body: "Two players share one screen. Open safe letters, use the mine counts as clues, and name the hidden word before the other player does. The Japanese board alone has 14,016 answers.",
+        specs: [
+          ["Platform", "Web (iOS version in review)"],
+          ["Address", "minesweeper.enludus.com"],
+          ["Built with", "Expo, React Native, TypeScript"],
+          ["Answers", "14,016 in Japanese, plus English"],
+        ],
+        image: { base: "/img/products/minesweeper", widths: [400, 800], ratio: 867 / 400, alt: "Gojuon Minesweeper: choosing a genre before a match", shape: "phone" },
+        links: [{ label: "Play on the web", href: "https://minesweeper.enludus.com" }],
+      },
+    ] as Product[],
+    guidePaths: {
+      studyreel: "/products/studyreel",
+      usefulmap: "/products/useful-map",
+      career: "/products/career",
+      logiscore: "/products/logiscore",
+      minesweeper: "/products/gojuon-minesweeper",
+    } as Record<string, string>,
+  },
+  decisions: {
+    label: "Decisions we keep making",
+    items: [
+      {
+        title: "Make the heavy part optional.",
+        body: "StudyReel can record you, but it never has to. The camera is a choice; the timer works on its own.",
+        product: "StudyReel",
+      },
+      {
+        title: "Keep data where it is.",
+        body: "Logiscore encodes, encrypts and decodes in the browser. There is no server that could see the file.",
+        product: "Logiscore",
+      },
+      {
+        title: "Don't rebuild what already works.",
+        body: "UsefulMap answers “which way?” and leaves step-by-step transit to Google Maps.",
+        product: "UsefulMap",
       },
     ],
   },
-  about: {
-    label: "About Enludus",
-    heading: ["Small by design.", "Serious about the details."],
-    body: [
-      "Enludus is an independent, bootstrapped software venture founded by Ibuki Nagase in Japan. We design and build products end-to-end, from problem discovery and system design to implementation, deployment, and operation.",
-      "Our current work spans web products, native iOS apps, backend systems, and practical uses of AI.",
-    ],
-    links: { portfolio: "Founder's portfolio", blog: "Read the blog (Japanese)" },
-    facts: [
-      ["Based in", "Japan"],
-      ["Structure", "Bootstrapped"],
+  journal: {
+    label: "From the blog",
+    all: "All posts",
+    note: "Posts are written in Japanese.",
+  },
+  company: {
+    label: "Company",
+    rows: [
+      ["Name", "Enludus"],
       ["Founder", "Ibuki Nagase"],
-    ],
+      ["Location", "Osaka, Japan"],
+      ["Work", "Planning, building and running iOS apps and web services"],
+      ["Name origin", "Enlightenment + Ludus (Latin for play)"],
+      ["Contact", "contact@enludus.com"],
+    ] as [string, string][],
+    founderLink: "Founder's portfolio",
   },
   contact: {
-    label: "Get in touch",
-    heading: ["Have a problem", "worth simplifying?"],
-    body: "Product inquiries, collaborations, startup conversations, or just a thoughtful hello.",
+    label: "Contact",
+    lead: "Questions about a product, bug reports, or work together — all by email.",
   },
   footer: {
-    tagline: "Building useful software from Japan.",
     privacy: "Privacy",
-    contact: "Contact",
   },
 };
 
@@ -148,131 +195,157 @@ const ja: Copy = {
   },
   nav: {
     products: "製品",
-    about: "会社について",
-    blog: "ブログ",
-    portfolio: "代表",
+    journal: "ブログ",
+    founder: "代表",
+    company: "会社概要",
     contact: "お問い合わせ",
   },
-  orbit: {
-    career: "迷いを、選べる形に",
-    study: "努力を、見える形に",
-    map: "動く前に、比べる",
-  },
   hero: {
-    eyebrow: "日本の独立系ソフトウェアスタジオ",
-    lines: ["使いにくさを、", "使ってよかったに", "変えていく。"],
-    lead: "Enludus は、学び・移動・キャリアの選択を支えるプロダクトを、外部資本に頼らず一から作っているソフトウェアスタジオです。",
-    cta: "製品を見る",
+    label: "Enludus — 大阪",
+    title: "大阪で、5つのアプリをつくって、運営しています。",
+    lead: "勉強の記録、移動手段の比較、求人の見比べ、音でデータを送る道具、ことば当てゲーム。どれも、身近な「ちょっと面倒」をひとつ減らすところから始めました。",
+    indexHead: ["No.", "名前", "できること", "対応", "公開"],
   },
-  intro: {
-    label: "考え方",
-    lead: "はじめに見るのは",
-    accent: "課題。",
-    rest: "技術はそのあと。",
-    body: [
-      "良いソフトウェアは、手間やつまずきを減らすことで居場所を得ます。私たちはまず「本来もっと楽なはずの判断・習慣・作業」を見つけ、それを確かに良くする一番小さな仕組みから作ります。",
-      "AI は体験を良くするときに使う道具のひとつです。AI を使うこと自体を、プロダクトの理由にはしません。",
-    ],
-  },
-  career: {
-    bars: ["働き方", "成長", "社風", "報酬"],
-    role: "バックエンドエンジニア",
-    place: "サンプル求人 · 東京 / ハイブリッド",
-    match: "一致",
-    insight: "働き方はよく合っています。決める前に、チーム体制の違いを確認しましょう。",
-  },
-  study: {
-    total: "3時間24分",
-    delta: "先週より +18%",
-    subject: "システム設計",
-    pause: "一時停止",
-    streak: "28日間の積み重ね",
-  },
-  map: {
-    search: "大阪駅",
-    best: "34分",
-    arrive: "19:42 到着",
-    options: ["最速 · 31分", "バランス · 34分", "多めに歩く · 41分"],
-  },
-  logiscoreArt: "テキストが音になり、録音から元に戻るイメージ",
-  minesweeperCaption: "数字を読み、答えの文字を推理する。",
   products: {
-    label: "プロダクト",
-    heading: ["5つのプロダクト。", "作り方は、ひとつ。"],
-    guide: "使い方・詳しい紹介を見る",
-    items: {
-      career: {
-        label: "キャリアの意思決定支援",
-        headline: "応募する前に、合うかどうかを見る。",
-        body: "公開されている求人情報と、あなたが大事にしたいことを照らし合わせます。散らばった条件を「合っている点・違う点・まだ分からない点」に整理して見せます。",
-        cta: "Career を開く",
-      },
-      study: {
-        label: "学習 / iOS",
-        headline: "がんばった時間を、目に見える形に。",
-        body: "StudyReel はタイマーの数字だけでなく、勉強している様子そのものを記録します。セッション・統計・目標・ウィジェットで、積み重ねが見えるようにします。",
-        cta: "App Store で見る",
-      },
-      map: {
-        label: "移動 / iOS",
-        headline: "経路を開く前に、移動手段を選ぶ。",
-        body: "UsefulMap は移動手段を比べ、ルートを分かりやすい区間に分けて見せます。電車の細かい乗り換えが必要なときは Google マップに引き継ぎます。",
-        cta: "App Store で見る",
-      },
-      logiscore: {
-        label: "コード / ブラウザ / 音",
-        headline: "データを、音で送る。",
-        body: "テキストやソースファイル、プロジェクト丸ごとを音楽に変換します。スピーカーで鳴らして別の端末で録音し、その録音を読み込むと元のデータがそのまま戻ります。誤り訂正とパスワード暗号化はブラウザ内の Rust/WebAssembly で動き、Enludus のサーバーには何も送りません。",
-        cta: "Logiscore を試す",
-      },
-      minesweeper: {
-        label: "ことば / パズル / 2人対戦",
-        headline: "数字を読んで、ことばを当てる。",
-        body: "ひとつの画面を2人で囲む、五十音とアルファベットの推理ゲーム。安全な文字を開き、まわりの地雷の数を手がかりに、相手より先に答えのことばを見つけます。",
-        cta: "Web で遊ぶ",
-      },
-    },
-  },
-  principles: {
-    label: "作り方",
+    label: "製品",
+    specsLabel: "仕様",
+    guide: "使い方を読む",
     items: [
       {
-        title: "まず、理解する。",
-        body: "実装の前に、要件と制約、そして困っている人のことを知る。",
+        id: "studyreel",
+        name: "StudyReel",
+        what: "勉強の様子を記録する",
+        platform: "iPhone / iPad",
+        since: "2025.12",
+        headline: "机にスマホを置くだけで、勉強した時間がタイムラプスになる。",
+        body: "タイマーだけだと「2時間」という数字しか残りません。StudyReel はその2時間の様子も、短いタイムラプスとして日付ごとに残します。顔はモザイクで隠せます。撮影はしなくても、ふつうのタイマーとして使えます。",
+        specs: [
+          ["対応", "iOS 18.5 以降、iPhone・iPad"],
+          ["公開", "2025年12月、App Store"],
+          ["技術", "Swift, SwiftUI, SwiftData, WidgetKit"],
+          ["料金", "無料（StudyReel Pro をアプリ内で購入可）"],
+        ],
+        image: { base: "/img/products/studyreel-ja", widths: [400, 800], ratio: 869 / 400, alt: "StudyReel のギャラリー画面。勉強の記録が日付ごとに並ぶ", shape: "phone" },
+        links: [{ label: "App Store", href: "https://apps.apple.com/jp/app/studyreel/id6756177589" }],
       },
       {
-        title: "仕組みで考える。",
-        body: "速さ・信頼性・コスト・運用・変えやすさも、プロダクトの判断のうち。",
+        id: "usefulmap",
+        name: "UsefulMap",
+        what: "移動手段を比べる",
+        platform: "iPhone / iPad",
+        since: "2026.08",
+        headline: "歩くか、電車か、車か。経路を開く前に決められる。",
+        body: "移動のしかたを並べて比べ、ルートをひと目で読める区間に分けて表示します。乗り換えの細かい案内が必要なときは、乗換案内を作り直さずに Google マップへ引き継ぎます。",
+        specs: [
+          ["対応", "iOS 17 以降、iPhone・iPad"],
+          ["公開", "2026年8月、App Store"],
+          ["技術", "Swift, SwiftUI, MapKit, Core Location"],
+          ["料金", "無料"],
+        ],
+        image: { base: "/img/products/usefulmap", widths: [400, 800], ratio: 869 / 400, alt: "UsefulMap の画面。御茶ノ水駅から東京駅までを徒歩と電車の区間に分けて表示", shape: "phone" },
+        links: [
+          { label: "App Store", href: "https://apps.apple.com/jp/app/useful-map-%E7%B5%8C%E8%B7%AF%E6%AF%94%E8%BC%83/id6801771854" },
+        ],
       },
       {
-        title: "出して、学ぶ。",
-        body: "図や仮説からは得られない手応えを、動くソフトウェアからもらう。",
+        id: "career",
+        name: "Career",
+        what: "求人が自分に合うか確かめる",
+        platform: "Web",
+        since: "公開中",
+        headline: "求人票を、自分が大事にしたいことと並べて読む。",
+        body: "求人の条件は会社ごとに書き方がばらばらです。Career は公開されている求人情報を集め、「合っている点」「合っていない点」「求人に書かれていない点」に分けて見せます。応募の前に、確かめるべきことがはっきりします。",
+        specs: [
+          ["対応", "Web（Google でログイン）"],
+          ["URL", "career.enludus.com"],
+          ["技術", "React, TypeScript, Hono, Supabase"],
+        ],
+        image: { base: "/img/products/career", widths: [800, 1440], ratio: 900 / 1440, alt: "Career のログイン画面", shape: "screen" },
+        links: [{ label: "Career を開く", href: "https://career.enludus.com" }],
+      },
+      {
+        id: "logiscore",
+        name: "Logiscore",
+        what: "データを音にして送る",
+        platform: "Web",
+        since: "公開中",
+        headline: "ファイルを音で鳴らして、別の端末で録音すると、元のファイルに戻る。",
+        body: "テキストやソースコード、フォルダごとを音楽に変換します。誤り訂正と任意のパスワード暗号化は、WebAssembly にした Rust がブラウザの中で行います。どこにもアップロードしません。",
+        specs: [
+          ["対応", "Web（パソコンのブラウザ）"],
+          ["URL", "logiscore.enludus.com"],
+          ["技術", "Rust, WebAssembly, React, Web Audio"],
+          ["データ", "ブラウザの中だけで処理"],
+        ],
+        image: { base: "/img/products/logiscore", widths: [800, 1440], ratio: 900 / 1440, alt: "Logiscore の画面。左にソースコード、右に生成された楽譜", shape: "screen" },
+        links: [
+          { label: "Logiscore を試す", href: "https://logiscore.enludus.com" },
+          { label: "ソースコード", href: "https://github.com/naki0227/logiscore" },
+        ],
+      },
+      {
+        id: "minesweeper",
+        name: "五十音マインスイーパー",
+        what: "ことば当てゲーム",
+        platform: "Web",
+        since: "公開中",
+        headline: "五十音表でマインスイーパー。数字を読んで、ことばを当てる。",
+        body: "ひとつの画面を2人で囲んで遊びます。安全な文字を開き、地雷の数を手がかりに、相手より先に答えのことばを見つけます。日本語の問題だけで 14,016 問あります。",
+        specs: [
+          ["対応", "Web（iOS 版は審査・配信準備中）"],
+          ["URL", "minesweeper.enludus.com"],
+          ["技術", "Expo, React Native, TypeScript"],
+          ["問題数", "日本語 14,016 問、英語もあり"],
+        ],
+        image: { base: "/img/products/minesweeper", widths: [400, 800], ratio: 867 / 400, alt: "五十音マインスイーパーの画面。対戦前にジャンルを選ぶ", shape: "phone" },
+        links: [{ label: "Web で遊ぶ", href: "https://minesweeper.enludus.com" }],
+      },
+    ],
+    guidePaths: en.products.guidePaths,
+  },
+  decisions: {
+    label: "いつも決めていること",
+    items: [
+      {
+        title: "重い機能は、使わなくてもいいようにする。",
+        body: "StudyReel は撮影できますが、撮影しなくても使えます。カメラは選べる機能で、タイマーだけでも成り立ちます。",
+        product: "StudyReel",
+      },
+      {
+        title: "データは、手元から出さない。",
+        body: "Logiscore は変換も暗号化も復元も、ブラウザの中で行います。ファイルを見られるサーバーが、そもそもありません。",
+        product: "Logiscore",
+      },
+      {
+        title: "すでに良いものは、作り直さない。",
+        body: "UsefulMap が答えるのは「どう行くか」まで。乗り換えの細かい案内は Google マップに任せています。",
+        product: "UsefulMap",
       },
     ],
   },
-  about: {
-    label: "Enludus について",
-    heading: ["小さく、つくる。", "細部まで、ちゃんと。"],
-    body: [
-      "Enludus は、長瀬唯楓が日本で立ち上げた独立系のソフトウェアスタジオです。外部資本に頼らず、課題の発見と設計から、実装・公開・運用までを一貫して手がけています。",
-      "いまは Web プロダクト、iOS ネイティブアプリ、バックエンド、そして実用的な AI の活用に取り組んでいます。",
-    ],
-    links: { portfolio: "代表のポートフォリオ", blog: "ブログを読む" },
-    facts: [
-      ["拠点", "日本・大阪"],
-      ["体制", "自己資本"],
+  journal: {
+    label: "ブログ",
+    all: "記事一覧",
+    note: "",
+  },
+  company: {
+    label: "会社概要",
+    rows: [
+      ["名称", "Enludus"],
       ["代表", "長瀬 唯楓"],
+      ["所在地", "大阪府"],
+      ["事業内容", "iOS アプリ・Web サービスの企画、開発、運営"],
+      ["名前の由来", "Enlightenment（啓蒙）＋ Ludus（ラテン語で「遊び」）"],
+      ["連絡先", "contact@enludus.com"],
     ],
+    founderLink: "代表のポートフォリオ",
   },
   contact: {
     label: "お問い合わせ",
-    heading: ["その手間、", "減らせるかもしれません。"],
-    body: "プロダクトについてのご質問、協業のご相談、ちょっとしたご挨拶まで、お気軽にどうぞ。",
+    lead: "製品についてのご質問、不具合のご報告、お仕事のご相談は、メールでお送りください。",
   },
   footer: {
-    tagline: "日本から、役に立つソフトウェアを。",
     privacy: "プライバシーポリシー",
-    contact: "お問い合わせ",
   },
 };
 

@@ -20,8 +20,8 @@ function pages(posts: Post[]) {
 function cards(posts: Post[]): Card[] {
   const dot = (date: string) => date.replace(/-/g, ".");
   return [
-    { file: "og/home.png", kicker: "INDEPENDENT SOFTWARE STUDIO", title: "Building software that turns friction into better experiences." },
-    { file: "og/ja.png", kicker: "日本の独立系ソフトウェアスタジオ", title: "使いにくさを、使ってよかったに変えていく。" },
+    { file: "og/home.png", kicker: "SOFTWARE STUDIO — OSAKA", title: "Five apps, made and run from Osaka." },
+    { file: "og/ja.png", kicker: "ソフトウェアスタジオ — 大阪", title: "大阪で、5つのアプリをつくって、運営しています。" },
     { file: "og/portfolio.png", kicker: "PORTFOLIO — OSAKA, JAPAN", title: "IBUKI NAGASE", variant: "name" },
     { file: "og/blog.png", kicker: "BLOG", title: "つくっているもの、学んだこと、考えたことの記録。" },
     ...posts.map((p) => ({ file: `og/blog/${p.slug}.png`, kicker: `BLOG — ${dot(p.date)}`, title: p.title })),
@@ -40,6 +40,8 @@ function fileFor(url: string) {
  * the Open Graph images from site/profile.ts and content/blog/*.md. Drafts show up in
  * `npm run dev` only.
  */
+const LATEST = "virtual:latest-posts";
+
 export function contentPages(): Plugin {
   let root = process.cwd();
   const ogCache = new Map<string, Uint8Array>();
@@ -47,6 +49,16 @@ export function contentPages(): Plugin {
     name: "enludus-content-pages",
     configResolved(config) {
       root = config.root;
+    },
+    // The company top lists the newest posts; they are baked in at build time.
+    resolveId(id) {
+      return id === LATEST ? `\0${LATEST}` : undefined;
+    },
+    async load(id) {
+      if (id !== `\0${LATEST}`) return;
+      const posts = await loadPosts(root, { includeDrafts: false });
+      const latest = posts.slice(0, 3).map(({ slug, title, date }) => ({ slug, title, date }));
+      return `export default ${JSON.stringify(latest)};`;
     },
     configureServer(server) {
       server.watcher.add(`${root}/content`);
