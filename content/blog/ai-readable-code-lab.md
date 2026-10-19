@@ -1,7 +1,7 @@
 ---
 title: AI に同じ変更を 54 回させて、設計ごとの差を測る ── 3 構成・6 課題・隠しテスト・Runner と Evaluator の分離
 date: 2026-10-20
-description: 同じ TypeScript / Fastify の API を monolithic・layered・feature-based の 3 構成で書き、gpt-5.6-terra に 6 つの変更課題を 3 回ずつ解かせた ai-readable-code-lab の中身です。構成ごとのファイル、実行順の固定、隠しテストの隔離、評価 JSON、54 回分の結果を生データから集計し直し、失敗の内訳と、評価の側にあった穴まで書きます。
+description: 同じ TypeScript / Fastify の API を 3 つの構成で書き、gpt-5.6-terra に 6 つの変更課題を 3 回ずつ解かせた ai-readable-code-lab の中身です。構成ごとのファイル、実行順の固定、隠しテストの隔離、54 回分の生データからの再集計、失敗の内訳、評価の側にあった穴まで書きます。
 tags: [AI, 設計, TypeScript, Fastify, Vitest, コーディングエージェント]
 type: tech
 ---
@@ -10,7 +10,7 @@ type: tech
 
 ai-readable-code-lab は、**人間に読みやすい設計が、AI にとっても変更しやすいのか** を同じ条件で比べるための実験リポジトリです。この記事では、Phase 1（設計構造の比較）を、リポジトリの `main`（HEAD は 342e50c）と、各実験ブランチに保存した評価の生データから順に追います。
 
-表の数字は、54 回分の `metadata.json` と `evaluation.json` を自分で読み直して集計したものです。リポジトリの集計（`results/summaries/main-experiment-summary.json`）とは一致しましたが、生データとドキュメントのあいだにはいくつか食い違いがあったので、最後にまとめて書きます。
+表の数字は、54 回分の `metadata.json` と `evaluation.json` を読み直して集計し直したものです。リポジトリの集計 JSON とは一致しました。記録どうしの食い違いもいくつかあったので、後半にまとめます。
 
 ## 問いと、実験前に置いた仮説
 
@@ -18,21 +18,11 @@ ai-readable-code-lab は、**人間に読みやすい設計が、AI にとって
 
 > 同じ機能を持つコードでも、ファイル構成や責務の分け方によって、AI のコード変更精度は変化するのか。
 
-仮説は実験前に 5 つ書いていました。
-
-| 仮説 | 内容 |
-| --- | --- |
-| A | 局所的で単純な変更では、1 ファイル構成が有利 |
-| B | 複数の責務を横断する変更では、レイヤー分割が有利 |
-| C | レイヤーを細かく分けすぎると、関連ファイルの見落としで実装漏れが増える |
-| D | 機能単位構成が、総合的に最も安定する |
-| E | 大事なのはファイル数ではなく、必要な情報を低コストで見つけられること |
-
-計画書には「これらは実験前の仮説であり、結果に合わせて変更してはならない」とも書いています。先に答えを言うと、54 回のデータでは **どの仮説も支持も棄却もできませんでした**。理由は、この記事の後半に書きます。
+仮説は実験前に 5 つ書いていました。A：局所的な変更では 1 ファイル構成が有利。B：横断的な変更ではレイヤー分割が有利。C：分けすぎると見落としで実装漏れが増える。D：機能単位構成が総合的に最も安定する。E：大事なのはファイル数ではなく、必要な情報を低コストで見つけられること。先に答えを言うと、54 回のデータでは **どの仮説も支持も棄却もできませんでした**。理由は、この記事の後半に書きます。
 
 ## 題材：タスク管理 API
 
-3 構成とも、Node 22・TypeScript・Fastify・Vitest で、データはメモリ上の `Map` です。外部 DB・認証・ネットワークは使いません。公開している API は `docs/COMMON_SPEC.md` で決めています。
+3 構成とも、Node 22・TypeScript・Fastify・Vitest で、データはメモリ上の `Map` です。外部 DB・認証・ネットワークは使いません。課題 02〜06 の出発点（v1.0.1）の API は次のとおりです。
 
 | Method | Path | 成功 | 失敗 |
 | --- | --- | --- | --- |
@@ -59,17 +49,7 @@ phase1-architecture/monolithic/
 └── tests/app.test.ts   21 行
 ```
 
-`buildApp()` の中に、`Map`、連番、時刻、判定、ルートが全部入っています。期限切れの判定とレスポンスの組み立ても、ここに並んでいます。
-
-```ts
-// phase1-architecture/monolithic/src/app.ts（v1.0.1）
-const isOverdue = (task: Task) => Boolean(task.dueDate && task.dueDate < now().slice(0, 10));
-const response = (task: Task) => ({
-  ...task,
-  isOverdue: isOverdue(task),
-  warnings: task.dueDate && task.dueDate < now().slice(0, 10) ? ['due date is in the past'] : [],
-});
-```
+`buildApp()` の中に、`Map`、連番、時刻、期限切れの判定、レスポンスの組み立て、全ルートが入っています。
 
 ### layered
 
@@ -129,13 +109,7 @@ phase1-architecture/feature-based/
 
 課題 01 だけは、履歴とアーカイブの実装が入った v1.0.0 から始めています。課題 02〜06 のために、それらを取り除いた v1.0.1 を別に固定しました。
 
-課題文には、構成ごとの特別な指示を入れていません。たとえば課題 02 はこうです。
-
-```text
-完了済みタスクは担当者を変更できないようにしてください。
-
-既存コードと公開テストを確認し、既存の設計と命名規則を維持してください。必要な範囲だけを変更し、テストを追加して、lint・型検査・テストを実行してください。
-```
+課題文には、構成ごとの特別な指示を入れていません。どの課題文も、要件のあとに「既存コードと公開テストを確認し、…テストを追加して、lint・型検査・テストを実行してください」という定型の一文が続きます。
 
 ## ハーネス
 
@@ -157,7 +131,7 @@ for (let index = conditions.length - 1; index > 0; index -= 1) {
 }
 ```
 
-結果は `experiments/phase1-main-run-order.json` に書き出しています。評価の時刻を並べると、計画の順番から入れ替わったのは 16〜18 番目と 44〜47 番目の 2 か所だけでした。
+評価の時刻を並べると、計画の順番から入れ替わったのは 16〜18 番目と 44〜47 番目の 2 か所だけでした。
 
 ### Runner と Evaluator を分ける
 
@@ -172,18 +146,7 @@ for (let index = conditions.length - 1; index > 0; index -= 1) {
 
 ### 隠しテストは Git に入れない
 
-隠しテストは `hidden-tests/` に置き、`.gitignore` で除外しています。通常の Vitest からも外します。
-
-```ts
-// vitest.config.ts
-export default defineConfig({
-  test: {
-    exclude: ['hidden-tests/**', '**/node_modules/**', '**/dist/**'],
-  },
-});
-```
-
-Evaluator だけが `scripts/run-hidden-tests` を使います。課題と構成は許可リストで縛り、任意のパスは受け取りません。
+隠しテストは `hidden-tests/` に置き、`.gitignore` で除外し、`vitest.config.ts` の `exclude` でも通常のテスト実行から外しています。Evaluator だけが `scripts/run-hidden-tests` を使います。課題と構成は許可リストで縛り、任意のパスは受け取りません。
 
 ```sh
 # scripts/run-hidden-tests（抜粋）
@@ -201,31 +164,15 @@ HIDDEN_TEST_TARGET="$target" npx vitest run --config hidden-tests/vitest.config.
 
 保存された結果を見ると、隠しテストは **課題ごとに 1 つのテストケース** です（`hiddenTests.total` は 54 回すべて 1）。1 つのケースの中で複数のことを確かめていますが、通過か失敗かの 2 値になります。テスト本体はまだ公開していません。
 
-### 変更量は git diff から取る
-
-```sh
-# scripts/collect-git-metrics
-git diff --name-only "$baseline"...HEAD > "$output/changed-files.txt"
-git diff --stat "$baseline"...HEAD > "$output/git-stat.txt"
-git diff --binary "$baseline"...HEAD > "$output/changes.patch"
-```
-
 ### 1 回ごとに残すもの
 
-各実験ブランチ `experiment/p1/<構成>/<課題>/r0N` の `results/raw/<実験 ID>/` に、`metadata.json`、`evaluation.json`、`changes.patch`、`git-stat.txt`、`changed-files.txt`、公開テストと隠しテストの出力を残しています。評価 JSON はこういう形です。
+変更量は `scripts/collect-git-metrics` が `git diff "$baseline"...HEAD` の `--name-only`・`--stat`・`--binary` で取ります。各実験ブランチ `experiment/p1/<構成>/<課題>/r0N` の `results/raw/<実験 ID>/` に、`metadata.json`、`evaluation.json`、`changes.patch`、`git-stat.txt`、`changed-files.txt`、公開テストと隠しテストの出力を残しています。評価 JSON の中心はこの部分です。
 
 ```json
-{
-  "experimentId": "P1-FEATURE-BASED-T06-R01",
-  "automatedChecks": {
-    "build": null,
-    "typecheck": false,
-    "format": null,
-    "lint": null,
-    "publicTests": { "passed": 5, "total": 9 },
-    "hiddenTests": { "passed": 0, "total": 1 }
-  },
-  "failureClassification": ["typecheck failure", "functional failure"]
+"automatedChecks": {
+  "build": null, "typecheck": false, "format": null, "lint": null,
+  "publicTests": { "passed": 5, "total": 9 },
+  "hiddenTests": { "passed": 0, "total": 1 }
 }
 ```
 
@@ -233,12 +180,10 @@ git diff --binary "$baseline"...HEAD > "$output/changes.patch"
 
 ## 指標
 
-| 指標 | 定義 |
-| --- | --- |
-| 完全検証通過 | build・typecheck・format・lint がすべて `true`、公開テストと隠しテストが全件通過 |
-| 隠しテスト通過 | 隠しテスト 1/1 |
-| 公開テスト全通過 | `publicTests.passed === total` |
-| 変更ファイル数・追加行・削除行 | Evaluator が記録した `metrics` の値 |
+- **完全検証通過**：build・typecheck・format・lint がすべて `true` で、公開テストと隠しテストが全件通過
+- **隠しテスト通過**：隠しテスト 1/1
+- **公開テスト全通過**：`publicTests.passed === total`
+- **変更ファイル数・追加行・削除行**：Evaluator が記録した `metrics` の値
 
 評価基準 `docs/EVALUATION_RULES.md` には 100 点満点の採点表（要件 25、隠しテスト 20、既存テスト維持 15、責務配置 10 など）がありますが、**54 回すべて `scores` は `null`** です。読んだファイル数、コマンド数、修正ループ数、トークン数も、54 回すべて `null` でした。計画にあった「探索コスト」は、今回は測れていません。
 
@@ -266,17 +211,10 @@ git diff --binary "$baseline"...HEAD > "$output/changes.patch"
 | 比較 | p 値 |
 | --- | --- |
 | monolithic 15/18 と layered 12/18 | 0.44 |
-| monolithic 15/18 と feature-based 13/18 | 0.69 |
 | 課題 05 を除く monolithic 15/15 と layered 12/15 | 0.22 |
-| 隠しテスト feature-based 16/18 と他構成 18/18 | 0.49 |
+| 隠しテスト feature-based 16/18 と monolithic（または layered）18/18 | 0.49 |
 
-| 構成 | 完全検証（54 回） | 95% 信頼区間 |
-| --- | --- | --- |
-| monolithic | 15/18 | 61〜94% |
-| feature-based | 13/18 | 49〜88% |
-| layered | 12/18 | 44〜84% |
-
-区間はほとんど重なっていて、**構成のあいだに差があるとは言えません**。並び順は記録として残しますが、順位として読むのは無理があります。
+完全検証率の 95% 信頼区間は、monolithic 61〜94%、feature-based 49〜88%、layered 44〜84% です。区間はほとんど重なっていて、**構成のあいだに差があるとは言えません**。並び順は記録として残しますが、順位として読むのは無理があります。
 
 ### 課題別
 
@@ -316,7 +254,7 @@ git diff --binary "$baseline"...HEAD > "$output/changes.patch"
 
 わかったことは 2 つあります。
 
-1 つ目は、**平均変更ファイル数には `docs/TODO.md` や作業報告書が混ざっている** ことです。54 回中 5 回で、Runner がリポジトリの運用ルールに従って docs まで書いていました。本体とテストだけで数えると monolithic 2.06、feature-based 3.00、layered 3.94 です。順番は変わりません。
+1 つ目は、**平均変更ファイル数には `docs/TODO.md` や作業報告書が混ざっている** ことです。54 回中 5 回で、Runner が `docs/TODO.md` の更新や `docs/reports/` の作業報告書まで書いていました。リポジトリにはそういう文書が並んでいるので、それにならったのだと思いますが、ログがないので理由はわかりません。本体とテストだけで数えると monolithic 2.06、feature-based 3.00、layered 3.94 です。順番は変わりません。
 
 2 つ目は、**追加行の大半がテスト** だということです。本体の追加は平均 13〜21 行で、テストは 42〜46 行でした。「課題 06 は平均 108 行が必要だった」のではなく、108 行の多くはテストと docs です。
 
@@ -331,19 +269,12 @@ git diff --binary "$baseline"...HEAD > "$output/changes.patch"
 | LAYERED-T06-R02 | format | 1/1 | formatting failure |
 | FEATURE-BASED-T06-R03 | format | 1/1 | formatting |
 | FEATURE-BASED-T06-R01 | typecheck | 0/1 | typecheck failure, functional failure |
-| MONOLITHIC-T05-R01 | 公開テスト | 1/1 | implementation omission |
-| MONOLITHIC-T05-R02 | 公開テスト | 1/1 | shared contract mismatch |
-| MONOLITHIC-T05-R03 | 公開テスト | 1/1 | shared contract mismatch |
-| LAYERED-T05-R01 | 公開テスト | 1/1 | shared contract mismatch |
-| LAYERED-T05-R02 | 公開テスト | 1/1 | implementation omission |
-| LAYERED-T05-R03 | 公開テスト | 1/1 | shared contract mismatch |
-| FEATURE-BASED-T05-R02 | 公開テスト | 1/1 | shared contract mismatch |
-| FEATURE-BASED-T05-R03 | 公開テスト | 1/1 | shared contract mismatch |
+| 課題 05 の 8 回（3 構成すべて） | 公開テスト | 1/1 | shared contract mismatch 6、implementation omission 2 |
 | FEATURE-BASED-T05-R01 | 隠しテスト | 0/1 | implementation omission |
 
 ### 整形だけで落ちた 4 回
 
-4 回とも、隠しテストは通っていて、Prettier の `--check` だけで落ちています。うち 3 回が layered で、整形されていなかったのは `layered/tests/app.test.ts` や `layered/src/domain.ts` でした。Runner の課題文には「lint・型検査・テストを実行してください」とあり、整形は名指ししていません。`npm run validate` を最後まで流していれば止まったはずの失敗です。
+4 回とも隠しテストは通っていて、Prettier の `--check` だけで落ちています。うち 3 回が layered で、整形されていなかったのは `layered/tests/app.test.ts` や `layered/src/domain.ts` でした。課題文は「lint・型検査・テスト」の実行を求めていて、整形は名指ししていません。
 
 ### 課題 05：評価の側の矛盾
 
@@ -410,7 +341,7 @@ v1.0.1 の Baseline には、`category` も複製ルートもありません。�
 +      warnings: overdue ? ['due date is in the past'] : [],
 ```
 
-期限切れの判定を直すついでに、警告も同じ判定に寄せています。重複を減らすリファクタリングとしては自然ですが、仕様には反します。警告を残したのは LAYERED-T04-R02 と FEATURE-BASED-T04-R03 の 2 回だけで、構成による偏りは見えませんでした。
+期限切れの判定を直すついでに、警告も同じ判定に寄せています。重複を減らすリファクタリングとしては自然ですが、仕様には反します。警告を残したのは LAYERED-T04-R02 と FEATURE-BASED-T04-R03 の 2 回だけです。消した 7 回は 3 構成すべてにまたがっていて（monolithic 3、layered 2、feature-based 2）、構成による偏りは見えませんでした。
 
 **課題 02。** 仕様には「タイトルなど、担当者以外の更新を禁止しない」とあります。MONOLITHIC-T02-R02 は、担当者がいる完了済みタスクにタイトルだけを PATCH すると 409 を返しました。
 
@@ -422,23 +353,20 @@ v1.0.1 の Baseline には、`category` も複製ルートもありません。�
 
 body に `assigneeId` がないと `undefined !== 'user-1'` になって拒否されます。担当者のいないタスクでは 200 になるので、隠しテストはこの経路を通っていなかったのだと思います。
 
-ついでに、完了済みタスクに **同じ担当者** を入れ直したときの動きも見ると、9 回中 5 回が 409、4 回が 200 でした。仕様がこのケースを決めていないので、どちらも間違いではありません。曖昧なところは、回ごとに解釈が割れます。
+ついでに、完了済みタスクに **同じ担当者** を入れ直したときの動きも見ると、9 回中 6 回が 409、3 回が 200 でした。仕様がこのケースを決めていないので、どちらも間違いではありません。曖昧なところは、回ごとに解釈が割れます。
 
 隠しテストの通過率 52/54 は「隠しテストに書いた範囲では要件を満たした」という意味で、それ以上ではありません。
 
-## ドキュメントと生データの食い違い
+## 記録の食い違い
 
-集計し直していて見つけたものです。どれも、結論の向きを変えるものではありません。
+集計し直していて、記録どうしの食い違いも見つけました。どれも結論の向きは変えませんが、書いておきます。
 
-1. **LAYERED-T05-R01 には `humanCodeCorrections: true` が付いている。** 評価のメモは「Runner のソースは、結果コミットの前に親による整形の修正が必要だった」です。手順では通常の集計から外すはずの Run ですが、54 回に含まれています。完全検証は通っていないので通過数は変わりませんが、外すと layered は 12/17 になります。また、この修正がなければ、layered の整形失敗はもう 1 回増えていた可能性があります。
-2. **課題 05 の「実装漏れ」3 回のうち 2 回は、記録の根拠が契約の不一致そのもの。** MONOLITHIC-T05-R01 と LAYERED-T05-R02 は隠しテストを通っていて、根拠欄には「公開契約が 204 を期待している」とあります。本当に実装が足りなかったのは FEATURE-BASED-T05-R01 の 1 回だけです。下書きの「6 回が契約と衝突し、残る 3 回は実装漏れ」は、8 回と 1 回と読むのが正確です。
-3. **下書きの「課題 05 以外の失敗内訳」の表は、実際には 54 回分。** feature-based の隠しテスト失敗 2 件のうち 1 件は課題 05 です。課題 05 を除けば 1 件です。
-4. **FEATURE-BASED-T06-R01 の説明。** 下書きは「既存の複製ルートと `category` 定義を確認しないまま再追加した」としていますが、Baseline にはどちらもなく、同じ Run の中で 2 回書いたものです。
-5. **FEATURE-BASED-T03-R03 の `metrics`。** 評価 JSON は 4 ファイル・追加 29 行ですが、`git-stat.txt` は 6 ファイル・追加 136 行・削除 1 行です。集計の平均はこの評価 JSON の値を使っています。
-6. **整形で落ちた Run の公開テスト件数。** LAYERED-T04-R02 は記録上 12/13 ですが、根拠欄には「テストを別に流すと 13/13」とあります。LAYERED-T06-R02 も 9/10 と 10/10 です。公開テスト全通過率には、整形の失敗が混ざっています。
-7. **探索とトークンの記録。** 下書きは「全 Run で同じ粒度に揃っていない」と書いていますが、評価 JSON では 54 回すべて `null` です。
+1. **LAYERED-T05-R01 に `humanCodeCorrections: true` が付いている。** メモは「結果コミットの前に、親による整形の修正が必要だった」です。手順では集計から外すはずの Run が、54 回に含まれています。外すと layered は 12/17 で、この修正がなければ整形失敗がもう 1 回増えていた可能性があります。
+2. **課題 05 の「実装漏れ」3 回のうち 2 回は、根拠欄が契約の不一致そのもの。** MONOLITHIC-T05-R01 と LAYERED-T05-R02 は隠しテストを通っています。実装が足りなかったのは FEATURE-BASED-T05-R01 の 1 回だけで、内訳は「契約の矛盾 8 回、実装漏れ 1 回」と読むのが正確です。
+3. **FEATURE-BASED-T03-R03 の `metrics`。** 評価 JSON は 4 ファイル・追加 29 行、`git-stat.txt` は 6 ファイル・追加 136 行です。集計の平均は評価 JSON の値を使っています。
+4. **整形で落ちた Run の公開テスト件数。** LAYERED-T04-R02 は記録上 12/13 ですが、根拠欄には「別に流すと 13/13」とあります。公開テスト全通過率には、整形の失敗が混ざっています。
 
-Qiita 向けの下書き `docs/articles/phase1-qiita-draft.md` は、冒頭に「下書き。公開前に著者情報、図の説明、代表差分へのリンクを確認する」とあり、公開先の URL はまだありません。この記事は、下書きではなく上の生データに合わせています。
+リポジトリには Qiita 向けの記事の下書きもありますが、まだ公開していません。この記事は、下書きではなく生データに合わせて書いています。
 
 ## 妥当性への脅威
 
@@ -450,7 +378,6 @@ Qiita 向けの下書き `docs/articles/phase1-qiita-draft.md` は、冒頭に�
 - **課題の偏り。** 課題 02・03 は 9/9 で、天井に当たっています。課題 05 は評価の矛盾で 0/9 です。6 課題のうち、構成差を見られる課題は実質 4 つでした。
 - **評価者も AI。** Evaluator は別の clone・別のセッションですが、Codex CLI のセッションです。設計の質を人が見る採点はしていません。
 - **Runner のログがない。** 何を読み、何を実行したかは残っていないので、失敗の原因は差分からの推測になります。
-- **リポジトリの運用ルールの影響。** 5 回の Run が `docs/TODO.md` や作業報告書を書いていました。課題とは別の指示が、Runner の作業量に入り込んでいます。
 
 ## 再現方法
 
@@ -464,17 +391,7 @@ npm ci
 npm run summarize:main-experiment
 ```
 
-`results/summaries/main-experiment-summary.json` と `main-experiment-runs.csv` が、54 回分の評価 JSON から作り直されます。1 回分の生データを見るときは、ブランチから直接取り出せます。
-
-```sh
-git show origin/experiment/p1/feature-based/task-06/r01:results/raw/P1-FEATURE-BASED-T06-R01/evaluation.json
-```
-
-新しく Run を足すときは、Baseline のタグから分岐して、Runner には対象の構成と課題文と公開テストだけを渡します。
-
-```sh
-scripts/create-experiment-branch p1 layered task-02 r04 p1-layered-v1.0.1
-```
+`results/summaries/main-experiment-summary.json` と `main-experiment-runs.csv` が、54 回分の評価 JSON から作り直されます。1 回分の生データは、`git show origin/experiment/p1/<構成>/<課題>/r0N:results/raw/<実験 ID>/evaluation.json` のように、ブランチから直接取り出せます。
 
 隠しテストの本体はまだ公開していないので、Evaluator の手順はいまのところ手元でしか回せません。
 
@@ -484,12 +401,6 @@ scripts/create-experiment-branch p1 layered task-02 r04 p1-layered-v1.0.1
 
 わからなかったのは、最初の問いそのものです。構成の差は偶然の範囲に収まっていて、コードが小さすぎて探索の難しさも生まれていません。
 
-それでも、次に何を直せばいいかははっきりしました。
-
-1. 課題を流す前に、課題の仕様と共有契約テストの食い違いを機械で見つける
-2. 隠しテストのケースを増やし、「変えてはいけないもの」も確かめる
-3. Runner の操作ログとトークン数を残す
-4. 本体が数千行ある Baseline を用意し、探索が必要になる大きさで測り直す
-5. 設計の質を、条件を伏せて人が採点する
+それでも、次に何を直せばいいかははっきりしました。リポジトリの TODO には、課題 05 のような契約の矛盾を実行前に見つける仕組み、人によるブラインド評価、より大きな変更課題を入れています。この記事を書きながら、隠しテストに「変えてはいけないもの」を足すこと、Runner の操作ログとトークン数を残すこと、探索が必要になる大きさの Baseline を用意することも、足したいと考えるようになりました。
 
 構成を固定して言語を変える第 2 弾（Python・TypeScript・Go・Rust）は、計画書にはありますが、まだ始めていません。その前に、Phase 1 の測り方を直すところからやります。
