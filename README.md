@@ -68,6 +68,7 @@ The portfolio's facts live in `site/profile.ts`. Portfolio, blog, posts and 404 
    tags: [設計, Swift]
    # updated: 2026-10-25   (optional)
    # draft: true           (optional: shown in npm run dev only)
+   # type: tech            (optional: a deep technical write-up; default is a readable "story" post)
    ---
    ```
 

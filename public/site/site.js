@@ -79,7 +79,7 @@
     var apply = function (tag, push) {
       var shown = 0;
       rows.forEach(function (row) {
-        var hit = !tag || (" " + row.getAttribute("data-tags") + " ").indexOf(" " + tag + " ") >= 0;
+        var hit = !tag || row.getAttribute("data-tags").split("|").indexOf(tag) >= 0;
         row.hidden = !hit;
         if (hit) shown++;
       });

@@ -80,10 +80,11 @@ function LangSwitch() {
 
 function useNav() {
   const t = useCopy();
+  const lang = useLang();
   return [
     { href: "#products", label: t.nav.products, en: "Products", Icon: Pin },
     { href: "/blog", label: t.nav.journal, en: "Blog", Icon: Pencil },
-    { href: "/portfolio", label: t.nav.founder, en: "Founder", Icon: Leaf },
+    { href: lang === "en" ? "/en/portfolio" : "/portfolio", label: t.nav.founder, en: "Founder", Icon: Leaf },
     { href: "#company", label: t.nav.company, en: "About", Icon: Mug },
   ];
 }
@@ -377,6 +378,7 @@ function Journal() {
 
 function Company() {
   const t = useCopy();
+  const lang = useLang();
   const [, founderRow] = t.company.rows;
   return (
     <section className="sec paper-a curve" id="company">
@@ -389,7 +391,7 @@ function Company() {
               <dd>
                 {v.includes("@") ? <a href={`mailto:${v}`}>{v}</a> : v}
                 {k === founderRow[0] && (
-                  <a className="inline" href="/portfolio">
+                  <a className="inline" href={lang === "en" ? "/en/portfolio" : "/portfolio"}>
                     {t.company.founderLink} →
                   </a>
                 )}

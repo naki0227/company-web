@@ -11,6 +11,8 @@ export type Post = {
   description: string;
   tags: string[];
   draft: boolean;
+  /** "tech" for deep technical write-ups, "story" (default) for readable posts. */
+  kind: "story" | "tech";
   html: string;
   toc: { id: string; text: string }[];
   minutes: number;
@@ -131,6 +133,7 @@ export async function loadPosts(root: string, { includeDrafts }: { includeDrafts
       description: String(data.description ?? ""),
       tags,
       draft,
+      kind: data.type === "tech" ? "tech" : "story",
       html,
       toc,
       // Japanese reads at roughly 500 characters a minute.
