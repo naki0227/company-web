@@ -108,6 +108,7 @@ button { font: inherit; color: inherit; }
 .hd-nav a[aria-current="page"] { background: var(--paper-a); }
 .hd-nav span { display: grid; line-height: 1.25; }
 .hd-nav small { color: var(--orange); font-size: 11px; font-weight: 600; }
+.hd-nav small:empty { display: none; }
 .hd-icon { width: 30px; height: 30px; }
 .hd-end { display: flex; align-items: center; gap: 10px; }
 .burger { display: none; position: relative; width: 44px; height: 44px; border: 0; border-radius: 10px; background: var(--orange); cursor: pointer; }

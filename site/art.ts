@@ -15,6 +15,7 @@ export const workArt: Record<string, Name> = {
   UsefulMap: "MapIcon",
   Logiscore: "SoundIcon",
   "五十音マインスイーパー": "KanaIcon",
+  "Gojuon Minesweeper": "KanaIcon",
   Nue: "VideoIcon",
   "LP Anatomy": "LoupeIcon",
 };

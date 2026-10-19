@@ -1,5 +1,6 @@
 import { art, workArt } from "./art";
 import type { Post } from "./posts";
+import { aboutEn, activitiesEn, capabilitiesEn, factsEn, personEn, skillsEn, worksEn } from "./profile-en";
 import {
   about,
   activities,
@@ -17,6 +18,7 @@ const STATIC_PATHS = [
   "/",
   "/ja",
   "/portfolio",
+  "/en/portfolio",
   "/blog",
   "/privacy",
   "/products/studyreel",
@@ -52,7 +54,49 @@ type Head = {
   noindex?: boolean;
   /** Path of the Open Graph card, e.g. "/og/portfolio.png". */
   image: string;
+  lang?: Lang;
+  /** hreflang alternates, e.g. { ja: "/portfolio", en: "/en/portfolio" }. */
+  alternates?: Record<Lang, string>;
 };
+
+type Lang = "ja" | "en";
+
+const CHROME = {
+  ja: {
+    skip: "本文へ移動",
+    home: "Enludus トップページ",
+    homeHref: "/ja",
+    mainNav: "メインメニュー",
+    menu: "メニュー",
+    contact: "お問い合わせ",
+    footerNav: "フッター",
+    locale: "ja_JP",
+    nav: [
+      ["", "/ja#products", "Products", "製品", "Pin"],
+      ["blog", "/blog", "Blog", "ブログ", "Pencil"],
+      ["portfolio", "/portfolio", "Founder", "代表", "Leaf"],
+      ["", "/ja#company", "About", "運営者情報", "Mug"],
+    ],
+    footer: [["/ja", "Enludus トップ"], ["/portfolio", "代表"], ["/blog", "ブログ"], ["/blog/feed.xml", "RSS"], ["/privacy", "プライバシーポリシー"]],
+  },
+  en: {
+    skip: "Skip to content",
+    home: "Enludus home",
+    homeHref: "/",
+    mainNav: "Primary",
+    menu: "Menu",
+    contact: "Contact",
+    footerNav: "Footer",
+    locale: "en_US",
+    nav: [
+      ["", "/#products", "", "Products", "Pin"],
+      ["blog", "/blog", "", "Blog", "Pencil"],
+      ["portfolio", "/en/portfolio", "", "Founder", "Leaf"],
+      ["", "/#company", "", "About", "Mug"],
+    ],
+    footer: [["/", "Enludus"], ["/en/portfolio", "Founder"], ["/blog", "Blog (Japanese)"], ["/blog/feed.xml", "RSS"], ["/privacy", "Privacy (Japanese)"]],
+  },
+} as const;
 
 /**
  * Fredoka for Latin, Zen Maru Gothic for Japanese — the same pair as the company top.
@@ -76,14 +120,9 @@ const LOGO = `<span class="logo-mark" aria-hidden="true"><span class="logo-bar l
 
 function layout(head: Head, current: "portfolio" | "blog" | "", main: string) {
   const url = SITE + head.path;
-  const nav = (
-    [
-      ["", "/ja#products", "Products", "製品", "Pin"],
-      ["blog", "/blog", "Blog", "ブログ", "Pencil"],
-      ["portfolio", "/portfolio", "Founder", "代表", "Leaf"],
-      ["", "/ja#company", "About", "運営者情報", "Mug"],
-    ] as const
-  )
+  const lang = head.lang ?? "ja";
+  const c = CHROME[lang];
+  const nav = c.nav
     .map(
       ([key, href, en, ja, icon], i) =>
         `<a href="${href}" style="--i:${i}"${key && key === current ? ' aria-current="page"' : ""}>${art(icon, "hd-icon")}<span><small class="round">${en}</small>${ja}</span></a>`,
@@ -91,13 +130,13 @@ function layout(head: Head, current: "portfolio" | "blog" | "", main: string) {
     .join("");
   const edge = ["StudyIcon", "MapIcon", "CareerIcon", "SoundIcon", "KanaIcon", "VideoIcon", "LoupeIcon"] as const;
   const body = `<body>
-<a class="skip" href="#main">本文へ移動</a>
+<a class="skip" href="#main">${c.skip}</a>
 <header class="hd">
-  <a class="hd-brand" href="/ja" aria-label="Enludus トップページ">${LOGO}<span class="round">Enludus</span></a>
-  <nav class="hd-nav" id="menu" aria-label="メインメニュー">${nav}</nav>
+  <a class="hd-brand" href="${c.homeHref}" aria-label="${c.home}">${LOGO}<span class="round">Enludus</span></a>
+  <nav class="hd-nav" id="menu" aria-label="${c.mainNav}">${nav}</nav>
   <div class="hd-end">
-    <a class="btn btn-sm" href="mailto:${person.email}">お問い合わせ</a>
-    <button class="burger" type="button" aria-expanded="false" aria-controls="menu" aria-label="メニュー" data-burger><span></span></button>
+    <a class="btn btn-sm" href="mailto:${person.email}">${c.contact}</a>
+    <button class="burger" type="button" aria-expanded="false" aria-controls="menu" aria-label="${c.menu}" data-burger><span></span></button>
   </div>
 </header>
 <main id="main">
@@ -106,16 +145,16 @@ ${main}
 <footer class="ft">
   <div class="ft-edge" aria-hidden="true">${[...edge, ...edge].map((n) => art(n)).join("")}</div>
   <div class="ft-row">
-    <a class="hd-brand" href="/ja">${LOGO}<span class="round">Enludus</span></a>
-    <nav aria-label="フッター">
-      <a href="/ja">Enludus トップ</a><a href="/portfolio">代表</a><a href="/blog">ブログ</a><a href="/blog/feed.xml">RSS</a><a href="/privacy">プライバシーポリシー</a>
+    <a class="hd-brand" href="${c.homeHref}">${LOGO}<span class="round">Enludus</span></a>
+    <nav aria-label="${c.footerNav}">
+      ${c.footer.map(([href, label]) => `<a href="${href}">${label}</a>`).join("")}
     </nav>
     <span class="round">© ${new Date().getFullYear()} Enludus</span>
   </div>
 </footer>
 </body>`;
   return `<!doctype html>
-<html lang="ja">
+<html lang="${lang}">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -124,7 +163,8 @@ ${main}
 ${head.noindex ? '<meta name="robots" content="noindex">\n' : ""}<link rel="canonical" href="${url}">
 <meta property="og:type" content="${head.type ?? "website"}">
 <meta property="og:site_name" content="Enludus">
-<meta property="og:locale" content="ja_JP">
+<meta property="og:locale" content="${c.locale}">
+${head.alternates ? Object.entries(head.alternates).map(([l, path]) => `<link rel="alternate" hreflang="${l}" href="${SITE}${path}">`).join("\n") + "\n" : ""}
 <meta property="og:title" content="${esc(head.title)}">
 <meta property="og:description" content="${esc(head.description)}">
 <meta property="og:url" content="${url}">
@@ -186,13 +226,45 @@ function postRows(posts: Post[]) {
   </ol>`;
 }
 
-export function portfolioPage(posts: Post[]) {
-  const workItems = works
+const PORTFOLIO = {
+  ja: {
+    rows: ["課題", "つくり方", "学んだこと"],
+    stack: "使っている技術",
+    heads: ["つくったもの", "書いたもの", "できること", "わたしについて"],
+    worksLead: "名前を押すと、課題・つくり方・学んだことが開きます。",
+    allPosts: "すべての記事を見る",
+    postsNote: "",
+    contactLead: "お仕事のご相談、インターン・採用のお話、技術の雑談まで。",
+    switchTo: ["/en/portfolio", "English"],
+  },
+  en: {
+    rows: ["", "", ""],
+    stack: "Tech I use",
+    heads: ["Things I've made", "Things I've written", "What I do", "About me"],
+    worksLead: "Open a name to see the problem, the approach and what I learned.",
+    allPosts: "All posts",
+    postsNote: "The blog is written in Japanese.",
+    contactLead: "Work, internships, hiring, or just talking tech — email is best.",
+    switchTo: ["/portfolio", "日本語"],
+  },
+} as const;
+
+export function portfolioPage(posts: Post[], lang: Lang = "ja") {
+  const t = PORTFOLIO[lang];
+  const en = lang === "en";
+  const p = en ? { ...person, ...personEn } : person;
+  const works_ = en ? worksEn : works;
+  const capabilities_ = en ? capabilitiesEn : capabilities;
+  const skills_ = en ? skillsEn : skills;
+  const facts_ = en ? factsEn : facts;
+  const about_ = en ? aboutEn : about;
+  const activities_ = en ? activitiesEn : activities;
+  const workItems = works_
     .map((work, index) => {
       const rows = [
-        ["Problem", "課題", work.problem],
-        ["Approach", "つくり方", work.approach],
-        ...(work.learning ? [["Learning", "学んだこと", work.learning]] : []),
+        ["Problem", t.rows[0], work.problem],
+        ["Approach", t.rows[1], work.approach],
+        ...(work.learning ? [["Learning", t.rows[2], work.learning]] : []),
       ]
         .map(
           ([en, ja, text]) =>
@@ -224,6 +296,7 @@ export function portfolioPage(posts: Post[]) {
     .join("");
 
   const band = marquee.map((m) => `<li>${esc(m)}</li>`).join("");
+  const name = en ? "Ibuki Nagase" : person.name;
 
   const main = `
 <section class="hero paper-a" aria-labelledby="hero-name">
@@ -231,38 +304,40 @@ export function portfolioPage(posts: Post[]) {
     <span>Portfolio — ${new Date().getFullYear()}</span>
     <span>Software engineer</span>
     <span><time data-clock>--:--</time> JST</span>
+    <a href="${t.switchTo[0]}" hreflang="${en ? "ja" : "en"}" lang="${en ? "ja" : "en"}">${t.switchTo[1]}</a>
   </div>
   ${art("Studio", "hero-art")}
   <h1 class="hero-name round" id="hero-name">
-    <span class="sr">${esc(person.name)}（</span><span class="l1">${person.latinFirst}</span><span class="l2">${person.latinLast}<i class="dot" aria-hidden="true"></i></span><span class="sr">）</span>
+    ${en ? "" : `<span class="sr">${esc(person.name)}（</span>`}<span class="l1">${person.latinFirst}</span><span class="l2">${person.latinLast}<i class="dot" aria-hidden="true"></i></span>${en ? "" : '<span class="sr">）</span>'}
   </h1>
   <div class="hero-foot">
-    <p class="hero-who"><strong>${esc(person.name)}</strong><span>${esc(person.role)}</span><span>${esc(person.school)}</span></p>
-    <p class="hero-lead">${esc(person.lead)}</p>
+    <p class="hero-who"><strong>${esc(name)}</strong><span>${esc(p.role)}</span><span>${esc(p.school)}</span></p>
+    <p class="hero-lead">${esc(p.lead)}</p>
     <a class="hero-next" href="#works">Works <span aria-hidden="true">↓</span></a>
   </div>
 </section>
 
-<div class="band" data-marquee aria-label="使っている技術">
+<div class="band" data-marquee aria-label="${t.stack}">
   <div class="band-track"><ul>${band}</ul><ul aria-hidden="true">${band}</ul></div>
 </div>
 
 <section class="sec paper-b curve" id="works" aria-label="Works">
-  ${sectionHead("01 / 04", "Works", "つくったもの", 0)}
-  <p class="sec-lead" data-reveal>名前を押すと、課題・つくり方・学んだことが開きます。</p>
+  ${sectionHead("01 / 04", "Works", t.heads[0], 0)}
+  <p class="sec-lead" data-reveal>${t.worksLead}</p>
   <ol class="works">${workItems}
   </ol>
 </section>
 
 <section class="sec paper-a curve" id="writing" aria-label="Writing">
-  ${sectionHead("02 / 04", "Writing", "書いたもの", 1)}
+  ${sectionHead("02 / 04", "Writing", t.heads[1], 1)}
+  ${t.postsNote ? `<p class="sec-lead" data-reveal>${t.postsNote}</p>` : ""}
   ${postRows(posts.slice(0, 3))}
-  <p class="more" data-reveal><a href="/blog">すべての記事を見る <span aria-hidden="true">→</span></a></p>
+  <p class="more" data-reveal><a href="/blog">${t.allPosts} <span aria-hidden="true">→</span></a></p>
 </section>
 
 <section class="sec paper-b curve" id="skills" aria-label="Skills">
-  ${sectionHead("03 / 04", "Skills", "できること", 2)}
-  <div class="caps">${capabilities
+  ${sectionHead("03 / 04", "Skills", t.heads[2], 2)}
+  <div class="caps">${capabilities_
     .map(
       (c, i) => `
     <article class="cap" data-reveal>
@@ -274,22 +349,22 @@ export function portfolioPage(posts: Post[]) {
     )
     .join("")}
   </div>
-  <dl class="skills" data-reveal>${skills
+  <dl class="skills" data-reveal>${skills_
     .map(([area, primary, detail]) => `<div><dt>${area}</dt><dd><strong>${esc(primary)}</strong>${esc(detail)}</dd></div>`)
     .join("")}
   </dl>
 </section>
 
 <section class="sec paper-a curve" id="about" aria-label="About">
-  ${sectionHead("04 / 04", "About", "わたしについて", 3)}
+  ${sectionHead("04 / 04", "About", t.heads[3], 3)}
   <div class="about">
-    <dl class="facts" data-reveal>${facts
+    <dl class="facts" data-reveal>${facts_
       .map(([label, value, note]) => `<div><dt>${label}</dt><dd>${esc(value)}<small>${esc(note)}</small></dd></div>`)
       .join("")}
     </dl>
-    <div class="about-text" data-reveal>${about.map((p) => `<p>${esc(p)}</p>`).join("")}</div>
+    <div class="about-text" data-reveal>${about_.map((x) => `<p>${esc(x)}</p>`).join("")}</div>
   </div>
-  <ul class="acts">${activities
+  <ul class="acts">${activities_
     .map(
       ([label, title, text]) => `
     <li data-reveal><span>${label}</span><h3>${esc(title)}</h3><p>${esc(text)}</p></li>`,
@@ -300,27 +375,32 @@ export function portfolioPage(posts: Post[]) {
 
 <section class="contact" id="contact" aria-label="Contact">
   <p class="contact-en round" aria-hidden="true">Contact</p>
-  <p class="contact-lead">お仕事のご相談、インターン・採用のお話、技術の雑談まで。</p>
+  <p class="contact-lead">${t.contactLead}</p>
   <a class="contact-mail round" href="mailto:${person.email}">${person.email}</a>
   <p class="contact-links">${person.links
+    .map((l) => (en && l.href === "/ja" ? { ...l, href: "/" } : l))
     .map((l) => `<a href="${l.href}"${external(l.href)}>${l.label} <span aria-hidden="true">↗</span></a>`)
     .join("")}</p>
 </section>`;
 
   return layout(
     {
-      title: "長瀬 唯楓 — Portfolio | Enludus",
-      description: `${person.name}（Ibuki Nagase）のポートフォリオ。${person.lead}StudyReel・Career・UsefulMap・Logiscore など、つくったものと考え方をまとめています。`,
-      path: "/portfolio",
+      title: en ? "Ibuki Nagase — Portfolio | Enludus" : "長瀬 唯楓 — Portfolio | Enludus",
+      description: en
+        ? `Portfolio of Ibuki Nagase. ${personEn.lead} StudyReel, Career, UsefulMap, Logiscore and more — what I've made and how I think.`
+        : `${person.name}（Ibuki Nagase）のポートフォリオ。${person.lead}StudyReel・Career・UsefulMap・Logiscore など、つくったものと考え方をまとめています。`,
+      path: en ? "/en/portfolio" : "/portfolio",
       image: "/og/portfolio.png",
+      lang,
+      alternates: { ja: "/portfolio", en: "/en/portfolio" },
       jsonLd: {
         "@context": "https://schema.org",
         "@type": "ProfilePage",
         mainEntity: {
           "@type": "Person",
-          name: person.name,
-          alternateName: "Ibuki Nagase",
-          jobTitle: "ソフトウェアエンジニア",
+          name: en ? "Ibuki Nagase" : person.name,
+          alternateName: en ? person.name : "Ibuki Nagase",
+          jobTitle: en ? "Software engineer" : "ソフトウェアエンジニア",
           worksFor: { "@type": "Organization", name: "Enludus", url: SITE },
           sameAs: person.links.filter((l) => l.href.startsWith("http")).map((l) => l.href),
         },

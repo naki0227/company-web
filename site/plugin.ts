@@ -8,6 +8,7 @@ import { blogIndexPage, feed, notFoundPage, portfolioPage, postPage, sitemap } f
 function pages(posts: Post[]) {
   const files = new Map<string, string>([
     ["portfolio.html", portfolioPage(posts)],
+    ["en/portfolio.html", portfolioPage(posts, "en")],
     ["blog.html", blogIndexPage(posts)],
     ["404.html", notFoundPage(posts)],
     ["blog/feed.xml", feed(posts.filter((p) => !p.draft))],
