@@ -212,7 +212,7 @@ function postRows(posts: Post[]) {
   return `<ol class="posts">${posts
     .map(
       (post) => `
-    <li data-tags="${esc(post.tags.join(" "))}" data-reveal>
+    <li data-tags="${esc(post.tags.join("|"))}" data-reveal>
       <a class="post-row" href="/blog/${post.slug}">
         <time datetime="${post.date}">${dot(post.date)}</time>
         <span class="post-row-title">${post.draft ? '<b class="badge">下書き</b>' : ""}${esc(post.title)}</span>
