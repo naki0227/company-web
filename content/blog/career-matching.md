@@ -27,7 +27,7 @@ crawler worker（Node + Playwright）
 
 pnpm の monorepo で、`apps/web`・`apps/api`・`apps/crawler` と、`packages/contracts`（Web / API 共有の Zod schema）・`packages/application`（ユースケースと port）・`packages/domain`（比較の純粋関数）に分けています。domain は Zod にも HTTP にも DB にも依存しません。
 
-MVP の配置は月額 0 円を前提にしています（ADR-040）。
+配置は月額 0 円が前提です（ADR-040）。
 
 | 役割 | 配置 |
 | --- | --- |
@@ -42,7 +42,7 @@ API は外部サイトを取得しません。取得・抽出・評価という�
 
 ## 2. データモデル：共有の評価と、個人の比較を分ける
 
-一番大きな線引きは、**求人の評価はユーザー非依存で共有し、比較だけを個人ごとに行う** ことです。
+**求人の評価はユーザー非依存で共有し、比較だけを個人ごとに行う** のが一番大きな線引きです。
 
 ```text
 companies 1─N job_postings
@@ -65,7 +65,7 @@ unique (target_id, source_set_hash, rubric_version, evaluator_version, model_ver
 
 `evaluator_version` は、parser・rule・Jev 評価器の版を `+` でつないだ文字列です。いまの値はそれぞれ `job-facts-v9`、`public-rules-v4`、`jev-context-v7+context-fragments-v5` で、抽出器は `html-v5`、公開資料のルーブリックは `public-anchors-v2` です。過去の評価がどの組み合わせで作られたかは、行を見れば分かります。
 
-個人側は、プロフィールを版で持ちます。`career_profile_versions` に 8 軸の `preference` と `importance`（どちらも 0〜100）、希望職種、必須条件をまとめて 1 回の RPC で確定し、比較結果 `match_results` は「どのプロフィール版と、どの評価版を比べたか」を参照します。プロフィールを更新しても、過去の比較は書き換わりません。
+個人側のプロフィール（8 軸の `preference` と `importance`、希望職種、必須条件）も版で持ち、`match_results` は「どの版とどの評価を比べたか」を参照します。更新しても過去の比較は書き換わりません。
 
 ## 3. 解析ジョブ：URL ごとに 1 件、lease で引き継ぐ
 
@@ -115,7 +115,7 @@ crawler の 1 サイクルは、30 日を過ぎた本文の削除 → 解析 job
 | ブラウザの要求数 | 1 ページ 64 件 |
 | ブラウザの subresource | 1 件 4 MiB、合計 16 MiB |
 
-圧縮された応答は受け付けません（`accept-encoding: identity` を送り、`content-encoding` が付いていたら破棄）。展開後のサイズで上限を守るためです。
+圧縮された応答は受け付けません（`accept-encoding: identity`）。展開後のサイズで上限を守るためです。
 
 ### ブラウザ
 
@@ -139,7 +139,7 @@ URL を知らない利用者のために、企業名（と職種・雇用形態�
 
 ### 公式サイトの特定
 
-最初は検索エンジン（DDGS 経由の DuckDuckGo）を手がかりにしていましたが、1 回目の検索の後に bot 判定（HTTP 202）が返り、それを DDGS が「結果なし」と報告していたため、「求人なし」をキャッシュしていました。そこで主経路を、参照データから公式サイトをたどる方法に替えました（ADR-051）。
+最初は DDGS 経由の DuckDuckGo を手がかりにしていましたが、bot 判定（HTTP 202）を DDGS が「結果なし」と報告し、「求人なし」をキャッシュしていました。そこで主経路を、参照データから公式サイトをたどる方法に替えました（ADR-051）。
 
 1. 日本語 Wikipedia の記事を「〇〇」「株式会社〇〇」「〇〇 (企業)」の順に試す。検索 API（`/w/api.php`）と SPARQL は robots.txt で禁止されているので使わない
 2. 記事中の Wikidata の Q-ID から `Special:EntityData/Q….json` を取る
@@ -147,7 +147,7 @@ URL を知らない利用者のために、企業名（と職種・雇用形態�
 4. ラベルか別名が入力の企業名と一致しなければ除く（同名の別物を避ける）
 5. P856（公式ウェブサイト）を最大 4 件。ラベルと別名は、求人の会社名の別表記として後で使う
 
-これらの取得も、求人ページと同じ境界（HTTPS、DNS 検査、robots、サイズ・時間の上限、別 origin へのリダイレクト拒否）を通ります。
+これらの取得も、求人ページと同じ境界を通ります。
 
 ### 手がかりの収集
 
@@ -155,7 +155,7 @@ URL を知らない利用者のために、企業名（と職種・雇用形態�
 
 ### 探索と検証
 
-`discoverJobs` は待ち行列で手がかりを処理します。JSON-LD のない採用ページが同じ形のリンクを 3 件以上（`LISTING_SIBLINGS = 3`）持っていれば一覧としてたどり、深さは最大 3 段（採用サイト → カテゴリ → 一覧 → 求人）です。求人らしい兄弟リンクと ATS のページは行列の先頭に入れ、ナビゲーションのリンクで取得上限を使い切らないようにしています。
+JSON-LD のない採用ページが同じ形のリンクを 3 件以上（`LISTING_SIBLINGS = 3`）持っていれば一覧としてたどり、深さは最大 3 段（採用サイト → カテゴリ → 一覧 → 求人）です。求人らしい兄弟リンクと ATS のページは待ち行列の先頭に入れ、ナビゲーションで取得上限を使い切らないようにしています。
 
 公式の手がかりを先に処理し、検索エンジンが設定されている場合は取得上限の 3/4 までを公式に使い、残りを検索の予備に取っておきます。
 
@@ -178,7 +178,7 @@ URL を知らない利用者のために、企業名（と職種・雇用形態�
 export type SourceFragment = SourceSection & { section?: string };
 ```
 
-求人の領域は `data-job`、JobPosting、`<main>`、`role="main"`、`<body>` の順で選びます。会社の情報は `data-company` か Organization として明示された領域からだけ取り、推測できなければ空にします。「関連ポジション」などの見出しが出たら、そこを求人本文の終わりとみなします。関連求人の技術や条件が混ざるのを防ぐためです。
+求人の領域は `data-job`、JobPosting、`<main>`、`role="main"`、`<body>` の順で選び、会社の情報は明示された領域からだけ取ります。「関連ポジション」などの見出しが出たら、そこを求人本文の終わりとみなします。関連求人の技術や条件が混ざるのを防ぐためです。
 
 ### 分割はロスなく
 
@@ -258,7 +258,7 @@ export const MIN_RANGE_SHARE = 0.15;
 
 grounding が足りないか、根拠の断片が 1 つもなければ、判定がどれだけ確信していても `unknown` です。根拠を指せない判断は推測とみなします。
 
-0.8 は較正済みの正答率ではなく、保守的に保留するための値です。unknown が多いからといってこの値は下げていません。
+0.8 は較正済みの正答率ではなく、保守的に保留するための値で、unknown が多くても下げていません。
 
 ### 範囲
 
@@ -351,7 +351,7 @@ if (observation.status === "range") {
           : "partial",
 ```
 
-希望 75 と anchor 50 は差 25 で近い、76 なら相違です。重要度は表示順に使うだけで、点数の重みにはしません。範囲の 2 点のあいだを補間することもしません。
+希望 75 と anchor 50 は差 25 で近い、76 なら相違です。重要度は表示順に使うだけで、重みにはしません。範囲の補間もしません。
 
 会社の評価は別に比べて「参考」として返し、求人の根拠がない軸を会社の値で埋めることはしません。プロフィールと評価で軸カタログの版が違えば、その対象は `incompatible` です。
 
@@ -380,7 +380,7 @@ if (observation.status === "range") {
 | AI の日次予算 | `reserve_jev_budget`。予約できたときだけ呼ぶ |
 | AI の呼び出し回数 | 1 求人 1 回。rule で決まった軸と、断片が 0 のときは呼ばない |
 
-新規解析の上限は、利用者の `profiles` 行を `for update` で取ってから数えるので、並列の要求でも超えません。同じ URL は期間内に 1 回分しか数えません。
+新規解析の上限は、利用者の `profiles` 行を `for update` で取ってから数えるので、並列の要求でも超えません。
 
 AI の予算は、送る断片の数を単位に、日ごとの行を 1 本の UPDATE（`reserved_units + p_units <= p_daily_limit` のときだけ更新）で予約します。予算が切れたら残りの軸は明示的に unknown にし、評価器の版を `jev-budget-exhausted` として保存します。予算の表に届かないときは、無視せずに一時的な失敗として再試行します。本番はいま `unlimited` で、実際の token 数はメトリクスで見ています。
 
@@ -403,7 +403,7 @@ AI の予算は、送る断片の数を単位に、日ごとの行を 1 本の U
 
 CI は package ごとに lint（oxlint）・typecheck・test・build を回し、Web は Playwright の E2E と、bundle にサーバー側の秘密が入っていないかの検査（`scripts/check-web-bundle-secrets.sh`）も行います。
 
-main に merge されると、API と crawler の image を GHCR に push し、digest を記録します。デプロイの workflow は Azure に OIDC でログインし、API を digest 指定で更新します。crawler の image は Job の定義ではなく、API が Job を起動するときの実行テンプレートで digest を指定します。こうすると、デプロイ用の ID に Job の書き込み権限を渡さずに済みます。ロールバックは、既存の digest を指定して同じ workflow を手動で流します。
+main に merge されると、API と crawler の image を GHCR に push し、デプロイの workflow が Azure に OIDC でログインして API を digest 指定で更新します。crawler の digest は Job の定義ではなく、API が Job を起動するときの実行テンプレートで指定するので、デプロイ用の ID に Job の書き込み権限が要りません。ロールバックは既存の digest を指定して同じ workflow を流します。
 
 ## 14. テスト
 
@@ -419,7 +419,7 @@ unit test は 6 つの package で合わせて約 530 件です。
 
 oracle Jev は、テストに書いた正解だけから答える Jev の代役です。ある軸の正解の言い回しが、渡された断片の中にあればその断片を根拠として答え、なければ `none` を返します。
 
-これで、「本文のどこかが評価器に届かなかったせいで unknown になる」回帰を、AI の揺れと切り離して検出できます。求人ページ全体の理解や評価の fixture のテストは、この oracle を使っています。
+これで、「本文が評価器に届かず unknown になる」回帰を、AI の揺れと切り離して検出できます。
 
 DB の migration には rollback の SQL を用意し、rollback そのものもテストしています。範囲を足した migration の rollback は、範囲の観測を unknown に、`partial` の比較を unknown に戻してから列と CHECK を元に戻します。
 

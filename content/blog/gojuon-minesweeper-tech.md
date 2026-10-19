@@ -300,22 +300,7 @@ for (const char of state.openedChars) {
 
 ### 同じルールを Deno で動かす
 
-Edge Function は Deno で動くので、`src/` の TypeScript をそのまま import できません。`scripts/sync-online-function.mjs` が `src/game/`・`src/data/`・`src/online/` の必要なファイルを `supabase/functions/_shared/app/` にコピーし、その途中で import を書き換えます。
-
-```js
-// scripts/sync-online-function.mjs
-function rewriteImports(source) {
-  return source.replace(
-    /(from\s+)"(\.{1,2}\/[^"]+)"/g,
-    (_match, prefix, specifier) =>
-      specifier.endsWith(".json")
-        ? `${prefix}"${specifier}" with { type: "json" }`
-        : `${prefix}"${specifier}.ts"`,
-  );
-}
-```
-
-Deno は拡張子つきの import と、JSON の import attributes を求めるからです。コピー先は生成物なので git には入れていません。ルールを変えたら、アプリと一緒に Edge Function もデプロイし直します。サーバーは出題を ID で覚えているので、データの入れ替えは対戦中の部屋がないときに行います。
+Edge Function は Deno で動くので、`src/` の TypeScript をそのまま import できません。`scripts/sync-online-function.mjs` が `src/game/`・`src/data/`・`src/online/` の必要なファイルを `supabase/functions/_shared/app/` にコピーし、その途中で相対 import を正規表現で書き換えます。`"./engine"` は `"./engine.ts"` に、JSON は `with { type: "json" }` 付きにします。Deno は拡張子つきの import と、JSON の import attributes を求めるからです。コピー先は生成物なので git には入れていません。ルールを変えたら、アプリと一緒に Edge Function もデプロイし直します。サーバーは出題を ID で覚えているので、データの入れ替えは対戦中の部屋がないときに行います。
 
 ### 競合：行ロックと version
 
@@ -357,8 +342,6 @@ end if;
 
 端末は Realtime の `postgres_changes` で部屋の変更を受け取りつつ、15 秒ごとにも読み直します。どちらの経路で届いても、`version` が大きい方（同じなら `updated_at` が新しい方）だけを採用するので、順番が前後しても古い状態に戻りません。
 
-合言葉は「全角半角・大文字小文字・ひらがなカタカナ・空白の違い」を同じとみなします。NFKC → 小文字 → カタカナをひらがなに → 空白を除く、の順です。
-
 ## 8. Expo で Web と iOS を 1 つのコードにする
 
 主な依存は Expo SDK 57、React Native 0.86.2、React 19.2.3、Expo Router、react-native-web 0.21 です。New Architecture を有効にしています。
@@ -367,27 +350,13 @@ end if;
 
 広告、課金、Apple でのサインインのように、Web と iOS でまったく違うものは、Metro のプラットフォーム拡張子で分けています。`.native.ts(x)` と `.web.ts(x)` のファイルがリポジトリに 16 個あります。
 
-```ts
-// src/ads/BannerAd.d.ts
-// Resolved per platform by Metro: BannerAd.native.tsx (AdMob) / BannerAd.web.tsx (AdSense)
-export declare function BannerAd(
-  props: BannerAdProps,
-): React.JSX.Element | null;
-```
-
-型は `.d.ts` に 1 つだけ書き、呼ぶ側は `BannerAd` を import するだけです。ネイティブは AdMob、Web は AdSense になります。
+たとえば広告は `BannerAd.native.tsx`（AdMob）と `BannerAd.web.tsx`（AdSense）の 2 つで、型は `BannerAd.d.ts` に 1 つだけ書き、呼ぶ側は `BannerAd` を import するだけです。
 
 ### つまずいたところ
 
 実際に直したものを並べます。
 
-**1. Web には native driver がない。** `Animated` の `useNativeDriver: true` は Web では使えないので、1 か所で切り替えています。
-
-```ts
-// src/components/motion.ts
-// React Native Web has no native animation driver.
-export const USE_NATIVE_DRIVER = Platform.OS !== "web";
-```
+**1. Web には native driver がない。** `Animated` の `useNativeDriver: true` は Web では使えないので、`src/components/motion.ts` の `USE_NATIVE_DRIVER = Platform.OS !== "web"` 1 か所で切り替えています。
 
 **2. Web では disabled な Pressable が中身ごと無効になる。** 閉じられないポップアップの背面に `disabled` の `Pressable` を置いたところ、Web ではその子孫まで無効扱いになり、チュートリアルのボタンが押せなくなりました。背面に `Pressable` を置かない形に直しています。
 
