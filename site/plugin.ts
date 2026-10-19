@@ -1,4 +1,5 @@
 import type { Plugin } from "vite";
+import { copy } from "../src/i18n";
 import { renderCards, type Card } from "./og";
 import { loadPosts, type Post } from "./posts";
 import { blogIndexPage, feed, notFoundPage, portfolioPage, postPage, sitemap } from "./pages";
@@ -42,6 +43,33 @@ function fileFor(url: string) {
  */
 const LATEST = "virtual:latest-posts";
 
+function strings(value: unknown): string[] {
+  if (typeof value === "string") return [value];
+  if (Array.isArray(value)) return value.flatMap(strings);
+  if (value && typeof value === "object") return Object.values(value).flatMap(strings);
+  return [];
+}
+
+/**
+ * Font links for the company top. Zen Maru Gothic is requested with `text=` holding
+ * every character the page can show (both languages, the newest post titles, ASCII),
+ * so Google Fonts returns a few dozen KB instead of the whole Japanese face.
+ */
+function fontLinks(titles: string[]) {
+  const ascii = Array.from({ length: 95 }, (_, i) => String.fromCharCode(32 + i)).join("");
+  const chars = [...new Set([...strings(copy).join(""), ...titles.join(""), ...ascii, ..."→←↗©·—「」、。・（）"])]
+    .filter((c) => c.trim())
+    .sort()
+    .join("");
+  const zen = `https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700&display=swap&text=${encodeURIComponent(chars)}`;
+  return [
+    '<link rel="preconnect" href="https://fonts.googleapis.com" />',
+    '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />',
+    '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&display=swap" />',
+    `<link rel="stylesheet" href="${zen}" />`,
+  ].join("\n    ");
+}
+
 export function contentPages(): Plugin {
   let root = process.cwd();
   const ogCache = new Map<string, Uint8Array>();
@@ -53,6 +81,11 @@ export function contentPages(): Plugin {
     // The company top lists the newest posts; they are baked in at build time.
     resolveId(id) {
       return id === LATEST ? `\0${LATEST}` : undefined;
+    },
+    async transformIndexHtml(html) {
+      if (!html.includes("<!-- fonts:")) return html;
+      const posts = await loadPosts(root, { includeDrafts: false });
+      return html.replace(/<!-- fonts:.*?-->/, fontLinks(posts.slice(0, 3).map((p) => p.title)));
     },
     async load(id) {
       if (id !== `\0${LATEST}`) return;

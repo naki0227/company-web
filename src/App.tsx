@@ -1,10 +1,42 @@
+import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import latestPosts from "virtual:latest-posts";
 import { LangContext, useCopy, useLang } from "./copy-context";
 import { homePath, type Lang, type Product } from "./i18n";
+import {
+  CameraSwitchIcon,
+  CareerIcon,
+  HandoffIcon,
+  KanaIcon,
+  Leaf,
+  LockedWindowIcon,
+  MapIcon,
+  Mug,
+  Note,
+  Pencil,
+  Pin,
+  SoundIcon,
+  Studio,
+  StudyIcon,
+} from "./illustrations";
 
-// Layout follows lp-anatomy's "minimal / hardware" mood (teenage engineering): the
-// products carry the colour and the page stays ink, paper and grey. Almost nothing
-// moves; hover only changes opacity or background, and only on mouse devices.
+const productIcons: Record<string, typeof StudyIcon> = {
+  studyreel: StudyIcon,
+  usefulmap: MapIcon,
+  career: CareerIcon,
+  logiscore: SoundIcon,
+  minesweeper: KanaIcon,
+};
+
+// Mood: lp-anatomy §7-2 "warm" (Bikkuri Donkey), translated to Enludus. Two paper
+// colours alternate with oval curves between them; colour comes only from the logo
+// (orange, sky, navy) and the illustrations use the same three. Latin is a round face
+// (Fredoka), Japanese a round gothic (Zen Maru Gothic, subset at build time). Motion:
+// one centre slider (3 s), hover wobble (.75 s, ±3°), rows that slide 10 px (.5 s
+// cubic-bezier(.19,1,.22,1)), and a mobile menu whose items drop in .125 s apart.
+
+const still = () =>
+  matchMedia("(prefers-reduced-motion: reduce)").matches ||
+  Boolean((navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData);
 
 function LogoMark() {
   return (
@@ -46,70 +78,81 @@ function LangSwitch() {
   );
 }
 
+function useNav() {
+  const t = useCopy();
+  return [
+    { href: "#products", label: t.nav.products, en: "Products", Icon: Pin },
+    { href: "/blog", label: t.nav.journal, en: "Blog", Icon: Pencil },
+    { href: "/portfolio", label: t.nav.founder, en: "Founder", Icon: Leaf },
+    { href: "#company", label: t.nav.company, en: "About", Icon: Mug },
+  ];
+}
+
 function Header() {
   const t = useCopy();
+  const nav = useNav();
+  const [open, setOpen] = useState(false);
   return (
-    <header className="hd">
+    <header className={`hd${open ? " is-open" : ""}`}>
       <a className="hd-brand" href="#top" aria-label={t.meta.homeLabel}>
         <LogoMark />
-        <span>Enludus</span>
+        <span className="round">Enludus</span>
       </a>
-      <nav className="hd-nav" aria-label={t.meta.navLabel}>
-        <a href="#products">{t.nav.products}</a>
-        <a href="/blog">{t.nav.journal}</a>
-        <a href="/portfolio">{t.nav.founder}</a>
-        <a href="#company">{t.nav.company}</a>
+      <nav className="hd-nav" id="menu" aria-label={t.meta.navLabel}>
+        {nav.map(({ href, label, en, Icon }, i) => (
+          <a
+            key={href}
+            href={href}
+            style={{ "--i": i } as CSSProperties}
+            onClick={() => setOpen(false)}
+          >
+            <Icon className="hd-icon" />
+            <span>
+              <small className="round">{en}</small>
+              {label}
+            </span>
+          </a>
+        ))}
       </nav>
       <div className="hd-end">
         <LangSwitch />
-        <a className="hd-mail" href="mailto:contact@enludus.com">
+        <a className="btn btn-sm" href="mailto:contact@enludus.com">
           {t.nav.contact}
         </a>
+        <button
+          className="burger"
+          type="button"
+          aria-expanded={open}
+          aria-controls="menu"
+          aria-label="Menu"
+          onClick={() => setOpen((v) => !v)}
+        >
+          <span />
+        </button>
       </div>
     </header>
   );
 }
 
-function Hero() {
-  const t = useCopy();
+function SectionHead({ en, ja, left, right }: { en: string; ja: string; left: ReactNode; right: ReactNode }) {
   return (
-    <section className="hero" id="top">
-      <p className="label">{t.hero.label}</p>
-      <h1>{t.hero.title}</h1>
-      <p className="hero-lead">{t.hero.lead}</p>
-      <div className="index" role="table" aria-label={t.products.label}>
-        <div className="index-row index-head" role="row">
-          {t.hero.indexHead.map((cell) => (
-            <span key={cell} role="columnheader">
-              {cell}
-            </span>
-          ))}
-        </div>
-        {t.products.items.map((p, i) => (
-          <a className="index-row" role="row" href={`#${p.id}`} key={p.id}>
-            <span role="cell">{String(i + 1).padStart(2, "0")}</span>
-            <span role="cell" className="index-name">
-              {p.name}
-            </span>
-            <span role="cell">{p.what}</span>
-            <span role="cell">{p.platform}</span>
-            <span role="cell">{p.since}</span>
-          </a>
-        ))}
+    <div className="sh">
+      <span className="sh-side sh-left">{left}</span>
+      <div>
+        <p className="sh-en round" aria-hidden="true">
+          {en}
+        </p>
+        <h2 className="sh-ja">{ja}</h2>
       </div>
-    </section>
+      <span className="sh-side sh-right">{right}</span>
+    </div>
   );
 }
 
-function Shot({ image }: { image: Product["image"] }) {
+function Shot({ image, sizes }: { image: Product["image"]; sizes: string }) {
   const [small] = image.widths;
-  const sizes =
-    image.shape === "phone"
-      ? "(max-width: 760px) 62vw, 320px"
-      : "(max-width: 760px) 92vw, 56vw";
   return (
     <img
-      className={`shot shot-${image.shape}`}
       src={`${image.base}-${small}.webp`}
       srcSet={image.widths.map((w) => `${image.base}-${w}.webp ${w}w`).join(", ")}
       sizes={sizes}
@@ -122,30 +165,126 @@ function Shot({ image }: { image: Product["image"] }) {
   );
 }
 
-function ProductSection({
-  product,
-  index,
-  total,
-}: {
-  product: Product;
-  index: number;
-  total: number;
-}) {
+/** Centre slider (Bikkuri Donkey's main visual): one big card, neighbours darkened. */
+function Slider() {
   const t = useCopy();
+  const items = t.products.items;
+  const n = items.length;
+  const [index, setIndex] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (still() || paused) return;
+    const el = ref.current;
+    let visible = true;
+    const io = new IntersectionObserver(([e]) => (visible = e.isIntersecting));
+    if (el) io.observe(el);
+    const id = window.setInterval(() => {
+      if (visible && !document.hidden) setIndex((i) => (i + 1) % n);
+    }, 3000);
+    return () => {
+      window.clearInterval(id);
+      io.disconnect();
+    };
+  }, [n, paused]);
+
+  return (
+    <div
+      className="slider"
+      ref={ref}
+      role="region"
+      aria-roledescription="carousel"
+      aria-label={t.products.label}
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+      onFocus={() => setPaused(true)}
+    >
+      <div className="slider-track">
+        {items.map((p, i) => {
+          let offset = (i - index + n) % n;
+          if (offset > n / 2) offset -= n;
+          const Icon = productIcons[p.id];
+          return (
+            <a
+              key={p.id}
+              href={`#${p.id}`}
+              className={`slide${offset === 0 ? " is-center" : ""}${Math.abs(offset) > 1 ? " is-far" : ""}`}
+              style={{ "--o": offset } as CSSProperties}
+              aria-hidden={offset !== 0}
+              tabIndex={offset === 0 ? 0 : -1}
+            >
+              <span className={`slide-frame slide-${p.image.shape}`}>
+                <Shot image={p.image} sizes="(max-width: 760px) 70vw, 340px" />
+              </span>
+              <span className="slide-cap">
+                <Icon className="slide-icon" />
+                <span>
+                  <strong className="round">{p.name}</strong>
+                  {p.what}
+                </span>
+              </span>
+            </a>
+          );
+        })}
+      </div>
+      <div className="slider-ui">
+        <button type="button" className="slider-btn" aria-label="Previous" onClick={() => setIndex((i) => (i - 1 + n) % n)}>
+          ←
+        </button>
+        <div className="dots">
+          {items.map((p, i) => (
+            <button
+              key={p.id}
+              type="button"
+              aria-label={p.name}
+              aria-current={i === index ? "true" : undefined}
+              onClick={() => setIndex(i)}
+            />
+          ))}
+        </div>
+        <button type="button" className="slider-btn" aria-label="Next" onClick={() => setIndex((i) => (i + 1) % n)}>
+          →
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function Hero() {
+  const t = useCopy();
+  return (
+    <section className="hero paper-a" id="top">
+      <div className="hero-copy">
+        <p className="label round">{t.hero.label}</p>
+        <h1>{t.hero.title}</h1>
+        <p className="hero-lead">{t.hero.lead}</p>
+        <Note className="doodle doodle-note" />
+        <Pencil className="doodle doodle-pencil" />
+      </div>
+      <Slider />
+    </section>
+  );
+}
+
+function ProductCard({ product, index }: { product: Product; index: number }) {
+  const t = useCopy();
+  const Icon = productIcons[product.id];
   const guide = t.products.guidePaths[product.id];
   return (
-    <article className={`product ${index % 2 ? "is-light" : "is-dark"}`} id={product.id}>
-      <div className={`stage stage-${product.image.shape}`}>
-        <Shot image={product.image} />
+    <article className={`card ${index % 2 ? "tone-s" : "tone-o"}`} id={product.id}>
+      <div className="card-arch">
+        <span className="card-no round">{String(index + 1).padStart(2, "0")}</span>
+        <Icon className="card-icon wobble" />
       </div>
-      <div className="info">
-        <p className="label">
-          {String(index + 1).padStart(2, "0")} / {String(total).padStart(2, "0")} — {product.what}
-        </p>
-        <h3 className="info-name">{product.name}</h3>
-        <p className="info-headline">{product.headline}</p>
-        <p className="info-body">{product.body}</p>
-        <dl className="specs" aria-label={t.products.specsLabel}>
+      <div className="card-body">
+        <p className="card-what">{product.what}</p>
+        <h3 className="round" lang={/^[\x20-\x7e]+$/.test(product.name) ? "en" : "ja"}>
+          {product.name}
+        </h3>
+        <p className="card-headline">{product.headline}</p>
+        <p className="card-text">{product.body}</p>
+        <dl className="specs">
           {product.specs.map(([k, v]) => (
             <div key={k}>
               <dt>{k}</dt>
@@ -153,20 +292,14 @@ function ProductSection({
             </div>
           ))}
         </dl>
-        <p className="info-links">
+        <p className="card-links">
           {product.links.map((l) => (
-            <a
-              key={l.href}
-              className="pill pill-dark"
-              href={l.href}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <a key={l.href} className="btn" href={l.href} target="_blank" rel="noopener noreferrer">
               {l.label} <span aria-hidden="true">↗</span>
             </a>
           ))}
           {guide && (
-            <a className="pill" href={guide}>
+            <a className="btn btn-line" href={guide}>
               {t.products.guide}
             </a>
           )}
@@ -179,29 +312,35 @@ function ProductSection({
 function Products() {
   const t = useCopy();
   return (
-    <section className="products" id="products" aria-label={t.products.label}>
-      {t.products.items.map((p, i) => (
-        <ProductSection product={p} index={i} total={t.products.items.length} key={p.id} />
-      ))}
+    <section className="sec paper-b curve" id="products">
+      <SectionHead en="Products" ja={t.products.label} left={<Pin />} right={<Note />} />
+      <div className="cards">
+        {t.products.items.map((p, i) => (
+          <ProductCard product={p} index={i} key={p.id} />
+        ))}
+      </div>
     </section>
   );
 }
 
 function Decisions() {
   const t = useCopy();
+  const icons = [CameraSwitchIcon, LockedWindowIcon, HandoffIcon];
   return (
-    <section className="block" aria-labelledby="decisions-title">
-      <h2 className="label" id="decisions-title">
-        {t.decisions.label}
-      </h2>
-      <ol className="decisions">
-        {t.decisions.items.map((d) => (
-          <li key={d.title}>
-            <h3>{d.title}</h3>
-            <p>{d.body}</p>
-            <span>{d.product}</span>
-          </li>
-        ))}
+    <section className="sec paper-a curve">
+      <SectionHead en="Our way" ja={t.decisions.label} left={<Leaf />} right={<Pencil />} />
+      <ol className="ways">
+        {t.decisions.items.map((d, i) => {
+          const Icon = icons[i];
+          return (
+            <li key={d.title}>
+              <Icon className="way-icon wobble" />
+              <span className="way-tag round">{d.product}</span>
+              <h3>{d.title}</h3>
+              <p>{d.body}</p>
+            </li>
+          );
+        })}
       </ol>
     </section>
   );
@@ -211,26 +350,27 @@ function Journal() {
   const t = useCopy();
   if (!latestPosts.length) return null;
   return (
-    <section className="block" aria-labelledby="journal-title">
-      <div className="block-head">
-        <h2 className="label" id="journal-title">
-          {t.journal.label}
-        </h2>
-        <a className="block-more" href="/blog">
-          {t.journal.all} →
-        </a>
-      </div>
+    <section className="sec paper-b curve">
+      <SectionHead en="News" ja={t.journal.label} left={<Pencil />} right={<Mug />} />
       <ul className="news">
         {latestPosts.map((p) => (
           <li key={p.slug}>
             <a href={`/blog/${p.slug}`}>
-              <time dateTime={p.date}>{p.date.replace(/-/g, ".")}</time>
+              <time className="round" dateTime={p.date}>
+                {p.date.replace(/-/g, ".")}
+              </time>
               <span lang="ja">{p.title}</span>
+              <i aria-hidden="true">→</i>
             </a>
           </li>
         ))}
       </ul>
-      {t.journal.note && <p className="note">{t.journal.note}</p>}
+      <p className="more">
+        <a className="btn btn-line" href="/blog">
+          {t.journal.all}
+        </a>
+        {t.journal.note && <small>{t.journal.note}</small>}
+      </p>
     </section>
   );
 }
@@ -239,25 +379,26 @@ function Company() {
   const t = useCopy();
   const [, founderRow] = t.company.rows;
   return (
-    <section className="block" id="company" aria-labelledby="company-title">
-      <h2 className="label" id="company-title">
-        {t.company.label}
-      </h2>
-      <dl className="company">
-        {t.company.rows.map(([k, v]) => (
-          <div key={k}>
-            <dt>{k}</dt>
-            <dd>
-              {v.includes("@") ? <a className="inline-link" href={`mailto:${v}`}>{v}</a> : v}
-              {k === founderRow[0] && (
-                <a className="inline-link" href="/portfolio">
-                  {t.company.founderLink} →
-                </a>
-              )}
-            </dd>
-          </div>
-        ))}
-      </dl>
+    <section className="sec paper-a curve" id="company">
+      <SectionHead en="About us" ja={t.company.label} left={<Mug />} right={<Leaf />} />
+      <div className="company">
+        <dl className="company-table">
+          {t.company.rows.map(([k, v]) => (
+            <div key={k}>
+              <dt>{k}</dt>
+              <dd>
+                {v.includes("@") ? <a href={`mailto:${v}`}>{v}</a> : v}
+                {k === founderRow[0] && (
+                  <a className="inline" href="/portfolio">
+                    {t.company.founderLink} →
+                  </a>
+                )}
+              </dd>
+            </div>
+          ))}
+        </dl>
+        <Studio className="studio" />
+      </div>
     </section>
   );
 }
@@ -265,12 +406,13 @@ function Company() {
 function Contact() {
   const t = useCopy();
   return (
-    <section className="contact" id="contact" aria-labelledby="contact-title">
-      <h2 className="label" id="contact-title">
-        {t.contact.label}
-      </h2>
-      <p className="contact-lead">{t.contact.lead}</p>
-      <a className="contact-mail" href="mailto:contact@enludus.com">
+    <section className="band" id="contact" aria-labelledby="contact-title">
+      <p className="round band-en" aria-hidden="true">
+        Contact
+      </p>
+      <h2 id="contact-title">{t.contact.label}</h2>
+      <p>{t.contact.lead}</p>
+      <a className="btn btn-white" href="mailto:contact@enludus.com">
         contact@enludus.com
       </a>
     </section>
@@ -279,19 +421,30 @@ function Contact() {
 
 function Footer() {
   const t = useCopy();
+  const nav = useNav();
+  const Icons = Object.values(productIcons);
   return (
     <footer className="ft">
-      <a className="hd-brand" href="#top">
-        <LogoMark />
-        <span>Enludus</span>
-      </a>
-      <nav aria-label="Footer">
-        <a href="#products">{t.nav.products}</a>
-        <a href="/blog">{t.nav.journal}</a>
-        <a href="/portfolio">{t.nav.founder}</a>
-        <a href="/privacy">{t.footer.privacy}</a>
-      </nav>
-      <span>© 2026 Enludus</span>
+      <div className="ft-edge" aria-hidden="true">
+        {[...Icons, ...Icons].map((Icon, i) => (
+          <Icon key={i} />
+        ))}
+      </div>
+      <div className="ft-row">
+        <a className="hd-brand" href="#top">
+          <LogoMark />
+          <span className="round">Enludus</span>
+        </a>
+        <nav aria-label="Footer">
+          {nav.map(({ href, label }) => (
+            <a key={href} href={href}>
+              {label}
+            </a>
+          ))}
+          <a href="/privacy">{t.footer.privacy}</a>
+        </nav>
+        <span className="round">© 2026 Enludus</span>
+      </div>
     </footer>
   );
 }

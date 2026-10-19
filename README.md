@@ -2,7 +2,7 @@
 
 Official company / studio website for **Enludus**.
 
-A quiet single-page site built with Vite, React and TypeScript, laid out in lp-anatomy's "minimal / hardware" mood: real product screens on alternating ink and stone stages, a product index, and almost no motion. It presents five products:
+A single-page site built with Vite, React and TypeScript, in lp-anatomy's "warm" mood (modelled on Bikkuri Donkey): two paper colours with oval edges, the logo's three colours only, hand-drawn SVG illustrations in those colours (`src/illustrations.tsx`), Fredoka and Zen Maru Gothic (subset to the page text at build time), a centre slider of real product screens, and arched product cards. It presents five products:
 
 - **StudyReel** — study recorder for iPhone and iPad
 - **UsefulMap** — travel-mode comparison for iPhone and iPad
