@@ -10,38 +10,25 @@ type: tech
 
 sekai は、手順の代わりに **空間・時間・制約** で「実行できる世界」を書く、実験的な言語です。この記事では、リポジトリの現在の `main`（HEAD は `5cc77df`、「Merge pull request #6 … relational-fact-resolution」）を、ソースを引用しながら順に追います。数字と定数はソースの値か、手元で実行した結果です。
 
-先に結論を書いておくと、sekai は **小さな世界なら、書いたとおりに動き、なぜそうなったかを報告できる** ところまで来ています。一方で、文書で定義した意味と実装の間にはまだ差があり、手元で試して見つかった穴もあります。それも全部書きます。
+先に結論を書くと、sekai は **小さな世界なら書いたとおりに動き、なぜそうなったかを報告できる** ところまで来ています。一方で、文書の意味と実装の間には差があり、手元で試して見つかった穴もあります。それも書きます。
 
 ## 全体像
 
 名前は 3 つあります。言語が `sekai`、ランタイムの中心が `orbis`、考え方が World-Oriented Programming（世界指向プログラミング）、ファイルの拡張子は `.sk` です（`docs/decisions/0001-project-identity.md`）。
 
 ```text
-Cargo.toml            workspace: members = ["orbis", "cli"]
-orbis/src/lib.rs        9 行   公開 API の再エクスポート
 orbis/src/parser.rs  1041 行   行単位のパーサ
-orbis/src/world.rs   6742 行   ランタイム本体（うち 4736 行目以降がテスト）
+orbis/src/world.rs   6742 行   ランタイム本体（4736 行目以降はテスト）
 cli/src/main.rs        55 行   sekai コマンド
-viewer/               app.js 2234 行 + index.html + styles.css（ライブラリなし）
-scripts/              viewer_server.py, render_figure.py, spec_metrics.py
+viewer/app.js        2234 行   ビューア（ライブラリなし）
 examples/             .sk が 42 本
-benchmarks/           比較用の Python（imperative / event_driven / library_style）
-paper/                LaTeX の論文
-docs/                 設計文書と研究ノート（research-log に 98 本）
+benchmarks/           比較用の Python
+docs/research-log/    研究ノート 98 本
 ```
 
 Rust は edition 2024 で、`Cargo.lock` に載っているのは `orbis` と `sekai-cli` の 2 つだけです。**外部クレートは 0**。JSON も `escape_json` を使って手で組み立てています。
 
-経緯は git でこう残っています。
-
-| 期間 | 内容 |
-| --- | --- |
-| 2026-03-24 | 研究ノートが始まる（考え方、最初の模型、最初の実行系） |
-| 2026-03-25 | 最初のコミット。制約の追跡、時間の意味（Phase G）、決まらない世界（Phase I）。この日だけで 69 コミット |
-| 2026-03-26〜28 | 見通し（Phase J）、比較評価（Phase K）、論文の仕上げ、Zenodo への公開 |
-| 2026-04-22 | PR #2〜#6。位置づけの整理、旗艦シナリオ、矛盾の構造化、不確かな事実、関係の事実 |
-
-コミットは全部で 120 です。論文は Zenodo に置いています（DOI: [10.5281/zenodo.19235961](https://doi.org/10.5281/zenodo.19235961)）。査読を経たものではありません。
+研究ノートは 2026-03-24 に始まり、コミットは 03-25〜28 に 110、04-22 に PR #2〜#6 の 10、合わせて 120 です。論文は Zenodo に置いています（DOI: [10.5281/zenodo.19235961](https://doi.org/10.5281/zenodo.19235961)）。査読を経たものではありません。
 
 ## 言語モデル：世界の最前線
 
@@ -61,11 +48,10 @@ world frontier -> next event -> local synchronization -> event firing -> law enf
 
 それぞれに名前が付いています。
 
-- `Next(W_t)`：次に起きる出来事を選ぶ。最も早いもの、同時なら意味上の優先度、それでも同じなら決まった順。
-- `Sync(ev, W_t)`：その出来事を解釈するのに必要な最小限の物だけを、同じ時刻にそろえる。これが **大域的には非同期、局所的に同期** の意味です。
-- `Fire(W_t, ev)`：出来事を起こす（速度を反転するなど）。
-- `Enforce(W_t^ev, L_h)`：法則を当てる。通る、直す（repair）、矛盾、のどれか。
-- `Obs(W, t_obs)`：観測。それより前の出来事が全部片付いてからでないと観測できない。
+- `Next(W_t)`：次の出来事を選ぶ。最も早いもの、同時なら意味上の優先度、それでも同じなら決まった順。
+- `Sync(ev, W_t)`：解釈に必要な最小限の物だけを同じ時刻にそろえる。これが **大域的には非同期、局所的に同期** の意味です。
+- `Fire` で出来事を起こし、`Enforce` で法則を当てる。結果は、通る・直す（repair）・矛盾のどれか。
+- `Obs(W, t_obs)`：観測。それより前の出来事が片付いてからでないと観測できない。
 
 矛盾は例外ではなく、**世界の結果の 1 つ** として扱います。
 
@@ -128,13 +114,11 @@ action:
 
 ## パーサ
 
-パーサ（`orbis/src/parser.rs`）は、行ごとに読んで、今どのブロックにいるかを `Mode` で切り替えるだけの素朴なものです。空行と `#` で始まる行は飛ばし、ブロックの中身は先頭が空白かタブかで判定します。
-
-結果の `Program` は、物の宣言、`HashMap<(String, String), Value>` の性質、候補、指示、法則、観測時刻を持つだけの構造体です。法則は `Vec<String>` のまま渡ります。`not inside(A, zone)` は `["not_inside", "A", "zone"]` に、`speed(A) <= 4` は `["velocity_limit", "A", "4"]` に書き換えられ、意味の解釈は `world.rs` の `Constraint::from_parts` で行います。エラーには行番号が付きますが、ランタイム側のエラー（法則の矛盾など）にはソースの位置がありません。これは `semantics-core.md` の「既知の穴」にも挙がっています。
+パーサ（`orbis/src/parser.rs`）は、行ごとに読み、どのブロックにいるかを `Mode` で切り替えるだけの素朴なものです。結果の `Program` では、法則は `Vec<String>` のまま渡ります。`not inside(A, zone)` は `["not_inside", "A", "zone"]` に、`speed(A) <= 4` は `["velocity_limit", "A", "4"]` に書き換えられ、意味の解釈は `world.rs` の `Constraint::from_parts` で行います。エラーには行番号が付きますが、ランタイム側のエラー（法則の矛盾など）にはソースの位置がありません。これは `semantics-core.md` の「既知の穴」にも挙がっています。
 
 ## ランタイム：時間の進め方
 
-入口は `simulate_program` です。やっていることは、観測時刻を並べ替えて、1 つずつそこまで世界を進めるだけです。
+入口の `simulate_program` は、観測時刻を並べ替えて、1 つずつそこまで世界を進めるだけです。
 
 ```rust
 // orbis/src/world.rs
@@ -151,8 +135,7 @@ for time in observation_times {
 ```rust
 pub fn advance_to(&mut self, target_time: f64) -> Result<(), SimulationError> {
     loop {
-        let current_time = self.spheres.iter()
-            .map(|sphere| sphere.last_update_time).fold(0.0, f64::max);
+        let current_time = /* 全球の last_update_time の最大 */;
         if target_time <= current_time + EPSILON { break; }
 
         let max_dt = target_time - current_time;
@@ -180,7 +163,7 @@ pub fn advance_to(&mut self, target_time: f64) -> Result<(), SimulationError> {
 
 ### 「局所的に同期」は、実装ではまだ全体同期
 
-ここは正直に書く必要があります。各球は `last_update_time` を持っていますが、進めるのは常に全員いっしょです。
+各球は `last_update_time` を持っていますが、進めるのは常に全員いっしょです。
 
 ```rust
 fn advance_all_by(&mut self, dt: f64) {
@@ -222,18 +205,13 @@ observe:
     snapshot at 5
 ```
 
-結果は、A は跳ね返って `y=3`、**B は床をすり抜けて `y=-1`** でした。A の反射を処理したあと、B は床にちょうど接している状態になり、`time_to_plane_collision` が `signed_distance <= EPSILON` で「もう当たらない」と判断するためです。B の開始位置を 0.5 ずらすと、正しく跳ね返ります。文書が「同時の出来事はまだ十分に定めていない」と書いているとおりの穴で、テストもまだありません。
+結果は、A は跳ね返って `y=3`、**B は床をすり抜けて `y=-1`** でした。A の反射のあと、B は床にちょうど接した状態になり、`time_to_plane_collision` が `signed_distance <= EPSILON` で「もう当たらない」と判断するためです。B の開始位置を 0.5 ずらすと正しく跳ね返ります。文書が「同時の出来事はまだ定め切れていない」と書いているとおりの穴です。
 
 ## 法則と修復
 
-修復は `Constraint::enforce` にあります。速さの上限を `clamp` にすると、向きを保ったまま大きさを上限にそろえます。箱の `clamp` と `reflect` は、球の中心からいちばん近い面を選び、その面の外側 `EPSILON` の位置に戻して、`clamp` ならその軸の速度を 0 に、`reflect` なら外向きに反転します。
+修復は `Constraint::enforce` にあります。速さの `clamp` は向きを保って大きさを上限にそろえます。箱の `clamp` と `reflect` は、中心からいちばん近い面の外側 `EPSILON` に戻し、その軸の速度を 0 にするか、外向きに反転します。
 
-```text
-$ sekai simulate examples/clamped_region.sk     # clamp not inside(A, zone)
-t=3.000  A position=(2.000, 0.000, 0.000) velocity=(0.000, 0.000, 0.000)
-$ sekai simulate examples/reflected_region.sk   # reflect not inside(A, zone)
-t=3.000  A position=(1.000, 0.000, 0.000) velocity=(-1.000, 0.000, 0.000)
-```
+`clamped_region.sk` では `t=3` に `x=2`・速度 0 で止まり、`reflected_region.sk` では `x=1`・速度 `-1` で戻っています。
 
 注意点として、箱との判定は **球の中心が箱に入ったか** で行っています（`point_inside_box(sphere.position, …)`）。半径は見ていないので、半径 1 の球は、中心が境界に着く前から 1 だけ箱にめり込んでいます。
 
@@ -257,27 +235,17 @@ t=3.000  A position=(1.000, 0.000, 0.000) velocity=(-1.000, 0.000, 0.000)
 
 `visible(A, B)` は、A と B の **中心を結ぶ線分** が、宣言されたどれかの箱と交わるかで判定します（`line_segment_intersects_box`、slab 法で `t ∈ [0, 1]`）。ここでも半径は見ていません。
 
-実装上の大事な点は、`visible` は **出来事を生まない** ことです。`candidate_event` で `Visible` は `None` を返し、検査は法則を当て直すとき、つまり別の出来事が起きたときか観測時刻にしか行われません。
+大事なのは、`visible` が **出来事を生まない** ことです（`candidate_event` が `None` を返す）。検査は、別の出来事のあとか観測時刻にしか行われません。
 
 手元で、止まっている A の前を、B が上から下へ壁の裏を通り過ぎる世界を作りました。観測を `0` と `6` だけにすると、**矛盾は報告されず正常終了** します。`3` を足すと `` `A` cannot see `B` through region `wall` at t=3.000 `` で止まります。
 
 旗艦シナリオの矛盾版（`examples/visibility_coordination_flagship_contradiction.sk`）でも同じことが起きています。報告される矛盾の時刻は `frontier: 1.000000` ですが、座標から計算すると、S から C への線分が下の壁にかかり始めるのは `t=0.6` です。報告されるのは「見えなくなった時刻」ではなく「見えなくなったことに気づいた観測時刻」です。
 
-もう 1 つ、`region` はすべて見通しをさえぎる箱として扱われ、`not inside` の対象になるのは最初に宣言した 1 つだけです。見通しをさえぎる箱は、動きをさえぎりません。旗艦シナリオでは、`t=2` の A は `(1, 1.5, 0)` にいて、上の壁 `(1..5, 1..3)` の中に入っています。
+また、`region` はすべて見通しをさえぎりますが、動きはさえぎりません（`not inside` の対象は最初に宣言した 1 つだけ）。旗艦シナリオの `t=2` の A は `(1, 1.5, 0)` で、上の壁 `(1..5, 1..3)` の中にいます。
 
 ## 決まらない世界：候補・保留・収束
 
-ここが sekai でいちばん作り込んだところです。`resolve_candidates_for_entity` は、まず候補を並べ替えます。
-
-```rust
-candidates.sort_by(|left, right| {
-    right.score.total_cmp(&left.score)
-        .then_with(|| /* preferred_label を前へ */)
-        .then_with(|| left.label.cmp(&right.label))
-});
-```
-
-点数の高い順、同点なら好みの付いたもの、それでも同じならラベルの辞書順です。そして上から 1 つずつ、**世界をまるごと複製して** その速度を入れ、全法則を当ててみます。
+ここが sekai でいちばん作り込んだところです。`resolve_candidates_for_entity` は、まず候補を点数の高い順、同点なら好みの付いたもの、それでも同じならラベルの辞書順です。そして上から 1 つずつ、**世界をまるごと複製して** その速度を入れ、全法則を当ててみます。
 
 ```rust
 for candidate in candidates {
@@ -295,26 +263,9 @@ for candidate in candidates {
 
 型は全部で 10 あります：`direct`、`fallback`、`repaired`、`tie_broken`、`equivalent_tie`、`deferred`、`resolved_after_defer`、`resolved_after_preference`、`resolved_after_rescore`、`resolved_after_law_update`。
 
-最高点が複数あるとき、選ばれたものと同じ結果になる同点候補を探します。「同じ結果」は、法則を当てたあとの全球の位置と速度を小数 6 桁で文字列にした `world_signature` が一致すること、で判定しています。一致するなら `equivalent_tie` で、観測の状態は `representative`（どれを選んでも見た目は同じ）。一致しないのに `defer_on_ambiguous_top` があれば、選ばずに `deferred` にして、状態は `ambiguous` になります。この同値判定は **その時刻の状態だけ** を見ていて、将来の軌道は比べていません。等速運動しかない今は、それで足りています。
+最高点が複数あるときは、法則を当てたあとの全球の位置と速度を小数 6 桁で文字列にした `world_signature` を比べます。一致すれば `equivalent_tie`（観測の状態は `representative`）、一致せず `defer_on_ambiguous_top` があれば `deferred`（状態は `ambiguous`）です。この判定は **その時刻の状態だけ** を見ていて、将来の軌道は比べていません。
 
-保留した候補を決めるのは `resolve_deferred_candidates_at` で、**観測時刻にしか呼ばれません**。`resolve_deferred_at(A, 1)` は「1 秒以降の最初の観測で決める」という意味になります。このとき、`prefer_candidate_at` の好み、`rescore_candidate_at` の点数の加算、`update_speed_limit_at` による速さの上限の書き換え、そして見通しによる好みが効きます。
-
-```rust
-fn visibility_conditioned_preference(&self, sphere_name: &str) -> Option<String> {
-    self.visibility_preference_triggers.get(sphere_name).and_then(|triggers| {
-        triggers.iter().find_map(|trigger| {
-            let visible = self.entity_can_see(sphere_name, &trigger.target);
-            let matches = match trigger.condition {
-                VisibilityCondition::Visible => visible,
-                VisibilityCondition::Occluded => !visible,
-            };
-            matches.then(|| trigger.label.clone())
-        })
-    })
-}
-```
-
-複数の条件が当てはまるときは、宣言順で最初のものが勝ちます。
+保留した候補を決めるのは `resolve_deferred_candidates_at` で、**観測時刻にしか呼ばれません**。`resolve_deferred_at(A, 1)` は「1 秒以降の最初の観測で決める」という意味になります。このとき、`prefer_candidate_at` の好み、`rescore_candidate_at` の点数の加算、`update_speed_limit_at` による速さの上限の書き換え、そして見通しによる好み（`visibility_conditioned_preference`。その時点で `entity_can_see` を評価し、当てはまる条件のうち宣言順で最初のもの）が効きます。
 
 ### 旗艦シナリオ
 
@@ -328,7 +279,7 @@ t=1  unresolved   ambiguous_entities=1   A -> pursue_b (selected_after_preferenc
 t=2  determinate  ambiguous_entities=0   D -> support_c (selected_after_preference)
 ```
 
-`t=1` では A から B が見えて C は下の壁に隠れ、`t=2` では D から B が隠れて C が見える、という幾何から決まっています。この `unresolved(2) → unresolved(1) → determinate(0)` の並びは、テスト `flagship_visibility_coordination_preserves_staggered_observation_story` で固定してあります。
+`t=1` では A から B が見えて C は下の壁に隠れ、`t=2` では D から B が隠れて C が見える、という幾何で決まります。この並びはテスト `flagship_visibility_coordination_preserves_staggered_observation_story` で固定してあります。
 
 ### 観測が結果を変える
 
@@ -341,20 +292,15 @@ t=2  determinate  ambiguous_entities=0   D -> support_c (selected_after_preferen
 PR #5 と #6 で、行動ではない「事実」の候補が入りました。
 
 ```text
-action:
     candidate_relation(observer, visibility, target, visible) = score 5
     candidate_relation(observer, visibility, target, occluded) = score 5
-    defer_relation_on_ambiguous_top(observer, visibility, target)
-    prefer_relation_at(observer, visibility, target, occluded, 1)
 ```
 
 仕組みは行動の候補と同じで、点数で並べ、同点なら保留し、指定の時刻の観測で決めます。ただし `resolve_facts_for_slot` は法則を当てません。事実の値は **ただのラベル** で、幾何とも動きともつながっていません。上の例で `visibility` に `visible` を選ばせても、実際の見通し（このとき observer と target の間には壁があります）との食い違いは検出されません。報告に「決まっていない事実」を載せる器ができた、という段階です。
 
 ## 決定性
 
-乱数は使っていません。候補は点数とラベルで並べ替え、物の索引は `BTreeMap`、法則は宣言順、観測時刻は `total_cmp` で並べ替えます。`Program.properties` は `HashMap` ですが、引くだけで順に回すことはありません。なので、同じ入力からは同じ報告が出るはずです。
-
-ただし、それを確かめるテスト（同じ入力を 2 回実行して比べる、など）はありません。計算は `f64` なので、別の環境での一致までは言えません。文書の「出来事の順序の決定性」は、上に書いた同時の出来事の扱いが定まるまでは、宣言順に依存した決定性です。
+乱数はなく、候補は点数とラベル、索引は `BTreeMap`、法則は宣言順、観測時刻は `total_cmp` で並びます。`HashMap` の `properties` は引くだけで回しません。同じ入力からは同じ報告が出るはずですが、それを確かめるテストはなく、`f64` なので別の環境での一致までは言えません。出来事の順序の決定性も、今は宣言順に依存したものです。
 
 ## CLI
 
@@ -364,24 +310,19 @@ action:
 usage: sekai <simulate|simulate-json|simulate-report|analyze> <file.sk>
 ```
 
-- `simulate`：人が読む形でスナップショットを出す。矛盾したら `error:` を出して終了コード 1。
-- `simulate-json`：成功したときの報告を JSON で出す。
-- `simulate-report`：成功でも失敗でも JSON の封筒（`status: ok | error`）を返す。失敗時は矛盾の構造と、そこまでの部分的な報告も入る。ビューアはこれを読みます。
-- `analyze`：実行せずに、法則の一覧、候補の一覧、指示の一覧を出す。
-
-報告には、法則ごとの `idle / fired / repaired / contradicted` の回数、分類ごとの合計、収束の型ごとの数、観測の時系列、出来事の履歴、スナップショットが入ります。
+`simulate` は人が読む形で、矛盾したら終了コード 1。`simulate-json` は成功時の報告。`simulate-report` は成功でも失敗でも `status: ok | error` の封筒を返し、失敗時は矛盾の構造とそこまでの部分的な報告も入ります（ビューアはこれを読みます）。`analyze` は実行せずに法則・候補・指示の一覧を出します。報告には、法則ごとの `idle / fired / repaired / contradicted` の回数、分類ごとの合計、収束の型ごとの数、観測の時系列、出来事の履歴、スナップショットが入ります。
 
 ## ビューア
 
-ビューアは `viewer/` の素の HTML・CSS・JavaScript で、外部ライブラリはありません。3D も Canvas 2D に自前の投影で描いています。`simulate-report` の JSON を読み、3D・xy・xz の切り替え、時刻のスライダー、再生、法則の一覧、矛盾の表示、候補の収束の表示、観測の時系列などを出します。`viewer/samples/` に 46 個の報告が入っています。
+ビューアは素の HTML・CSS・JavaScript で、3D も Canvas 2D に自前の投影で描いています。`simulate-report` の JSON を読み、3D・xy・xz、時刻のスライダー、再生、法則、矛盾、収束、観測の時系列を出します。`viewer/samples/` に 46 個の報告があります。
 
 再生は、観測と観測の間を線形補間しています。補間した時刻には `(interpolated display)` と表示し、**意味のある観測は `observe:` の時刻だけ** という区別を画面でも残しています。補間は出来事を知らないので、観測の間に跳ね返りがあると、表示上の動きは実際とずれます。たとえば `reflected_region` は 1 秒と 3 秒でどちらも `x=1` にいるので、再生するとその間ずっと止まっているように見えます（実際は 2 秒で箱に当たって戻っています）。
 
-もう 1 つの機能が下書きエディタです。xy 表示で画面をクリックして球を置き、床や禁止領域を付けると、`generateDraftDSL` が `.sk` を組み立て、置き方から法則の候補（床での反射、衝突、速さの上限、禁止領域、見通しの追跡）を提案します。採用して `Run Draft` を押すと、`scripts/viewer_server.py` の `POST /api/simulate` に送られ、サーバーは一時ファイルに書いて `cargo run --quiet -p sekai-cli -- simulate-report` を呼び、結果をそのままビューアに返します。図から法則、実行、報告、表示までが 1 周つながっている、というのが論文での主張の 1 つです。
+もう 1 つの機能が下書きエディタです。xy 表示で画面をクリックして球を置き、床や禁止領域を付けると、`generateDraftDSL` が `.sk` を組み立て、置き方から法則の候補（床での反射、衝突、速さの上限、禁止領域、見通しの追跡）を提案します。`Run Draft` を押すと `scripts/viewer_server.py` の `POST /api/simulate` に送られ、一時ファイルに書いて `cargo run --quiet -p sekai-cli -- simulate-report` を呼び、結果をビューアに返します。図から法則、実行、表示までが 1 周つながる、というのが論文の主張の 1 つです。
 
 ## テスト
 
-テストは `world.rs` の末尾に 51 本あり、`cargo test` で全部通ります（手元で 0.01 秒）。中身は、反射・衝突・速さの上限（reject / clamp / 対応しないポリシーの拒否）・禁止領域（reject / clamp / reflect）・見通し（単独と複数の壁）、報告と封筒の JSON、`analyze`、そして候補の収束が大半です。収束まわりは、fallback、repaired、同点、同値の同点、保留、複数の観測をまたいだ保留、あとからの好み・点数・法則の更新による決定、複数の物の時間差の決定、見通しによる追跡・捜索・役割分担、旗艦シナリオとその矛盾版、不確かな事実、とシナリオごとに 1 本ずつあります。
+テストは `world.rs` の末尾に 51 本あり、`cargo test` で全部通ります（手元で 0.01 秒）。基本の法則とポリシー、見通し、JSON の形、`analyze` のほかは、ほとんどが候補の収束（fallback、同点、保留、あとからの好み・点数・法則の更新、時間差の決定、見通しによる役割分担、旗艦シナリオなど）を 1 シナリオ 1 本で固定するものです。
 
 ないテストもはっきりしています。同時の出来事、同じ入力での再現性、観測時刻を変えたときの不変性、パーサの異常系、CLI です。上で見つけた穴は、どれもこの「ない」側にあります。
 
@@ -399,7 +340,7 @@ usage: sekai <simulate|simulate-json|simulate-report|analyze> <file.sk>
 
 （論理行数。旗艦シナリオは library_style との比較だけ）
 
-手書きのループやイベントと比べると 2〜3 倍短くなりますが、**ライブラリ版とはほぼ同じか、ライブラリ版のほうが短い** です。トークン数では sekai が少ない（旗艦で 377 対 596）ものの、これは `world.sphere("A", position=…)` のような呼び出しの書き方の差がほとんどです。
+手書きのループやイベントより 2〜3 倍短い一方、**ライブラリ版とはほぼ同じか、ライブラリ版のほうが短い** です。トークン数は sekai が少ない（旗艦で 377 対 596）ものの、呼び出しの書き方の差がほとんどです。
 
 指標の作りにも注意が要ります。「世界の内容の密度」は sekai が全場面で `1.000` ですが、これは sekai の行を全部「世界の内容」に分類しているからで、ほぼ定義から出てくる値です。また `benchmarks/library_style/worldlib.py`（61 行）は呼び出しを辞書に記録するだけで、実際には何も実行しません。比べているのは **書き方の表面** で、動く実装どうしの比較ではありません。リポジトリの文書（`docs/flagship-comparison.md`）も、「短いから勝ち」とは言えず、残る違いは法則が文法であることと、ソースから報告・ビューア・図までが 1 本でつながることだ、と書いています。
 
@@ -415,16 +356,14 @@ usage: sekai <simulate|simulate-json|simulate-report|analyze> <file.sk>
 
 ### すでにあるものとの関係
 
-- **物理エンジン・ゲームエンジン**：衝突の検出と応答は、sekai のものよりはるかに一般的で速いです。sekai が出しているのは「どの法則がいつ発火し、直し、矛盾したか」の報告で、ここは自分で作ればできる範囲です。
+- **物理エンジン・ゲームエンジン**：衝突の検出と応答は、sekai のものよりはるかに一般的です。sekai に固有なのは「どの法則がいつ発火し、直し、矛盾したか」の報告ですが、これもエンジンの上に記録を足せば近いものは作れると考えています。
 - **ECS**：物と性質と仕組みを分ける作り方は、sekai の内部（球の配列と法則の列）と近いです。違いは、sekai では法則がソースの文法で、仕組みのコードを利用者が書かないことだけです。
 - **Modelica**：方程式で書いた模型を、解く順番を指定せずに動かせる点で、最も近い先行例です。sekai には方程式はなく、代わりに「矛盾」「保留」「収束」があります。
 - **制約ソルバー**：sekai の候補選びは、有限個の候補を点数で並べて上から試すだけで、探索も最適化もしません。「制約」という言葉は使っていますが、解く道具ではありません。
 
 ### 実験が示していること、示していないこと
 
-示しているのは、**手順を書かずに、小さな世界の運動・法則の修復と矛盾・候補の保留と収束を、1 つの意味の言葉で書いて実行し、報告とビューアまで同じ言葉でつなげられる** ことです。ここはテストと例で裏付けがあります。
-
-示していないのは、それがふつうの言語と良いライブラリの組み合わせより、読みやすい・間違えにくい・速く書けることです。人を対象にした実験はしていませんし、文書もそこは仮説として扱っています。
+示しているのは、**小さな世界の運動、法則の修復と矛盾、候補の保留と収束を、手順なしに 1 つの意味の言葉で書いて実行し、報告とビューアまでつなげられる** ことです。テストと例で裏付けがあります。示していないのは、それがふつうの言語と良いライブラリより、読みやすい・間違えにくいことです。人を対象にした実験はしておらず、文書もそこは仮説として扱っています。
 
 ### 意味を持つための条件
 
@@ -439,6 +378,6 @@ sekai が道具として意味を持つには、少なくとも次が要ると�
 
 ## まとめ
 
-sekai のいまの実体は、**外部依存のない Rust の小さなランタイム（約 4,700 行と、テスト約 2,000 行）と、行単位のパーサ、JSON の報告、素の JavaScript のビューア** です。世界の最前線、法則、矛盾、保留、収束という言葉を、文書・コード・報告・画面で同じ名前のまま使えている点は、作ってよかったと思っています。
+sekai のいまの実体は、**外部依存のない Rust のランタイムとパーサ（合わせて約 5,800 行、テスト約 2,000 行）と、JSON の報告、素の JavaScript のビューア** です。世界の最前線、法則、矛盾、保留、収束を、文書・コード・報告・画面で同じ名前のまま扱えている点は、作ってよかったと思っています。
 
 同時に、文書のほうが実装より先に進んでいます。局所的な同期は全体同期で、同時の出来事は宣言順で、見通しは観測時にしか確かめず、観測が収束を兼ねています。次にやるのは機能を足すことではなく、この差を埋めることです。そのうえで、sekai でしか素直に書けない場面が見つかるかどうか。役に立つかどうかは、そこで決まると考えています。
