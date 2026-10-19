@@ -1,3 +1,5 @@
+/** @jsxRuntime automatic */
+/** @jsxImportSource react */
 // Hand-drawn vector illustrations in the logo's three colours (navy line, orange, sky)
 // plus white. lp-anatomy §7-2: illustrations use only the brand colours, and section
 // headings get a small drawing on each side instead of a picture of text.
@@ -195,6 +197,31 @@ export function Studio({ className }: Props) {
       <path className="f-o ln" d="M22 150l4-28h22l4 28z" />
       <path className="f-s ln" d="M36 122c0-18-10-28-20-30 2 14 8 26 20 30z" />
       <path className="f-s ln" d="M37 122c0-22 10-36 24-38-2 18-10 32-24 38z" />
+    </svg>
+  );
+}
+
+/** Nue: a clapper board over a film strip. */
+export function VideoIcon({ className }: Props) {
+  return (
+    <svg {...svg(className, "0 0 96 96")}>
+      <rect className="f-s ln" x="12" y="40" width="72" height="42" rx="6" />
+      <path className="f-w ln" d="M12 28l68-12 4 14-68 12z" />
+      <path className="ln" d="M30 24l8 12M48 21l8 12M66 18l8 12" />
+      <path className="f-o ln" d="M42 52v18l16-9z" />
+    </svg>
+  );
+}
+
+/** LP Anatomy: a page under a magnifying glass. */
+export function LoupeIcon({ className }: Props) {
+  return (
+    <svg {...svg(className, "0 0 96 96")}>
+      <rect className="f-w ln" x="12" y="10" width="50" height="64" rx="6" />
+      <path className="ln" d="M22 24h30M22 34h22M22 44h26" />
+      <rect className="f-o" x="22" y="52" width="18" height="10" rx="2" />
+      <circle className="f-s ln" cx="62" cy="58" r="16" />
+      <path className="ln" d="M74 70l12 12" />
     </svg>
   );
 }

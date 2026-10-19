@@ -53,7 +53,7 @@ A visitor whose browser prefers Japanese is sent from `/` to `/ja` on the first 
 
 Company copy and product facts (specs, release months, screenshots) for both languages live in `src/i18n.ts`. Product screenshots are WebP files in `public/img/products/`, two widths each, taken from the App Store listings and the live web apps. The Japanese object is typed from the English one, so a missing or extra key fails `npm run build`. The visual system and responsive behavior live in `src/styles.css`.
 
-The portfolio's facts live in `site/profile.ts`; its look lives in `public/site/site.css` (no build step, no Japanese web font) and `public/site/site.js` (reveal-once, the stack band, the JST clock and the blog tag filter — all off for reduced motion and Save-Data). The design follows the "art / portfolio" mood of lp-anatomy's `lp-quality-bar`.
+The portfolio's facts live in `site/profile.ts`. Portfolio, blog, posts and 404 share the company top's warm look: `public/site/site.css`, the same SVG drawings (rendered to static markup at build time by `site/art.ts`), and Fredoka + Zen Maru Gothic subset to each page's text. `public/site/site.js` adds the mobile menu, reveal-once, the stack band, the JST clock and the blog tag filter — all motion off for reduced motion and Save-Data. The hand-written product guides and privacy pages use the same palette and fonts through `public/products/product.css`.
 
 ## Writing a blog post
 

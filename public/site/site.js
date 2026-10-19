@@ -8,6 +8,16 @@
   var hasIO = "IntersectionObserver" in window;
   root.classList.add("js");
 
+  /* Mobile menu: the burger opens the icon menu; items drop in .125 s apart (CSS). */
+  var burger = document.querySelector("[data-burger]");
+  if (burger) {
+    burger.addEventListener("click", function () {
+      var open = burger.getAttribute("aria-expanded") !== "true";
+      burger.setAttribute("aria-expanded", String(open));
+      burger.closest(".hd").classList.toggle("is-open", open);
+    });
+  }
+
   /* Reveal once. Whatever is already on screen at load is never hidden. */
   if (!still && hasIO) {
     var els = [].slice.call(document.querySelectorAll("[data-reveal]"));

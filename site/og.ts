@@ -4,7 +4,7 @@ import { Resvg } from "@resvg/resvg-js";
 import satori from "satori";
 
 // Open Graph images (1200×630), one per page and per post, drawn at build time in the
-// portfolio's look: ground + ink, one orange dot. Fonts are fetched from Google Fonts
+// site's warm look: paper ground, brown text, the logo's orange, sky and navy. Fonts are fetched from Google Fonts
 // as TrueType, with the Japanese face subset to just the characters the cards use.
 
 export type Card = {
@@ -18,11 +18,15 @@ export type Card = {
 
 const W = 1200;
 const H = 630;
-const GROUND = "#ebe7e0";
-const INK = "#14171c";
-const ACCENT = "#e0612b";
+const GROUND = "#f4efe8";
+const CARD = "#ffffff";
+const INK = "#33261e";
+const NAVY = "#1d2a3a";
+const SKY = "#92ddff";
+const ACCENT = "#c95424";
+const ACCENT_L = "#f08c4f";
 
-type Font = { name: string; data: ArrayBuffer; weight: 400 | 800; style: "normal" };
+type Font = { name: string; data: ArrayBuffer; weight: 600 | 700; style: "normal" };
 
 async function ttf(family: string, weight: number, text?: string) {
   const query = `family=${family.replace(/ /g, "+")}:wght@${weight}${text ? `&text=${encodeURIComponent(text)}` : ""}`;
@@ -37,15 +41,13 @@ async function ttf(family: string, weight: number, text?: string) {
 
 async function fonts(cards: Card[]): Promise<Font[]> {
   const chars = [...new Set(cards.map((c) => c.title + c.kicker).join("") + "長瀬唯楓enludus.com")].join("");
-  const [latin, japanese, mono] = await Promise.all([
-    ttf("Manrope", 800),
-    ttf("Noto Sans JP", 800, chars),
-    ttf("DM Mono", 400),
+  const [latin, japanese] = await Promise.all([
+    ttf("Fredoka", 600),
+    ttf("Zen Maru Gothic", 700, chars),
   ]);
   return [
-    { name: "Manrope", data: latin, weight: 800, style: "normal" },
-    { name: "Noto Sans JP", data: japanese, weight: 800, style: "normal" },
-    { name: "DM Mono", data: mono, weight: 400, style: "normal" },
+    { name: "Fredoka", data: latin, weight: 600, style: "normal" },
+    { name: "Zen Maru Gothic", data: japanese, weight: 700, style: "normal" },
   ];
 }
 
@@ -70,55 +72,74 @@ function phrases(text: string) {
   return out;
 }
 
+function logo(size: number) {
+  const u = size / 30;
+  const bar = (top: number, width: number) =>
+    h("div", { position: "absolute", left: 7 * u, top: top * u, width: width * u, height: 3 * u, borderRadius: 8 * u, background: SKY });
+  return h("div", { position: "relative", display: "flex", width: size, height: size, borderRadius: 9 * u, background: NAVY }, [
+    bar(7, 16),
+    bar(13, 12),
+    bar(19, 16),
+    h("div", { position: "absolute", right: 5 * u, top: 5 * u, width: 5 * u, height: 5 * u, borderRadius: 3 * u, background: "#ff9b61" }),
+  ]);
+}
+
 function tree(card: Card): Node {
-  const dot = h("div", { width: 28, height: 28, borderRadius: 14, background: ACCENT, marginLeft: 10, marginBottom: 22 });
+  const dot = h("div", { width: 30, height: 30, borderRadius: 15, background: ACCENT_L, marginLeft: 8, marginBottom: 26 });
   const body =
     card.variant === "name"
-      ? h("div", { display: "flex", flexDirection: "column", fontFamily: "Manrope", fontSize: 196, lineHeight: 0.82, letterSpacing: -9 }, [
+      ? h("div", { display: "flex", flexDirection: "column", color: NAVY, fontFamily: "Fredoka", fontSize: 176, lineHeight: 0.9, letterSpacing: -3 }, [
           h("div", { display: "flex" }, card.title.split(" ")[0]),
-          h("div", { display: "flex", alignItems: "flex-end", paddingLeft: 110 }, [card.title.split(" ").slice(1).join(" "), dot]),
+          h("div", { display: "flex", alignItems: "flex-end", paddingLeft: 96 }, [card.title.split(" ").slice(1).join(" "), dot]),
         ])
       : h(
           "div",
           {
             display: "flex",
-            fontFamily: "Noto Sans JP, Manrope",
             flexWrap: "wrap",
-            fontSize: card.title.length > 34 ? 54 : 64,
-            lineHeight: 1.42,
+            fontFamily: "Zen Maru Gothic, Fredoka",
+            fontSize: card.title.length > 34 ? 52 : 62,
+            lineHeight: 1.45,
             letterSpacing: 1.5,
-            maxWidth: 1000,
+            maxWidth: 960,
           },
           phrases(card.title).map((p) => h("span", { whiteSpace: "pre" }, p)),
         );
   return h(
     "div",
-    {
-      width: W,
-      height: H,
-      display: "flex",
-      flexDirection: "column",
-      justifyContent: "space-between",
-      padding: "56px 72px",
-      background: GROUND,
-      color: INK,
-    },
+    { width: W, height: H, display: "flex", padding: 36, background: GROUND, color: INK },
     [
-      h("div", { display: "flex", justifyContent: "space-between", paddingBottom: 18, borderBottom: `2px solid ${INK}`, fontFamily: "DM Mono, Noto Sans JP", fontSize: 22, letterSpacing: 2 }, [
-        h("div", { display: "flex" }, card.kicker),
-        h("div", { display: "flex" }, "ENLUDUS.COM"),
-      ]),
-      body,
-      h("div", { display: "flex", justifyContent: "space-between", alignItems: "center", fontFamily: "Noto Sans JP, Manrope", fontSize: 28 }, [
-        h("div", { display: "flex", alignItems: "center" }, [
-          h("div", { width: 34, height: 34, borderRadius: 9, background: INK, marginRight: 14 }),
-          "Enludus",
-        ]),
-        h("div", { display: "flex", alignItems: "center" }, [
-          "長瀬 唯楓",
-          card.variant === "name" ? "" : h("div", { width: 16, height: 16, borderRadius: 8, background: ACCENT, marginLeft: 14 }),
-        ]),
-      ]),
+      h(
+        "div",
+        {
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
+          width: "100%",
+          height: "100%",
+          padding: "40px 56px",
+          borderRadius: 44,
+          background: CARD,
+          borderBottom: "8px solid #e6d8c8",
+        },
+        [
+          h("div", { display: "flex", justifyContent: "space-between", fontFamily: "Fredoka, Zen Maru Gothic", fontSize: 26 }, [
+            h("div", { display: "flex", color: ACCENT }, card.kicker),
+            h("div", { display: "flex", color: "#8a766a" }, "enludus.com"),
+          ]),
+          body,
+          h("div", { display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: 30 }, [
+            h("div", { display: "flex", alignItems: "center", fontFamily: "Fredoka" }, [
+              logo(40),
+              h("div", { display: "flex", marginLeft: 14 }, "Enludus"),
+            ]),
+            h("div", { display: "flex", alignItems: "center", fontFamily: "Zen Maru Gothic" }, [
+              "長瀬 唯楓",
+              h("div", { width: 16, height: 16, borderRadius: 8, background: ACCENT_L, marginLeft: 14 }),
+            ]),
+          ]),
+        ],
+      ),
     ],
   );
 }

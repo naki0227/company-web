@@ -1,3 +1,4 @@
+import { art, workArt } from "./art";
 import type { Post } from "./posts";
 import {
   about,
@@ -53,18 +54,66 @@ type Head = {
   image: string;
 };
 
+/**
+ * Fredoka for Latin, Zen Maru Gothic for Japanese — the same pair as the company top.
+ * The Japanese face is requested with `text=` holding exactly the characters on this
+ * page, so each page downloads a small subset instead of the whole face.
+ */
+function fontLinks(html: string) {
+  const text = html
+    .replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>/g, "")
+    .replace(/<[^>]+>/g, "")
+    .replace(/&[a-z#0-9]+;/gi, "");
+  const ascii = Array.from({ length: 95 }, (_, i) => String.fromCharCode(32 + i)).join("");
+  const chars = [...new Set([...text, ...ascii])].filter((c) => c.trim()).sort().join("");
+  return `<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700&display=swap&text=${encodeURIComponent(chars)}">`;
+}
+
+const LOGO = `<span class="logo-mark" aria-hidden="true"><span class="logo-bar logo-bar-a"></span><span class="logo-bar logo-bar-b"></span><span class="logo-bar logo-bar-c"></span><span class="logo-dot"></span></span>`;
+
 function layout(head: Head, current: "portfolio" | "blog" | "", main: string) {
   const url = SITE + head.path;
-  const nav = [
-    ["portfolio", "/portfolio", "Portfolio"],
-    ["blog", "/blog", "Blog"],
-    ["products", "/ja#products", "Products"],
-  ]
+  const nav = (
+    [
+      ["", "/ja#products", "Products", "製品", "Pin"],
+      ["blog", "/blog", "Blog", "ブログ", "Pencil"],
+      ["portfolio", "/portfolio", "Founder", "代表", "Leaf"],
+      ["", "/ja#company", "About", "会社概要", "Mug"],
+    ] as const
+  )
     .map(
-      ([key, href, label]) =>
-        `<a href="${href}"${key === current ? ' aria-current="page"' : ""}>${label}</a>`,
+      ([key, href, en, ja, icon], i) =>
+        `<a href="${href}" style="--i:${i}"${key && key === current ? ' aria-current="page"' : ""}>${art(icon, "hd-icon")}<span><small class="round">${en}</small>${ja}</span></a>`,
     )
     .join("");
+  const edge = ["StudyIcon", "MapIcon", "CareerIcon", "SoundIcon", "KanaIcon", "VideoIcon", "LoupeIcon"] as const;
+  const body = `<body>
+<a class="skip" href="#main">本文へ移動</a>
+<header class="hd">
+  <a class="hd-brand" href="/ja" aria-label="Enludus トップページ">${LOGO}<span class="round">Enludus</span></a>
+  <nav class="hd-nav" id="menu" aria-label="メインメニュー">${nav}</nav>
+  <div class="hd-end">
+    <a class="btn btn-sm" href="mailto:${person.email}">お問い合わせ</a>
+    <button class="burger" type="button" aria-expanded="false" aria-controls="menu" aria-label="メニュー" data-burger><span></span></button>
+  </div>
+</header>
+<main id="main">
+${main}
+</main>
+<footer class="ft">
+  <div class="ft-edge" aria-hidden="true">${[...edge, ...edge].map((n) => art(n)).join("")}</div>
+  <div class="ft-row">
+    <a class="hd-brand" href="/ja">${LOGO}<span class="round">Enludus</span></a>
+    <nav aria-label="フッター">
+      <a href="/ja">会社サイト</a><a href="/portfolio">代表</a><a href="/blog">ブログ</a><a href="/blog/feed.xml">RSS</a><a href="/privacy">プライバシーポリシー</a>
+    </nav>
+    <span class="round">© ${new Date().getFullYear()} Enludus</span>
+  </div>
+</footer>
+</body>`;
   return `<!doctype html>
 <html lang="ja">
 <head>
@@ -83,44 +132,37 @@ ${head.noindex ? '<meta name="robots" content="noindex">\n' : ""}<link rel="cano
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="theme-color" content="#ebe7e0">
+<meta name="theme-color" content="#ffffff">
 <meta name="google-adsense-account" content="ca-pub-1806737602764042">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="alternate" type="application/rss+xml" title="Enludus ブログ" href="/blog/feed.xml">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Mono&family=Manrope:wght@400;600;800&display=swap">
+${fontLinks(`${head.title} ${body}`)}
 <link rel="stylesheet" href="/site/site.css">
 <script src="/site/site.js" defer></script>
 ${head.jsonLd ? `<script type="application/ld+json">${JSON.stringify(head.jsonLd)}</script>\n` : ""}</head>
-<body>
-<a class="skip" href="#main">本文へ移動</a>
-<header class="hd">
-  <a class="hd-brand" href="/ja" aria-label="Enludus トップページ"><span class="hd-mark" aria-hidden="true"></span>Enludus</a>
-  <nav aria-label="メインメニュー">${nav}<a class="hd-mail" href="mailto:${person.email}">Contact</a></nav>
-</header>
-<main id="main">
-${main}
-</main>
-<footer class="ft">
-  <p class="ft-word" aria-hidden="true">Enludus</p>
-  <div class="ft-row">
-    <span>© ${new Date().getFullYear()} Enludus</span>
-    <nav aria-label="フッター">
-      <a href="/ja">会社サイト</a><a href="/portfolio">Portfolio</a><a href="/blog">Blog</a><a href="/blog/feed.xml">RSS</a><a href="/privacy">プライバシーポリシー</a>
-    </nav>
-  </div>
-</footer>
-</body>
+${body}
 </html>
 `;
 }
 
-function sectionHead(no: string, en: string, ja: string) {
+const DOODLES = [
+  ["Pin", "Note"],
+  ["Pencil", "Mug"],
+  ["Leaf", "Pencil"],
+  ["Mug", "Leaf"],
+] as const;
+
+/** Round English, small Japanese, a drawing on each side — as on the company top. */
+function sectionHead(no: string, en: string, ja: string, n = 0) {
+  const [left, right] = DOODLES[n % DOODLES.length];
   return `<div class="sh" data-reveal>
-    <span class="sh-no">${no}</span>
-    <h2 class="sh-en">${en}</h2>
-    <p class="sh-ja">${ja}</p>
+    <span class="sh-side sh-left">${art(left)}</span>
+    <div>
+      <p class="sh-no round">${no}</p>
+      <p class="sh-en round" aria-hidden="true">${en}</p>
+      <h2 class="sh-ja">${ja}</h2>
+    </div>
+    <span class="sh-side sh-right">${art(right)}</span>
   </div>`;
 }
 
@@ -163,7 +205,7 @@ export function portfolioPage(posts: Post[]) {
     <li class="work" data-reveal>
       <details>
         <summary>
-          <span class="work-no">${String(index + 1).padStart(2, "0")}</span>
+          <span class="work-no">${art(workArt[work.name] ?? "Note", "work-icon")}<span class="round">${String(index + 1).padStart(2, "0")}</span></span>
           <span class="work-name${/^[\x20-\x7e]+$/.test(work.name) ? "" : " is-ja"}">${esc(work.name)}</span>
           <span class="work-cat">${esc(work.category)}</span>
           <span class="work-status">${esc(work.status)}</span>
@@ -183,13 +225,14 @@ export function portfolioPage(posts: Post[]) {
   const band = marquee.map((m) => `<li>${esc(m)}</li>`).join("");
 
   const main = `
-<section class="hero" aria-labelledby="hero-name">
-  <div class="hero-meta">
+<section class="hero paper-a" aria-labelledby="hero-name">
+  <div class="hero-meta round">
     <span>Portfolio — ${new Date().getFullYear()}</span>
     <span>Osaka, Japan</span>
     <span><time data-clock>--:--</time> JST</span>
   </div>
-  <h1 class="hero-name" id="hero-name">
+  ${art("Studio", "hero-art")}
+  <h1 class="hero-name round" id="hero-name">
     <span class="sr">${esc(person.name)}（</span><span class="l1">${person.latinFirst}</span><span class="l2">${person.latinLast}<i class="dot" aria-hidden="true"></i></span><span class="sr">）</span>
   </h1>
   <div class="hero-foot">
@@ -203,21 +246,21 @@ export function portfolioPage(posts: Post[]) {
   <div class="band-track"><ul>${band}</ul><ul aria-hidden="true">${band}</ul></div>
 </div>
 
-<section class="sec" id="works" aria-label="Works">
-  ${sectionHead("01 / 04", "Works", "つくったもの")}
+<section class="sec paper-b curve" id="works" aria-label="Works">
+  ${sectionHead("01 / 04", "Works", "つくったもの", 0)}
   <p class="sec-lead" data-reveal>名前を押すと、課題・つくり方・学んだことが開きます。</p>
   <ol class="works">${workItems}
   </ol>
 </section>
 
-<section class="sec" id="writing" aria-label="Writing">
-  ${sectionHead("02 / 04", "Writing", "書いたもの")}
+<section class="sec paper-a curve" id="writing" aria-label="Writing">
+  ${sectionHead("02 / 04", "Writing", "書いたもの", 1)}
   ${postRows(posts.slice(0, 3))}
   <p class="more" data-reveal><a href="/blog">すべての記事を見る <span aria-hidden="true">→</span></a></p>
 </section>
 
-<section class="sec" id="skills" aria-label="Skills">
-  ${sectionHead("03 / 04", "Skills", "できること")}
+<section class="sec paper-b curve" id="skills" aria-label="Skills">
+  ${sectionHead("03 / 04", "Skills", "できること", 2)}
   <div class="caps">${capabilities
     .map(
       (c, i) => `
@@ -236,8 +279,8 @@ export function portfolioPage(posts: Post[]) {
   </dl>
 </section>
 
-<section class="sec" id="about" aria-label="About">
-  ${sectionHead("04 / 04", "About", "わたしについて")}
+<section class="sec paper-a curve" id="about" aria-label="About">
+  ${sectionHead("04 / 04", "About", "わたしについて", 3)}
   <div class="about">
     <dl class="facts" data-reveal>${facts
       .map(([label, value, note]) => `<div><dt>${label}</dt><dd>${esc(value)}<small>${esc(note)}</small></dd></div>`)
@@ -255,9 +298,9 @@ export function portfolioPage(posts: Post[]) {
 </section>
 
 <section class="contact" id="contact" aria-label="Contact">
-  <p class="sh-no">Contact</p>
+  <p class="contact-en round" aria-hidden="true">Contact</p>
   <p class="contact-lead">お仕事のご相談、インターン・採用のお話、技術の雑談まで。</p>
-  <a class="contact-mail" href="mailto:${person.email}">${person.email}</a>
+  <a class="contact-mail round" href="mailto:${person.email}">${person.email}</a>
   <p class="contact-links">${person.links
     .map((l) => `<a href="${l.href}"${external(l.href)}>${l.label} <span aria-hidden="true">↗</span></a>`)
     .join("")}</p>
@@ -297,16 +340,17 @@ export function blogIndexPage(posts: Post[]) {
   </div>`
     : "";
   const main = `
-<section class="hero hero-sm" aria-labelledby="blog-title">
-  <div class="hero-meta">
+<section class="hero hero-sm paper-a" aria-labelledby="blog-title">
+  <div class="hero-meta round">
     <span>Blog — ${posts.length} posts</span>
     <span>長瀬 唯楓 / Enludus</span>
     <a href="/blog/feed.xml">RSS</a>
   </div>
-  <h1 class="hero-name" id="blog-title"><span class="l1">Blog<i class="dot" aria-hidden="true"></i></span></h1>
+  ${art("Pencil", "hero-art hero-art-sm")}
+  <h1 class="hero-name round" id="blog-title"><span class="l1">Blog<i class="dot" aria-hidden="true"></i></span></h1>
   <p class="hero-lead">つくっているもの、学んだこと、考えたことの記録。</p>
 </section>
-<section class="sec sec-tight" aria-label="記事一覧">
+<section class="sec paper-b curve" aria-label="記事一覧">
   ${filter}
   ${postRows(posts)}
   <p class="empty" data-filter-empty hidden>このタグの記事はまだありません。</p>
@@ -360,7 +404,7 @@ export function postPage(post: Post, all: Post[]) {
     newer ? `<a class="pager-new" href="/blog/${newer.slug}"><span>次の記事 →</span>${esc(newer.title)}</a>` : "<span></span>",
   ].join("");
   const main = `
-<article class="post">
+<article class="post paper-a">
   <header class="post-head">
     <p class="post-meta"><a href="/blog">Blog</a><span aria-hidden="true">/</span><time datetime="${post.date}">${dot(post.date)}</time>${
       post.updated ? `<span>更新 <time datetime="${post.updated}">${dot(post.updated)}</time></span>` : ""
@@ -388,7 +432,7 @@ ${post.html}
     <nav class="pager" aria-label="前後の記事">${pager}</nav>
   </footer>
   ${more.length ? `<section class="related" aria-labelledby="related-title">
-    <p class="sh-no" id="related-title">Related — 関連する記事</p>
+    <p class="related-title" id="related-title"><span class="round">Related</span>関連する記事</p>
     ${postRows(more)}
   </section>` : ""}
 </article>`;
@@ -421,15 +465,16 @@ ${post.html}
 
 export function notFoundPage(posts: Post[]) {
   const main = `
-<section class="hero hero-sm" aria-labelledby="nf-title">
-  <div class="hero-meta">
+<section class="hero hero-sm paper-a" aria-labelledby="nf-title">
+  <div class="hero-meta round">
     <span>Error — 404</span>
     <span>Not found</span>
   </div>
-  <h1 class="hero-name" id="nf-title"><span class="l1">404<i class="dot" aria-hidden="true"></i></span></h1>
+  ${art("HandoffIcon", "hero-art hero-art-sm")}
+  <h1 class="hero-name round" id="nf-title"><span class="l1">404<i class="dot" aria-hidden="true"></i></span></h1>
   <p class="hero-lead">お探しのページは見つかりませんでした。<br>移動したか、URL が変わった可能性があります。</p>
 </section>
-<section class="sec sec-tight" aria-label="行き先">
+<section class="sec paper-b curve" aria-label="行き先">
   <ol class="posts nf-links">
     ${[
       ["/ja", "Enludus トップ", "会社とプロダクトの紹介"],
