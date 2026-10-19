@@ -4,7 +4,6 @@ date: 2026-10-19
 description: 五十音表を盤面にした 2 人対戦ゲームの中身を、ソースを引用しながら書きます。かなの正規化、重複込みの数字、signature による複数正解、Supabase での非公開状態、Expo で Web と iOS を 1 つのコードで動かすときのつまずき、YouTube ライブチャットとの接続まで。
 tags: [五十音マインスイーパー, TypeScript, Expo, React Native, Supabase, 設計]
 type: tech
-draft: true
 ---
 
 > これは技術編です。どんなゲームで、どう遊ぶのかを読みやすくまとめた読みもの版は「[答えの文字が地雷になる、五十音マインスイーパー](/blog/gojuon-minesweeper)」にあります。

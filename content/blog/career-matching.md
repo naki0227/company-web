@@ -4,7 +4,6 @@ date: 2026-10-19
 description: 企業名から公式サイトをたどって求人を見つけ、SSRF と robots を守って取得し、ラベル付きの断片に分け、決定的な parser と選択肢だけの AI 判定で 8 軸を読み、unknown を 0 点にせず比較する。Career の照合パイプラインをソースごと追います。
 tags: [Career, TypeScript, Hono, Supabase, PostgreSQL, Playwright, 設計]
 type: tech
-draft: true
 ---
 
 > これは技術編です。何を作ったのか、どう使うのか、何に悩んだのかを読みやすくまとめた読みもの版は「[求人を「近い・違う・まだ分からない」に分けて読む](/blog/career)」にあります。

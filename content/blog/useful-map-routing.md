@@ -4,7 +4,6 @@ date: 2026-10-19
 description: MapKit の公共交通は出発・到着・所要時間しか返しません。そこから乗降地点を推定して区間に割り、時刻を連鎖させ、遅くなる分割を捨てるしくみと、Google マップの非公開 data= URL の生成と毎日の契約監視、タグ 1 つで App Store まで流す CI を、ソースを引用して書きます。
 tags: [UsefulMap, Swift, iOS, MapKit, SwiftUI, 設計]
 type: tech
-draft: true
 ---
 
 > これは技術編です。何をつくって、どこでつまずいたかを読みやすくまとめた読みもの版は「[歩くか、電車か、車か。経路を比べて決める地図アプリ Useful Map](/blog/useful-map)」にあります。

@@ -3,7 +3,6 @@ title: 歩くか、電車か、車か。経路を比べて決める地図アプ�
 date: 2026-10-19
 description: 移動手段ごとの所要時間を比べるための iOS アプリ Useful Map を作った話です。乗換案内は作り直さずに Apple の MapKit で所要時間を出し、運賃や乗換の詳細は Google マップに任せる、という分担にしました。
 tags: [UsefulMap, iOS, Swift, 設計]
-draft: true
 ---
 
 Useful Map は、目的地まで「歩く・電車・車のどれで行くか」を決めるための地図アプリです。iPhone と iPad で使えて、iOS 17 以上、無料です。2026 年 8 月に [App Store](https://apps.apple.com/jp/app/useful-map-%E7%B5%8C%E8%B7%AF%E6%AF%94%E8%BC%83/id6801771854) で公開しました。

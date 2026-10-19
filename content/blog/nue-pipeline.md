@@ -4,7 +4,6 @@ date: 2026-10-19
 description: 動画を Gemini に見せて編集指示書 JSON を作り、Rust から FFmpeg を呼んで縦型動画に焼く Nue の中身を、ソースを引用して書きます。3 言語・3 サービスの構成を Rust CLI と Next.js API route にまとめ直した理由と、移行途中で残っている穴も含めます。
 tags: [Nue, Rust, Next.js, FFmpeg, Gemini, 設計]
 type: tech
-draft: true
 ---
 
 > これは技術編です。何をつくって、なぜ構成をまとめ直したかを読みやすくまとめた読みもの版は「[動画編集を AI に任せるために、3 つに分けたサービスを 1 つに戻した](/blog/nue)」にあります。
