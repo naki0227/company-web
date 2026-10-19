@@ -11,6 +11,19 @@
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://enludus.com" />
     <link rel="canonical" href="https://enludus.com/" />
+    <link rel="alternate" hreflang="en" href="https://enludus.com/" />
+    <link rel="alternate" hreflang="ja" href="https://enludus.com/ja" />
+    <link rel="alternate" hreflang="x-default" href="https://enludus.com/" />
+    <link rel="alternate" type="application/rss+xml" title="Enludus Blog" href="/blog/feed.xml" />
+    <script>
+      // First visit from a Japanese browser goes to /ja. A choice made with the
+      // EN/JA switch is remembered and always wins.
+      try {
+        var saved = localStorage.getItem("enludus-lang");
+        var prefersJa = (navigator.languages || [navigator.language]).some(function (l) { return /^ja\b/i.test(l || ""); });
+        if (location.pathname === "/" && (saved === "ja" || (!saved && prefersJa))) location.replace("/ja" + location.hash);
+      } catch (e) {}
+    </script>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>Enludus — Software that earns its place.</title>
   </head>

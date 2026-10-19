@@ -6,6 +6,8 @@ import {
   useScroll,
   useTransform,
 } from "motion/react";
+import { LangContext, useCopy, useLang } from "./copy-context";
+import { homePath, type Lang } from "./i18n";
 
 const ease = [0.16, 1, 0.3, 1] as const;
 
@@ -56,18 +58,50 @@ function SectionLabel({ children }: { children: string }) {
   );
 }
 
+function rememberLang(lang: Lang) {
+  try {
+    localStorage.setItem("enludus-lang", lang);
+  } catch {
+    // Private mode or blocked storage: the switch still navigates.
+  }
+}
+
+function LangSwitch() {
+  const lang = useLang();
+  const t = useCopy();
+  return (
+    <div className="lang-switch" role="group" aria-label={t.meta.switchLabel}>
+      {(["ja", "en"] as const).map((code) => (
+        <a
+          key={code}
+          href={homePath[code]}
+          hrefLang={code}
+          lang={code}
+          aria-current={code === lang ? "true" : undefined}
+          onClick={() => rememberLang(code)}
+        >
+          {code.toUpperCase()}
+        </a>
+      ))}
+    </div>
+  );
+}
+
 function Header() {
+  const t = useCopy();
   return (
     <header className="site-header">
-      <a className="brand" href="#top" aria-label="Enludus home">
+      <a className="brand" href="#top" aria-label={t.meta.homeLabel}>
         <LogoMark />
         <span>Enludus</span>
       </a>
-      <nav aria-label="Primary">
-        <a href="#products">Products</a>
-        <a href="#about">About</a>
+      <nav aria-label={t.meta.navLabel}>
+        <a className="nav-secondary" href="#products">{t.nav.products}</a>
+        <a className="nav-secondary" href="/portfolio">{t.nav.portfolio}</a>
+        <a href="/blog">{t.nav.blog}</a>
+        <LangSwitch />
         <a className="nav-contact" href="mailto:contact@enludus.com">
-          Contact
+          {t.nav.contact}
           <ArrowUpRight />
         </a>
       </nav>
@@ -76,6 +110,7 @@ function Header() {
 }
 
 function HeroOrbit() {
+  const t = useCopy();
   return (
     <div className="hero-orbit" aria-hidden="true">
       <div className="orbit-ring orbit-ring-one" />
@@ -91,7 +126,7 @@ function HeroOrbit() {
         <span className="orbit-icon">↗</span>
         <div>
           <strong>Career</strong>
-          <small>make a clearer choice</small>
+          <small>{t.orbit.career}</small>
         </div>
       </motion.div>
       <motion.div
@@ -102,7 +137,7 @@ function HeroOrbit() {
         <span className="record-dot" />
         <div>
           <strong>StudyReel</strong>
-          <small>make effort visible</small>
+          <small>{t.orbit.study}</small>
         </div>
       </motion.div>
       <motion.div
@@ -113,7 +148,7 @@ function HeroOrbit() {
         <span className="route-glyph">⌁</span>
         <div>
           <strong>UsefulMap</strong>
-          <small>compare before moving</small>
+          <small>{t.orbit.map}</small>
         </div>
       </motion.div>
     </div>
@@ -121,6 +156,7 @@ function HeroOrbit() {
 }
 
 function Hero() {
+  const t = useCopy();
   const ref = useRef<HTMLElement>(null);
   const reduced = useReducedMotion();
   const { scrollYProgress } = useScroll({
@@ -141,31 +177,20 @@ function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease }}
         >
-          Independent software studio · Japan
+          {t.hero.eyebrow}
         </motion.div>
         <h1>
-          <motion.span
-            initial={{ y: "110%" }}
-            animate={{ y: 0 }}
-            transition={{ duration: 0.85, delay: 0.08, ease }}
-          >
-            Building software
-          </motion.span>
-          <motion.span
-            initial={{ y: "110%" }}
-            animate={{ y: 0 }}
-            transition={{ duration: 0.85, delay: 0.16, ease }}
-          >
-            that turns friction
-          </motion.span>
-          <motion.span
-            className="hero-accent"
-            initial={{ y: "110%" }}
-            animate={{ y: 0 }}
-            transition={{ duration: 0.85, delay: 0.24, ease }}
-          >
-            into better experiences.
-          </motion.span>
+          {t.hero.lines.map((line, index) => (
+            <motion.span
+              key={line}
+              className={index === t.hero.lines.length - 1 ? "hero-accent" : undefined}
+              initial={{ y: "110%" }}
+              animate={{ y: 0 }}
+              transition={{ duration: 0.85, delay: 0.08 * (index + 1), ease }}
+            >
+              {line}
+            </motion.span>
+          ))}
         </h1>
         <motion.p
           className="hero-lead"
@@ -173,8 +198,7 @@ function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.75, delay: 0.5, ease }}
         >
-          Enludus is a bootstrapped software studio building focused products
-          for learning, movement, and career decisions.
+          {t.hero.lead}
         </motion.p>
         <motion.div
           className="hero-actions"
@@ -183,7 +207,7 @@ function Hero() {
           transition={{ duration: 0.75, delay: 0.62, ease }}
         >
           <a className="button button-dark" href="#products">
-            Explore products
+            {t.hero.cta}
             <span>↓</span>
           </a>
           <a className="text-link" href="mailto:contact@enludus.com">
@@ -232,9 +256,10 @@ function Marquee() {
 }
 
 function Intro() {
+  const t = useCopy();
   return (
     <section className="intro shell">
-      <SectionLabel>How we think</SectionLabel>
+      <SectionLabel>{t.intro.label}</SectionLabel>
       <div className="intro-grid">
         <motion.h2
           initial={{ opacity: 0, y: 45 }}
@@ -242,10 +267,10 @@ function Intro() {
           viewport={{ once: true, amount: 0.35 }}
           transition={{ duration: 0.8, ease }}
         >
-          We start with the
-          <span> problem,</span>
+          {t.intro.lead}
+          <span>{t.intro.accent}</span>
           <br />
-          not the stack.
+          {t.intro.rest}
         </motion.h2>
         <motion.div
           className="intro-copy"
@@ -254,15 +279,9 @@ function Intro() {
           viewport={{ once: true, amount: 0.35 }}
           transition={{ duration: 0.75, delay: 0.08, ease }}
         >
-          <p>
-            Good software earns its place by reducing friction. We begin with
-            the decision, routine, or workflow that feels harder than it should,
-            then build the smallest system that makes it meaningfully better.
-          </p>
-          <p>
-            AI is part of the toolbox when it improves the experience — never
-            the reason a product exists.
-          </p>
+          {t.intro.body.map((paragraph) => (
+            <p key={paragraph}>{paragraph}</p>
+          ))}
         </motion.div>
       </div>
     </section>
@@ -270,12 +289,10 @@ function Intro() {
 }
 
 function CareerVisual() {
-  const bars = [
-    ["Work style", 92],
-    ["Growth", 84],
-    ["Culture", 78],
-    ["Compensation", 88],
-  ] as const;
+  const t = useCopy();
+  const bars = [92, 84, 78, 88].map(
+    (value, index) => [t.career.bars[index], value] as const,
+  );
 
   return (
     <div className="career-ui">
@@ -287,8 +304,8 @@ function CareerVisual() {
       <div className="career-content">
         <div className="career-role">
           <small>MATCH RESULT</small>
-          <strong>Backend Engineer</strong>
-          <span>Sample opportunity · Tokyo / Hybrid</span>
+          <strong>{t.career.role}</strong>
+          <span>{t.career.place}</span>
         </div>
         <div className="score-ring-wrap">
           <svg className="score-ring" viewBox="0 0 120 120">
@@ -307,7 +324,7 @@ function CareerVisual() {
           </svg>
           <div>
             <strong>86</strong>
-            <span>match</span>
+            <span>{t.career.match}</span>
           </div>
         </div>
         <div className="career-bars">
@@ -330,10 +347,7 @@ function CareerVisual() {
         </div>
         <div className="career-insight">
           <span>↗</span>
-          <p>
-            Strong alignment on work style. Check the gap in team structure
-            before deciding.
-          </p>
+          <p>{t.career.insight}</p>
         </div>
       </div>
     </div>
@@ -341,6 +355,7 @@ function CareerVisual() {
 }
 
 function StudyReelVisual() {
+  const t = useCopy();
   const heat = [
     0, 1, 2, 3, 1, 0, 2, 3, 4, 1, 2, 4, 3, 2, 1, 3, 4, 4, 2, 0, 1, 2, 3, 4,
     3, 1, 0, 2,
@@ -354,8 +369,8 @@ function StudyReelVisual() {
         transition={{ duration: 6.8, repeat: Infinity, ease: "easeInOut" }}
       >
         <small>TODAY</small>
-        <strong>3h 24m</strong>
-        <span>+18% from last week</span>
+        <strong>{t.study.total}</strong>
+        <span>{t.study.delta}</span>
       </motion.div>
 
       <div className="phone">
@@ -370,7 +385,7 @@ function StudyReelVisual() {
             FOCUSING
           </div>
           <strong className="timer">42:18</strong>
-          <span className="subject">System Design</span>
+          <span className="subject">{t.study.subject}</span>
           <div className="study-wave">
             {[15, 32, 22, 44, 27, 50, 36, 61, 43, 28, 48, 35].map(
               (height, index) => (
@@ -388,7 +403,7 @@ function StudyReelVisual() {
             )}
           </div>
           <button type="button" tabIndex={-1}>
-            Pause session
+            {t.study.pause}
           </button>
         </div>
       </div>
@@ -403,19 +418,20 @@ function StudyReelVisual() {
             <i key={index} data-level={level} />
           ))}
         </div>
-        <span>28 day consistency</span>
+        <span>{t.study.streak}</span>
       </motion.div>
     </div>
   );
 }
 
 function UsefulMapVisual() {
+  const t = useCopy();
   return (
     <div className="map-ui">
       <div className="map-grid" />
       <div className="map-search">
         <span>⌕</span>
-        <strong>Osaka Station</strong>
+        <strong>{t.map.search}</strong>
         <i>×</i>
       </div>
 
@@ -440,9 +456,9 @@ function UsefulMapVisual() {
         <div className="route-sheet-head">
           <div>
             <small>BEST BALANCE</small>
-            <strong>34 min</strong>
+            <strong>{t.map.best}</strong>
           </div>
-          <span>Arrive 19:42</span>
+          <span>{t.map.arrive}</span>
         </div>
         <div className="transport-chain">
           <span>🚶 <b>6m</b></span>
@@ -452,9 +468,16 @@ function UsefulMapVisual() {
           <span>🚶 <b>6m</b></span>
         </div>
         <div className="route-options">
-          <button type="button" tabIndex={-1}>Fastest · 31m</button>
-          <button className="active" type="button" tabIndex={-1}>Balanced · 34m</button>
-          <button type="button" tabIndex={-1}>Walk more · 41m</button>
+          {t.map.options.map((option, index) => (
+            <button
+              key={option}
+              className={index === 1 ? "active" : undefined}
+              type="button"
+              tabIndex={-1}
+            >
+              {option}
+            </button>
+          ))}
         </div>
       </div>
     </div>
@@ -484,6 +507,7 @@ function ProductCopy({
   primaryLabel,
   detailPath,
 }: ProductCopyProps) {
+  const t = useCopy();
   return (
     <motion.div
       className="product-copy"
@@ -506,7 +530,7 @@ function ProductCopy({
       </div>
       <div className="product-links">
         <a href={detailPath} className="source-link">
-          使い方・詳しい紹介を見る
+          {t.products.guide}
           <ArrowUpRight />
         </a>
         <a href={primaryHref} target="_blank" rel="noreferrer">
@@ -519,19 +543,21 @@ function ProductCopy({
 }
 
 function Products() {
+  const t = useCopy();
+  const items = t.products.items;
   return (
     <section className="products" id="products">
       <div className="shell products-heading">
-        <SectionLabel>Selected products</SectionLabel>
+        <SectionLabel>{t.products.label}</SectionLabel>
         <motion.h2
           initial={{ opacity: 0, y: 35 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.5 }}
           transition={{ duration: 0.8, ease }}
         >
-          Five focused products.
+          {t.products.heading[0]}
           <br />
-          One way of building.
+          {t.products.heading[1]}
         </motion.h2>
       </div>
 
@@ -540,12 +566,12 @@ function Products() {
           <ProductCopy
             index="01"
             name="Career"
-            label="Career decision support"
-            headline="See the fit before making the leap."
-            body="Career compares public job information with what matters to you, turning scattered requirements into a structured view of alignment, differences, and unknowns."
+            label={items.career.label}
+            headline={items.career.headline}
+            body={items.career.body}
             tags={["React", "TypeScript", "Hono", "Supabase", "Applied AI"]}
             primaryHref="https://career.enludus.com"
-            primaryLabel="Open Career"
+            primaryLabel={items.career.cta}
             detailPath="/products/career"
           />
           <motion.div
@@ -574,12 +600,12 @@ function Products() {
           <ProductCopy
             index="02"
             name="StudyReel"
-            label="Learning / iOS"
-            headline="Turn effort into something you can see."
-            body="StudyReel records the act of studying — not just a number on a timer — and makes progress visible through sessions, statistics, goals, and interactive widgets."
+            label={items.study.label}
+            headline={items.study.headline}
+            body={items.study.body}
             tags={["Swift", "SwiftUI", "SwiftData", "WidgetKit"]}
             primaryHref="https://apps.apple.com/jp/app/studyreel/id6756177589"
-            primaryLabel="View on App Store"
+            primaryLabel={items.study.cta}
             detailPath="/products/studyreel"
           />
         </div>
@@ -590,12 +616,12 @@ function Products() {
           <ProductCopy
             index="03"
             name="UsefulMap"
-            label="Mobility / iOS"
-            headline="Choose how to move before opening directions."
-            body="UsefulMap compares travel modes and breaks a trip into understandable segments, while handing detailed public-transit directions off to Google Maps when you need them."
+            label={items.map.label}
+            headline={items.map.headline}
+            body={items.map.body}
             tags={["Swift", "SwiftUI", "MapKit", "Core Location"]}
             primaryHref="https://apps.apple.com/jp/app/useful-map-%E7%B5%8C%E8%B7%AF%E6%AF%94%E8%BC%83/id6801771854"
-            primaryLabel="View on App Store"
+            primaryLabel={items.map.cta}
             detailPath="/products/useful-map"
           />
           <motion.div
@@ -624,12 +650,12 @@ function Products() {
           <ProductCopy
             index="04"
             name="Logiscore"
-            label="Code / Browser / Sound"
-            headline="Send data with sound."
-            body="Logiscore turns text, a source file, or a whole project into music. Play it out loud, record it on another device, and import the recording to restore the exact original. Error correction and optional password encryption run in a Rust/WebAssembly engine inside the browser — nothing is uploaded to Enludus servers."
+            label={items.logiscore.label}
+            headline={items.logiscore.headline}
+            body={items.logiscore.body}
             tags={["Rust", "WebAssembly", "React", "TypeScript", "Web Audio"]}
             primaryHref="https://logiscore.enludus.com"
-            primaryLabel="Try Logiscore"
+            primaryLabel={items.logiscore.cta}
             detailPath="/products/logiscore"
           />
         </div>
@@ -639,12 +665,12 @@ function Products() {
           <ProductCopy
             index="05"
             name="五十音マインスイーパー"
-            label="Words / Puzzle / Local multiplayer"
-            headline="Read the numbers. Guess the word."
-            body="A kana-board and alphabet word deduction game for two players sharing one screen. Reveal safe letters, read nearby mine counts, and find the hidden answer before your opponent."
+            label={items.minesweeper.label}
+            headline={items.minesweeper.headline}
+            body={items.minesweeper.body}
             tags={["Expo", "React Native", "TypeScript", "Web", "iOS"]}
             primaryHref="https://minesweeper.enludus.com"
-            primaryLabel="Play on the Web"
+            primaryLabel={items.minesweeper.cta}
             detailPath="/products/gojuon-minesweeper"
           />
           <motion.div
@@ -664,6 +690,7 @@ function Products() {
 
 
 function LogiscoreVisual() {
+  const t = useCopy();
   const notes = [
     { tone: "G", left: "12%", top: "24%" },
     { tone: "A", left: "27%", top: "48%" },
@@ -672,7 +699,7 @@ function LogiscoreVisual() {
     { tone: "B", left: "79%", top: "22%" },
   ];
   return (
-    <div className="logiscore-art" aria-label="テキストが音になり、録音から元に戻るイメージ">
+    <div className="logiscore-art" aria-label={t.logiscoreArt}>
       <div className="logiscore-source">
         <span>01&nbsp;&nbsp;fn main() &#123;</span>
         <span>02&nbsp;&nbsp;&nbsp;&nbsp;let sound = code;</span>
@@ -696,6 +723,7 @@ function LogiscoreVisual() {
 }
 
 function MinesweeperVisual() {
+  const t = useCopy();
   const characters = [
     "わ", "ら", "や", "ま", "は", "な", "た", "さ", "か", "あ",
     "を", "り", "", "み", "ひ", "に", "ち", "し", "き", "い",
@@ -715,33 +743,21 @@ function MinesweeperVisual() {
           </div>
         ))}
       </div>
-      <div className="minesweeper-caption">数字を読み、答えの文字を推理する。</div>
+      <div className="minesweeper-caption">{t.minesweeperCaption}</div>
     </div>
   );
 }
 
 function Principles() {
-  const principles = [
-    {
-      number: "01",
-      title: "Understand first.",
-      body: "Requirements, constraints, and the person behind the problem come before the implementation.",
-    },
-    {
-      number: "02",
-      title: "Design the system.",
-      body: "Performance, reliability, cost, operations, and changeability are product decisions too.",
-    },
-    {
-      number: "03",
-      title: "Ship and learn.",
-      body: "Working software creates the feedback that diagrams and assumptions cannot.",
-    },
-  ];
+  const t = useCopy();
+  const principles = t.principles.items.map((item, index) => ({
+    ...item,
+    number: String(index + 1).padStart(2, "0"),
+  }));
 
   return (
     <section className="principles shell">
-      <SectionLabel>How we build</SectionLabel>
+      <SectionLabel>{t.principles.label}</SectionLabel>
       <div className="principle-list">
         {principles.map((item, index) => (
           <motion.div
@@ -763,71 +779,58 @@ function Principles() {
 }
 
 function About() {
+  const t = useCopy();
   return (
     <section className="about" id="about">
       <div className="about-noise" />
       <div className="shell about-grid">
         <div className="about-copy">
-          <SectionLabel>About Enludus</SectionLabel>
+          <SectionLabel>{t.about.label}</SectionLabel>
           <motion.h2
             initial={{ opacity: 0, y: 35 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.4 }}
             transition={{ duration: 0.8, ease }}
           >
-            Small by design.
+            {t.about.heading[0]}
             <br />
-            Serious about the details.
+            {t.about.heading[1]}
           </motion.h2>
-          <motion.p
-            initial={{ opacity: 0, y: 25 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.4 }}
-            transition={{ duration: 0.75, delay: 0.08, ease }}
-          >
-            Enludus is an independent, bootstrapped software venture founded by
-            Ibuki Nagase in Japan. We design and build products end-to-end,
-            from problem discovery and system design to implementation,
-            deployment, and operation.
-          </motion.p>
-          <motion.p
-            initial={{ opacity: 0, y: 25 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.4 }}
-            transition={{ duration: 0.75, delay: 0.14, ease }}
-          >
-            Our current work spans web products, native iOS apps, backend
-            systems, and practical uses of AI.
-          </motion.p>
+          {t.about.body.map((paragraph, index) => (
+            <motion.p
+              key={paragraph}
+              initial={{ opacity: 0, y: 25 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.4 }}
+              transition={{ duration: 0.75, delay: 0.08 + index * 0.06, ease }}
+            >
+              {paragraph}
+            </motion.p>
+          ))}
+          <div className="about-links">
+            <a href="/portfolio">
+              {t.about.links.portfolio}
+              <ArrowUpRight />
+            </a>
+            <a href="/blog">
+              {t.about.links.blog}
+              <ArrowUpRight />
+            </a>
+          </div>
         </div>
         <div className="about-facts">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.94 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7, ease }}
-          >
-            <small>Based in</small>
-            <strong>Japan</strong>
-          </motion.div>
-          <motion.div
-            initial={{ opacity: 0, scale: 0.94 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7, delay: 0.08, ease }}
-          >
-            <small>Structure</small>
-            <strong>Bootstrapped</strong>
-          </motion.div>
-          <motion.div
-            initial={{ opacity: 0, scale: 0.94 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7, delay: 0.16, ease }}
-          >
-            <small>Founder</small>
-            <strong>Ibuki Nagase</strong>
-          </motion.div>
+          {t.about.facts.map(([label, value], index) => (
+            <motion.div
+              key={label}
+              initial={{ opacity: 0, scale: 0.94 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7, delay: index * 0.08, ease }}
+            >
+              <small>{label}</small>
+              <strong>{value}</strong>
+            </motion.div>
+          ))}
         </div>
       </div>
     </section>
@@ -835,22 +838,20 @@ function About() {
 }
 
 function Contact() {
+  const t = useCopy();
   return (
     <section className="contact shell" id="contact">
       <div className="contact-card">
         <div>
-          <SectionLabel>Get in touch</SectionLabel>
+          <SectionLabel>{t.contact.label}</SectionLabel>
           <h2>
-            Have a problem
+            {t.contact.heading[0]}
             <br />
-            worth simplifying?
+            {t.contact.heading[1]}
           </h2>
         </div>
         <div className="contact-action">
-          <p>
-            Product inquiries, collaborations, startup conversations, or just a
-            thoughtful hello.
-          </p>
+          <p>{t.contact.body}</p>
           <a href="mailto:contact@enludus.com">
             contact@enludus.com
             <ArrowUpRight />
@@ -865,25 +866,28 @@ function Contact() {
 }
 
 function Footer() {
+  const t = useCopy();
   return (
     <footer className="footer shell">
       <a className="brand" href="#top">
         <LogoMark />
         <span>Enludus</span>
       </a>
-      <p>Building useful software from Japan.</p>
+      <p>{t.footer.tagline}</p>
       <div>
-        <a href="/privacy">Privacy</a>
-        <a href="mailto:contact@enludus.com">Contact</a>
+        <a href="/privacy">{t.footer.privacy}</a>
+        <a href="/blog">{t.nav.blog}</a>
+        <a href="/portfolio">{t.nav.portfolio}</a>
+        <a href="mailto:contact@enludus.com">{t.footer.contact}</a>
         <span>© 2026 Enludus</span>
       </div>
     </footer>
   );
 }
 
-export default function App() {
+export default function App({ lang }: { lang: Lang }) {
   return (
-    <>
+    <LangContext.Provider value={lang}>
       <PointerGlow />
       <Header />
       <main>
@@ -896,6 +900,6 @@ export default function App() {
         <Contact />
       </main>
       <Footer />
-    </>
+    </LangContext.Provider>
   );
 }
