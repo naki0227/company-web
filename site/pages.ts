@@ -139,6 +139,7 @@ ${head.noindex ? '<meta name="robots" content="noindex">\n' : ""}<link rel="cano
 ${fontLinks(`${head.title} ${body}`)}
 <link rel="stylesheet" href="/site/site.css">
 <script src="/site/site.js" defer></script>
+<script defer src="/_vercel/insights/script.js"></script>
 ${head.jsonLd ? `<script type="application/ld+json">${JSON.stringify(head.jsonLd)}</script>\n` : ""}</head>
 ${body}
 </html>
