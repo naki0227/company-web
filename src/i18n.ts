@@ -90,7 +90,7 @@ const en = {
           ["Address", "career.enludus.com"],
           ["Built with", "React, TypeScript, Hono, Supabase"],
         ],
-        image: { base: "/img/products/career", widths: [800, 1440], ratio: 900 / 1440, alt: "Career sign-in screen", shape: "screen" },
+        image: { base: "/img/products/career", widths: [400, 800], ratio: 867 / 400, alt: "Career match result for a sample company: 5 matches, 1 difference, 2 unknowns", shape: "phone" },
         links: [{ label: "Open Career", href: "https://career.enludus.com" }],
       },
       {
@@ -260,7 +260,7 @@ const ja: Copy = {
           ["URL", "career.enludus.com"],
           ["技術", "React, TypeScript, Hono, Supabase"],
         ],
-        image: { base: "/img/products/career", widths: [800, 1440], ratio: 900 / 1440, alt: "Career のログイン画面", shape: "screen" },
+        image: { base: "/img/products/career", widths: [400, 800], ratio: 867 / 400, alt: "Career の分析結果画面（サンプル企業）。近い 5、相違 1、不明 2", shape: "phone" },
         links: [{ label: "Career を開く", href: "https://career.enludus.com" }],
       },
       {
