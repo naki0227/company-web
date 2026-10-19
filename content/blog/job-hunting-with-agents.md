@@ -28,44 +28,19 @@ draft: true
 
 フォルダの中は、内容ごとに分けています。
 
-<figure class="fig">
-<svg viewBox="0 0 360 452" role="img" aria-labelledby="f1t">
-<title id="f1t">就活フォルダの構成。AGENTS.md の下に、内容ごとのフォルダが並ぶ</title>
-<defs><marker id="f1a" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 10 5 0 10z" fill="#c95424"/></marker></defs>
-<rect x="10" y="8" width="340" height="40" rx="14" fill="#1d2a3a"/>
-<text x="180" y="34" text-anchor="middle" font-size="15" font-weight="700" fill="#fff">就活フォルダ</text>
-<rect x="10" y="62" width="340" height="150" rx="18" fill="#fbe1cf" stroke="#c95424" stroke-width="2"/>
-<text x="26" y="88" font-size="15" font-weight="700" fill="#c95424">AGENTS.md</text>
-<text x="334" y="88" text-anchor="end" font-size="12" fill="#5a4a40">最初に読まれる説明書</text>
-<rect x="24" y="100" width="312" height="34" rx="10" fill="#fff"/>
-<text x="180" y="122" text-anchor="middle" font-size="13" font-weight="700" fill="#33261e">共通：自分の情報の場所・言葉回し</text>
-<g font-size="13" fill="#33261e" text-anchor="middle">
-<rect x="24" y="142" width="98" height="28" rx="14" fill="#fff"/><text x="73" y="161">自己分析</text>
-<rect x="131" y="142" width="98" height="28" rx="14" fill="#fff"/><text x="180" y="161">ES</text>
-<rect x="238" y="142" width="98" height="28" rx="14" fill="#fff"/><text x="287" y="161">面接対策</text>
-<rect x="77" y="176" width="98" height="28" rx="14" fill="#fff"/><text x="126" y="195">リサーチ</text>
-<rect x="184" y="176" width="98" height="28" rx="14" fill="#fff"/><text x="233" y="195">振り返り</text>
-</g>
-<path d="M180 214v26" stroke="#c95424" stroke-width="2.5" marker-end="url(#f1a)"/>
-<text x="192" y="232" font-size="12" fill="#5a4a40">章ごとのルールで動く</text>
-<g font-size="13" fill="#33261e">
-<path d="M10 262h50l8 8h96a10 10 0 0 1 10 10v26a10 10 0 0 1-10 10H20a10 10 0 0 1-10-10z" fill="#ddf1fb" stroke="#5bb8e6" stroke-width="2"/><text x="24" y="298">自分の情報</text>
-<path d="M186 262h50l8 8h96a10 10 0 0 1 10 10v26a10 10 0 0 1-10 10H196a10 10 0 0 1-10-10z" fill="#ddf1fb" stroke="#5bb8e6" stroke-width="2"/><text x="200" y="298">選考管理</text>
-<path d="M10 324h50l8 8h96a10 10 0 0 1 10 10v26a10 10 0 0 1-10 10H20a10 10 0 0 1-10-10z" fill="#ddf1fb" stroke="#5bb8e6" stroke-width="2"/><text x="24" y="360">自己分析</text>
-<path d="M186 324h50l8 8h96a10 10 0 0 1 10 10v26a10 10 0 0 1-10 10H196a10 10 0 0 1-10-10z" fill="#ddf1fb" stroke="#5bb8e6" stroke-width="2"/><text x="200" y="360">ES</text>
-<path d="M10 386h50l8 8h96a10 10 0 0 1 10 10v26a10 10 0 0 1-10 10H20a10 10 0 0 1-10-10z" fill="#ddf1fb" stroke="#5bb8e6" stroke-width="2"/><text x="24" y="422">面接対策・振り返り</text>
-<path d="M186 386h50l8 8h96a10 10 0 0 1 10 10v26a10 10 0 0 1-10 10H196a10 10 0 0 1-10-10z" fill="#ddf1fb" stroke="#5bb8e6" stroke-width="2"/><text x="200" y="422">リサーチ</text>
-</g>
-</svg>
-<figcaption>AGENTS.md は章に分かれていて、内容ごとのフォルダと対応している</figcaption>
-</figure>
+```text
+job-hunting/
+├── AGENTS.md          # エージェントへの説明書（章ごとにルールを分けている）
+├── profile/           # 自分の情報：経歴・経験・作品・これまで書いた文章
+├── notes/             # 作業の中で気づいたことの追記先
+├── companies/         # 選考管理：会社ごとの状況・締め切り・次にやること
+├── self-analysis/     # 自己分析の記録と、そこから出てきた仮説
+├── es/                # 設問と、書いた ES
+├── interviews/        # 想定問答と、面接のあとの振り返り
+└── research/          # 会社や業界について調べたこと
+```
 
-- **自分の情報**：経歴、経験、作品、これまでに自分で書いた文章。どの作業でも参照する材料
-- **選考管理**：会社ごとの状況、締め切り、次にやること
-- **自己分析**：掘り下げた記録と、そこから出てきた仮説
-- **ES**：設問と、書いた ES
-- **面接対策・振り返り**：想定問答、面接のあとのメモ
-- **リサーチ**：会社や業界について調べたこと
+`profile/` はどの作業でも最初に読む材料で、`notes/` はあとで書く「自分で自分を良くするループ」の溜め先です。フォルダ名は、説明のために少し変えています。
 
 ポイントは、**事実の材料と、そこから作った文章を分けておく** ことです。ES や面接の答えは、あくまで材料から組み立てた「出力」です。材料のほうを育てていけば、新しい会社の ES を書くときも、同じ材料から組み立て直せます。
 
@@ -81,7 +56,7 @@ draft: true
 
 ```markdown
 # 共通
-- 自分の情報は「自分の情報」フォルダにある。まずそこを読む
+- 自分の情報は profile/ にある。まずそこを読む
 - 言葉回しは、自分がこれまで書いた文章に合わせる
 - AI が書いたような言い方になっていないか確かめる
 
@@ -119,7 +94,7 @@ draft: true
 
 ES の章で一番強く書いているのは、**とにかく事実ベースで** ということです。
 
-経験・数字・成果は、自分の情報フォルダにあるものだけを使ってもらいます。材料にないことは書かずに、聞いてもらいます。AI はそれっぽい数字や、少し盛ったエピソードを平気で作ります。それを一度でも出すと、面接で聞かれたときに説明できません。
+経験・数字・成果は、`profile/` にあるものだけを使ってもらいます。材料にないことは書かずに、聞いてもらいます。AI はそれっぽい数字や、少し盛ったエピソードを平気で作ります。それを一度でも出すと、面接で聞かれたときに説明できません。
 
 ## 自分で自分を良くするループ
 
@@ -205,7 +180,7 @@ ES の章で一番強く書いているのは、**とにかく事実ベースで
 
 ### ES
 
-設問に対して、自分の情報フォルダから使えそうな経験を探してもらい、構成の案を出してもらいます。文字数に合わせた削り方や、設問の意図からずれていないかの確認にも使います。ここでも、事実ベースと言葉回しのルールが効いています。
+設問に対して、`profile/` から使えそうな経験を探してもらい、構成の案を出してもらいます。文字数に合わせた削り方や、設問の意図からずれていないかの確認にも使います。ここでも、事実ベースと言葉回しのルールが効いています。
 
 ### 面接対策
 
