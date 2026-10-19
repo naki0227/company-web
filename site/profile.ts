@@ -120,10 +120,10 @@ export const works: Work[] = [
     problem:
       "動画を作るとき、編集の作業量が発信のハードルになる。素材の取り込みから解析、書き出しまでを自動化したい。",
     approach:
-      "Go の受付、Python の AI 解析、Rust の動画処理に役割を分け、編集指示を介してつないだ。",
+      "Gemini が動画を見て編集指示書（JSON）を作り、Rust が FFmpeg で縦型動画に書き出す。Go・Python・Rust の 3 サービス構成から、Rust の CLI と Next.js の 2 つへ移行している。",
     learning:
-      "責務を分けることと、サービスを分けることは別の判断。複数コンテナの運用負荷を踏まえ、Rust への集約を検討している。",
-    stack: ["Rust", "Go", "Python", "FFmpeg"],
+      "責務を分けることと、サービスを分けることは別の判断。境目は JSON の指示書として残し、処理は 1 つのプログラムにまとめた。",
+    stack: ["Rust", "Next.js", "Gemini", "FFmpeg"],
     links: [{ label: "GitHub", href: "https://github.com/naki0227/nue" }],
   },
   {

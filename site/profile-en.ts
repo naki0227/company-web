@@ -84,10 +84,11 @@ export const worksEn: Work[] = [
     status: "In development",
     summary: "A video pipeline that connects AI analysis and rendering.",
     problem: "Editing effort keeps people from publishing video. I want to automate everything from import through analysis to export.",
-    approach: "Split the roles: intake in Go, AI analysis in Python, video processing in Rust, connected through edit instructions.",
+    approach:
+      "Gemini watches the footage and writes a JSON edit plan; Rust renders it with FFmpeg into vertical video. Moving from three services (Go, Python, Rust) to a Rust CLI plus Next.js.",
     learning:
-      "Separating responsibilities and separating services are different decisions. Given the cost of running many containers, I'm considering consolidating into Rust.",
-    stack: ["Rust", "Go", "Python", "FFmpeg"],
+      "Separating responsibilities is not the same as separating services. I kept the boundary as a JSON edit plan and put the processing in one program.",
+    stack: ["Rust", "Next.js", "Gemini", "FFmpeg"],
     links: [{ label: "GitHub", href: "https://github.com/naki0227/nue" }],
   },
   {
