@@ -42,7 +42,8 @@ No environment variables are required.
 | `/ja` | Japanese company site (`ja.html` → same app, `lang="ja"`) |
 | `/portfolio` | Founder portfolio, static HTML from `site/profile.ts` |
 | `/blog`, `/blog/<slug>` | Blog, static HTML from `content/blog/*.md` |
-| `/blog/feed.xml`, `/sitemap.xml` | Generated at build time |
+| `/blog/feed.xml`, `/sitemap.xml`, `/404` | Generated at build time |
+| `/og/*.png` | Open Graph cards for every page and post, generated at build time (`site/og.ts`) |
 | `/products/*`, `/privacy` | Hand-written pages in `public/` |
 
 A visitor whose browser prefers Japanese is sent from `/` to `/ja` on the first visit. The EN / JA switch in the header is remembered (`localStorage`) and always wins.
@@ -69,7 +70,9 @@ The portfolio's facts live in `site/profile.ts`; its look lives in `public/site/
    ---
    ```
 
-3. Write Markdown (GitHub flavored: tables, code blocks, lists). Every `##` heading becomes a table-of-contents entry once a post has three or more. Put images in `public/blog/<slug>/` and reference them as `/blog/<slug>/image.webp`.
-4. `npm run dev` and open `/blog`. Commit and push; the post, the portfolio's "Writing" list, the RSS feed and the sitemap update on deploy.
+3. Write Markdown (GitHub flavored: tables, code blocks, lists). Code blocks are coloured at build time; tag them with a language (`ts`, `swift`, `rust`, `go`, `bash`, … see `LANGS` in `site/posts.ts`). Every `##` heading becomes a table-of-contents entry once a post has three or more. Put images in `public/blog/<slug>/` and reference them as `/blog/<slug>/image.webp`.
+4. `npm run dev` and open `/blog`. Commit and push; the post, its share card (`/og/blog/<slug>.png`), related posts, the portfolio's "Writing" list, the RSS feed and the sitemap update on deploy.
+
+The share cards fetch Manrope, Noto Sans JP (subset to the characters used) and DM Mono from Google Fonts during the build. If that fails, every card falls back to `site/og-fallback.png` and the build still succeeds.
 
 The UI mockups are implemented in HTML/CSS/SVG instead of screenshots so the product storytelling remains crisp, animated, responsive, and easy to update.

@@ -49,6 +49,18 @@
     setTimeout(function () { tick(); setInterval(tick, 60000); }, 60000 - (Date.now() % 60000));
   }
 
+  /* Copy the post URL. The button stays hidden where the Clipboard API is missing. */
+  var copy = document.querySelector("[data-copy]");
+  if (copy && navigator.clipboard) {
+    copy.hidden = false;
+    copy.addEventListener("click", function () {
+      navigator.clipboard.writeText(copy.getAttribute("data-copy")).then(function () {
+        copy.textContent = "コピーしました";
+        setTimeout(function () { copy.textContent = "リンクをコピー"; }, 2000);
+      });
+    });
+  }
+
   /* Blog tag filter. Without JS every post is listed and the buttons stay hidden. */
   var filter = document.querySelector("[data-filter]");
   if (filter) {

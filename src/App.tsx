@@ -1,6 +1,8 @@
 import { useEffect, useRef } from "react";
 import {
   motion,
+  MotionConfig,
+  useInView,
   useMotionValue,
   useReducedMotion,
   useScroll,
@@ -10,6 +12,22 @@ import { LangContext, useCopy, useLang } from "./copy-context";
 import { homePath, type Lang } from "./i18n";
 
 const ease = [0.16, 1, 0.3, 1] as const;
+
+/** Looping decoration runs only while it is on screen and motion is welcome. */
+function useLoop<T extends Element>() {
+  const ref = useRef<T>(null);
+  const inView = useInView(ref);
+  const reduced = useReducedMotion();
+  return [ref, inView && !reduced] as const;
+}
+
+const float = (live: boolean, frames: Record<string, number[]>, duration: number) =>
+  live
+    ? { animate: frames, transition: { duration, repeat: Infinity, ease: "easeInOut" as const } }
+    : {
+        animate: Object.fromEntries(Object.entries(frames).map(([k, v]) => [k, v[0]])),
+        transition: { duration: 0.6, ease },
+      };
 
 function ArrowUpRight() {
   return (
@@ -111,8 +129,9 @@ function Header() {
 
 function HeroOrbit() {
   const t = useCopy();
+  const [ref, live] = useLoop<HTMLDivElement>();
   return (
-    <div className="hero-orbit" aria-hidden="true">
+    <div className="hero-orbit" aria-hidden="true" ref={ref}>
       <div className="orbit-ring orbit-ring-one" />
       <div className="orbit-ring orbit-ring-two" />
       <div className="orbit-core">
@@ -120,8 +139,7 @@ function HeroOrbit() {
       </div>
       <motion.div
         className="orbit-card orbit-career"
-        animate={{ y: [0, -8, 0], rotate: [-2, 0, -2] }}
-        transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+        {...float(live, { y: [0, -8, 0], rotate: [-2, 0, -2] }, 6)}
       >
         <span className="orbit-icon">↗</span>
         <div>
@@ -131,8 +149,7 @@ function HeroOrbit() {
       </motion.div>
       <motion.div
         className="orbit-card orbit-study"
-        animate={{ y: [0, 10, 0], rotate: [3, 1, 3] }}
-        transition={{ duration: 7.2, repeat: Infinity, ease: "easeInOut" }}
+        {...float(live, { y: [0, 10, 0], rotate: [3, 1, 3] }, 7.2)}
       >
         <span className="record-dot" />
         <div>
@@ -142,8 +159,7 @@ function HeroOrbit() {
       </motion.div>
       <motion.div
         className="orbit-card orbit-map"
-        animate={{ x: [0, 8, 0], rotate: [-1, 2, -1] }}
-        transition={{ duration: 6.6, repeat: Infinity, ease: "easeInOut" }}
+        {...float(live, { x: [0, 8, 0], rotate: [-1, 2, -1] }, 6.6)}
       >
         <span className="route-glyph">⌁</span>
         <div>
@@ -356,17 +372,17 @@ function CareerVisual() {
 
 function StudyReelVisual() {
   const t = useCopy();
+  const [ref, live] = useLoop<HTMLDivElement>();
   const heat = [
     0, 1, 2, 3, 1, 0, 2, 3, 4, 1, 2, 4, 3, 2, 1, 3, 4, 4, 2, 0, 1, 2, 3, 4,
     3, 1, 0, 2,
   ];
 
   return (
-    <div className="study-stage">
+    <div className="study-stage" ref={ref}>
       <motion.div
         className="study-note note-one"
-        animate={{ y: [0, -9, 0], rotate: [-4, -2, -4] }}
-        transition={{ duration: 6.8, repeat: Infinity, ease: "easeInOut" }}
+        {...float(live, { y: [0, -9, 0], rotate: [-4, -2, -4] }, 6.8)}
       >
         <small>TODAY</small>
         <strong>{t.study.total}</strong>
@@ -391,13 +407,20 @@ function StudyReelVisual() {
               (height, index) => (
                 <motion.i
                   key={index}
-                  animate={{ height: [height, height + 14, height] }}
-                  transition={{
-                    duration: 1.2 + index * 0.05,
-                    repeat: Infinity,
-                    delay: index * 0.04,
-                    ease: "easeInOut",
-                  }}
+                  style={{ height }}
+                  animate={
+                    live ? { scaleY: [1, (height + 14) / height, 1] } : { scaleY: 1 }
+                  }
+                  transition={
+                    live
+                      ? {
+                          duration: 1.2 + index * 0.05,
+                          repeat: Infinity,
+                          delay: index * 0.04,
+                          ease: "easeInOut",
+                        }
+                      : { duration: 0.3 }
+                  }
                 />
               ),
             )}
@@ -410,8 +433,7 @@ function StudyReelVisual() {
 
       <motion.div
         className="study-note note-two"
-        animate={{ y: [0, 8, 0], rotate: [4, 2, 4] }}
-        transition={{ duration: 7.4, repeat: Infinity, ease: "easeInOut" }}
+        {...float(live, { y: [0, 8, 0], rotate: [4, 2, 4] }, 7.4)}
       >
         <div className="heatmap">
           {heat.map((level, index) => (
@@ -888,18 +910,20 @@ function Footer() {
 export default function App({ lang }: { lang: Lang }) {
   return (
     <LangContext.Provider value={lang}>
-      <PointerGlow />
-      <Header />
-      <main>
-        <Hero />
-        <Marquee />
-        <Intro />
-        <Products />
-        <Principles />
-        <About />
-        <Contact />
-      </main>
-      <Footer />
+      <MotionConfig reducedMotion="user">
+        <PointerGlow />
+        <Header />
+        <main>
+          <Hero />
+          <Marquee />
+          <Intro />
+          <Products />
+          <Principles />
+          <About />
+          <Contact />
+        </main>
+        <Footer />
+      </MotionConfig>
     </LangContext.Provider>
   );
 }

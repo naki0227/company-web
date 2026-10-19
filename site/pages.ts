@@ -49,9 +49,11 @@ type Head = {
   type?: "website" | "article";
   jsonLd?: object;
   noindex?: boolean;
+  /** Path of the Open Graph card, e.g. "/og/portfolio.png". */
+  image: string;
 };
 
-function layout(head: Head, current: "portfolio" | "blog", main: string) {
+function layout(head: Head, current: "portfolio" | "blog" | "", main: string) {
   const url = SITE + head.path;
   const nav = [
     ["portfolio", "/portfolio", "Portfolio"],
@@ -77,7 +79,10 @@ ${head.noindex ? '<meta name="robots" content="noindex">\n' : ""}<link rel="cano
 <meta property="og:title" content="${esc(head.title)}">
 <meta property="og:description" content="${esc(head.description)}">
 <meta property="og:url" content="${url}">
-<meta name="twitter:card" content="summary">
+<meta property="og:image" content="${SITE}${head.image}">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#ebe7e0">
 <meta name="google-adsense-account" content="ca-pub-1806737602764042">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
@@ -263,6 +268,7 @@ export function portfolioPage(posts: Post[]) {
       title: "長瀬 唯楓 — Portfolio | Enludus",
       description: `${person.name}（Ibuki Nagase）のポートフォリオ。${person.lead}StudyReel・Career・UsefulMap・Logiscore など、つくったものと考え方をまとめています。`,
       path: "/portfolio",
+      image: "/og/portfolio.png",
       jsonLd: {
         "@context": "https://schema.org",
         "@type": "ProfilePage",
@@ -310,6 +316,7 @@ export function blogIndexPage(posts: Post[]) {
       title: "ブログ | Enludus",
       description: "Enludus 代表・長瀬唯楓のブログ。プロダクト開発、設計、学んだことの記録。",
       path: "/blog",
+      image: "/og/blog.png",
       jsonLd: {
         "@context": "https://schema.org",
         "@type": "Blog",
@@ -323,7 +330,25 @@ export function blogIndexPage(posts: Post[]) {
   );
 }
 
-export function postPage(post: Post, newer?: Post, older?: Post) {
+function related(post: Post, all: Post[]) {
+  // Most shared tags first, then newest. Drafts never point at each other in production
+  // because they are not loaded there.
+  return all
+    .filter((p) => p.slug !== post.slug)
+    .map((p) => ({ p, score: p.tags.filter((t) => post.tags.includes(t)).length }))
+    .filter((x) => x.score > 0)
+    .sort((a, b) => b.score - a.score || b.p.date.localeCompare(a.p.date))
+    .slice(0, 3)
+    .map((x) => x.p);
+}
+
+export function postPage(post: Post, all: Post[]) {
+  const i = all.indexOf(post);
+  const newer = all[i - 1];
+  const older = all[i + 1];
+  const url = `${SITE}/blog/${post.slug}`;
+  const share = `https://x.com/intent/post?text=${encodeURIComponent(post.title)}&url=${encodeURIComponent(url)}`;
+  const more = related(post, all);
   const toc =
     post.toc.length >= 3
       ? `<nav class="toc" aria-label="目次"><p>目次</p><ol>${post.toc
@@ -351,18 +376,28 @@ ${post.html}
     </div>
   </div>
   <footer class="post-foot">
+    <div class="share">
+      <span>Share</span>
+      <a href="${share}" target="_blank" rel="noopener noreferrer">X でシェア <span aria-hidden="true">↗</span></a>
+      <button type="button" data-copy="${url}" hidden>リンクをコピー</button>
+    </div>
     <a class="author" href="/portfolio">
       <span class="author-mark" aria-hidden="true">IN</span>
       <span><strong>${esc(person.name)}</strong>${esc(person.role)}</span>
     </a>
     <nav class="pager" aria-label="前後の記事">${pager}</nav>
   </footer>
+  ${more.length ? `<section class="related" aria-labelledby="related-title">
+    <p class="sh-no" id="related-title">Related — 関連する記事</p>
+    ${postRows(more)}
+  </section>` : ""}
 </article>`;
   return layout(
     {
       title: `${post.title} | Enludus ブログ`,
       description: post.description || post.title,
       path: `/blog/${post.slug}`,
+      image: `/og/blog/${post.slug}.png`,
       type: "article",
       noindex: post.draft,
       jsonLd: {
@@ -380,6 +415,37 @@ ${post.html}
       },
     },
     "blog",
+    main,
+  );
+}
+
+export function notFoundPage(posts: Post[]) {
+  const main = `
+<section class="hero hero-sm" aria-labelledby="nf-title">
+  <div class="hero-meta">
+    <span>Error — 404</span>
+    <span>Not found</span>
+  </div>
+  <h1 class="hero-name" id="nf-title"><span class="l1">404<i class="dot" aria-hidden="true"></i></span></h1>
+  <p class="hero-lead">お探しのページは見つかりませんでした。<br>移動したか、URL が変わった可能性があります。</p>
+</section>
+<section class="sec sec-tight" aria-label="行き先">
+  <ol class="posts nf-links">
+    ${[
+      ["/ja", "Enludus トップ", "会社とプロダクトの紹介"],
+      ["/", "Enludus (English)", "Company site in English"],
+      ["/portfolio", "Portfolio", "長瀬 唯楓のポートフォリオ"],
+      ["/blog", "Blog", posts[0] ? `最新：${posts[0].title}` : "記事の一覧"],
+    ]
+      .map(
+        ([href, title, desc]) => `<li><a class="post-row" href="${href}"><time>${href}</time><span class="post-row-title">${esc(title)}</span><span class="post-row-desc">${esc(desc)}</span><span class="post-row-tags"></span><span class="arrow" aria-hidden="true">→</span></a></li>`,
+      )
+      .join("")}
+  </ol>
+</section>`;
+  return layout(
+    { title: "ページが見つかりません | Enludus", description: "お探しのページは見つかりませんでした。", path: "/404", image: "/og/blog.png", noindex: true },
+    "",
     main,
   );
 }
