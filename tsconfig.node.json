@@ -15,10 +15,13 @@
     "strict": true,
     "types": [
       "node"
-    ]
+    ],
+    "jsx": "react-jsx"
   },
   "include": [
     "vite.config.ts",
-    "site"
+    "site",
+    "src/illustrations.tsx",
+    "src/i18n.ts"
   ]
 }

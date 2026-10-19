@@ -1,23 +1,42 @@
-import { useEffect, useRef } from "react";
-import {
-  motion,
-  useMotionValue,
-  useReducedMotion,
-  useScroll,
-  useTransform,
-} from "motion/react";
+import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
+import latestPosts from "virtual:latest-posts";
 import { LangContext, useCopy, useLang } from "./copy-context";
-import { homePath, type Lang } from "./i18n";
+import { homePath, type Lang, type Product } from "./i18n";
+import {
+  CameraSwitchIcon,
+  CareerIcon,
+  HandoffIcon,
+  KanaIcon,
+  Leaf,
+  LockedWindowIcon,
+  MapIcon,
+  Mug,
+  Note,
+  Pencil,
+  Pin,
+  SoundIcon,
+  Studio,
+  StudyIcon,
+} from "./illustrations";
 
-const ease = [0.16, 1, 0.3, 1] as const;
+const productIcons: Record<string, typeof StudyIcon> = {
+  studyreel: StudyIcon,
+  usefulmap: MapIcon,
+  career: CareerIcon,
+  logiscore: SoundIcon,
+  minesweeper: KanaIcon,
+};
 
-function ArrowUpRight() {
-  return (
-    <svg viewBox="0 0 18 18" aria-hidden="true">
-      <path d="M4 14 14 4M6 4h8v8" />
-    </svg>
-  );
-}
+// Mood: lp-anatomy §7-2 "warm" (Bikkuri Donkey), translated to Enludus. Two paper
+// colours alternate with oval curves between them; colour comes only from the logo
+// (orange, sky, navy) and the illustrations use the same three. Latin is a round face
+// (Fredoka), Japanese a round gothic (Zen Maru Gothic, subset at build time). Motion:
+// one centre slider (3 s), hover wobble (.75 s, ±3°), rows that slide 10 px (.5 s
+// cubic-bezier(.19,1,.22,1)), and a mobile menu whose items drop in .125 s apart.
+
+const still = () =>
+  matchMedia("(prefers-reduced-motion: reduce)").matches ||
+  Boolean((navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData);
 
 function LogoMark() {
   return (
@@ -27,34 +46,6 @@ function LogoMark() {
       <span className="logo-bar logo-bar-c" />
       <span className="logo-dot" />
     </span>
-  );
-}
-
-function PointerGlow() {
-  const x = useMotionValue(-300);
-  const y = useMotionValue(-300);
-  const reduced = useReducedMotion();
-
-  useEffect(() => {
-    if (reduced) return;
-    const move = (event: PointerEvent) => {
-      x.set(event.clientX - 180);
-      y.set(event.clientY - 180);
-    };
-    window.addEventListener("pointermove", move, { passive: true });
-    return () => window.removeEventListener("pointermove", move);
-  }, [reduced, x, y]);
-
-  if (reduced) return null;
-  return <motion.div className="pointer-glow" style={{ x, y }} />;
-}
-
-function SectionLabel({ children }: { children: string }) {
-  return (
-    <div className="section-label">
-      <span />
-      {children}
-    </div>
   );
 }
 
@@ -70,7 +61,7 @@ function LangSwitch() {
   const lang = useLang();
   const t = useCopy();
   return (
-    <div className="lang-switch" role="group" aria-label={t.meta.switchLabel}>
+    <div className="lang" role="group" aria-label={t.meta.switchLabel}>
       {(["ja", "en"] as const).map((code) => (
         <a
           key={code}
@@ -87,751 +78,326 @@ function LangSwitch() {
   );
 }
 
+function useNav() {
+  const t = useCopy();
+  return [
+    { href: "#products", label: t.nav.products, en: "Products", Icon: Pin },
+    { href: "/blog", label: t.nav.journal, en: "Blog", Icon: Pencil },
+    { href: "/portfolio", label: t.nav.founder, en: "Founder", Icon: Leaf },
+    { href: "#company", label: t.nav.company, en: "About", Icon: Mug },
+  ];
+}
+
 function Header() {
   const t = useCopy();
+  const nav = useNav();
+  const [open, setOpen] = useState(false);
   return (
-    <header className="site-header">
-      <a className="brand" href="#top" aria-label={t.meta.homeLabel}>
+    <header className={`hd${open ? " is-open" : ""}`}>
+      <a className="hd-brand" href="#top" aria-label={t.meta.homeLabel}>
         <LogoMark />
-        <span>Enludus</span>
+        <span className="round">Enludus</span>
       </a>
-      <nav aria-label={t.meta.navLabel}>
-        <a className="nav-secondary" href="#products">{t.nav.products}</a>
-        <a className="nav-secondary" href="/portfolio">{t.nav.portfolio}</a>
-        <a href="/blog">{t.nav.blog}</a>
-        <LangSwitch />
-        <a className="nav-contact" href="mailto:contact@enludus.com">
-          {t.nav.contact}
-          <ArrowUpRight />
-        </a>
+      <nav className="hd-nav" id="menu" aria-label={t.meta.navLabel}>
+        {nav.map(({ href, label, en, Icon }, i) => (
+          <a
+            key={href}
+            href={href}
+            style={{ "--i": i } as CSSProperties}
+            onClick={() => setOpen(false)}
+          >
+            <Icon className="hd-icon" />
+            <span>
+              <small className="round">{en}</small>
+              {label}
+            </span>
+          </a>
+        ))}
       </nav>
+      <div className="hd-end">
+        <LangSwitch />
+        <a className="btn btn-sm" href="mailto:contact@enludus.com">
+          {t.nav.contact}
+        </a>
+        <button
+          className="burger"
+          type="button"
+          aria-expanded={open}
+          aria-controls="menu"
+          aria-label="Menu"
+          onClick={() => setOpen((v) => !v)}
+        >
+          <span />
+        </button>
+      </div>
     </header>
   );
 }
 
-function HeroOrbit() {
-  const t = useCopy();
+function SectionHead({ en, ja, left, right }: { en: string; ja: string; left: ReactNode; right: ReactNode }) {
   return (
-    <div className="hero-orbit" aria-hidden="true">
-      <div className="orbit-ring orbit-ring-one" />
-      <div className="orbit-ring orbit-ring-two" />
-      <div className="orbit-core">
-        <LogoMark />
+    <div className="sh">
+      <span className="sh-side sh-left">{left}</span>
+      <div>
+        <p className="sh-en round" aria-hidden="true">
+          {en}
+        </p>
+        <h2 className="sh-ja">{ja}</h2>
       </div>
-      <motion.div
-        className="orbit-card orbit-career"
-        animate={{ y: [0, -8, 0], rotate: [-2, 0, -2] }}
-        transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-      >
-        <span className="orbit-icon">↗</span>
-        <div>
-          <strong>Career</strong>
-          <small>{t.orbit.career}</small>
+      <span className="sh-side sh-right">{right}</span>
+    </div>
+  );
+}
+
+function Shot({ image, sizes }: { image: Product["image"]; sizes: string }) {
+  const [small] = image.widths;
+  return (
+    <img
+      src={`${image.base}-${small}.webp`}
+      srcSet={image.widths.map((w) => `${image.base}-${w}.webp ${w}w`).join(", ")}
+      sizes={sizes}
+      width={small}
+      height={Math.round(small * image.ratio)}
+      alt={image.alt}
+      loading="lazy"
+      decoding="async"
+    />
+  );
+}
+
+/** Centre slider (Bikkuri Donkey's main visual): one big card, neighbours darkened. */
+function Slider() {
+  const t = useCopy();
+  const items = t.products.items;
+  const n = items.length;
+  const [index, setIndex] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (still() || paused) return;
+    const el = ref.current;
+    let visible = true;
+    const io = new IntersectionObserver(([e]) => (visible = e.isIntersecting));
+    if (el) io.observe(el);
+    const id = window.setInterval(() => {
+      if (visible && !document.hidden) setIndex((i) => (i + 1) % n);
+    }, 3000);
+    return () => {
+      window.clearInterval(id);
+      io.disconnect();
+    };
+  }, [n, paused]);
+
+  return (
+    <div
+      className="slider"
+      ref={ref}
+      role="region"
+      aria-roledescription="carousel"
+      aria-label={t.products.label}
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+      onFocus={() => setPaused(true)}
+    >
+      <div className="slider-track">
+        {items.map((p, i) => {
+          let offset = (i - index + n) % n;
+          if (offset > n / 2) offset -= n;
+          const Icon = productIcons[p.id];
+          return (
+            <a
+              key={p.id}
+              href={`#${p.id}`}
+              className={`slide${offset === 0 ? " is-center" : ""}${Math.abs(offset) > 1 ? " is-far" : ""}`}
+              style={{ "--o": offset } as CSSProperties}
+              aria-hidden={offset !== 0}
+              tabIndex={offset === 0 ? 0 : -1}
+            >
+              <span className={`slide-frame slide-${p.image.shape}`}>
+                <Shot image={p.image} sizes="(max-width: 760px) 70vw, 340px" />
+              </span>
+              <span className="slide-cap">
+                <Icon className="slide-icon" />
+                <span>
+                  <strong className="round">{p.name}</strong>
+                  {p.what}
+                </span>
+              </span>
+            </a>
+          );
+        })}
+      </div>
+      <div className="slider-ui">
+        <button type="button" className="slider-btn" aria-label="Previous" onClick={() => setIndex((i) => (i - 1 + n) % n)}>
+          ←
+        </button>
+        <div className="dots">
+          {items.map((p, i) => (
+            <button
+              key={p.id}
+              type="button"
+              aria-label={p.name}
+              aria-current={i === index ? "true" : undefined}
+              onClick={() => setIndex(i)}
+            />
+          ))}
         </div>
-      </motion.div>
-      <motion.div
-        className="orbit-card orbit-study"
-        animate={{ y: [0, 10, 0], rotate: [3, 1, 3] }}
-        transition={{ duration: 7.2, repeat: Infinity, ease: "easeInOut" }}
-      >
-        <span className="record-dot" />
-        <div>
-          <strong>StudyReel</strong>
-          <small>{t.orbit.study}</small>
-        </div>
-      </motion.div>
-      <motion.div
-        className="orbit-card orbit-map"
-        animate={{ x: [0, 8, 0], rotate: [-1, 2, -1] }}
-        transition={{ duration: 6.6, repeat: Infinity, ease: "easeInOut" }}
-      >
-        <span className="route-glyph">⌁</span>
-        <div>
-          <strong>UsefulMap</strong>
-          <small>{t.orbit.map}</small>
-        </div>
-      </motion.div>
+        <button type="button" className="slider-btn" aria-label="Next" onClick={() => setIndex((i) => (i + 1) % n)}>
+          →
+        </button>
+      </div>
     </div>
   );
 }
 
 function Hero() {
   const t = useCopy();
-  const ref = useRef<HTMLElement>(null);
-  const reduced = useReducedMotion();
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start start", "end start"],
-  });
-  const copyY = useTransform(scrollYProgress, [0, 1], [0, reduced ? 0 : 90]);
-  const visualY = useTransform(scrollYProgress, [0, 1], [0, reduced ? 0 : -70]);
-  const opacity = useTransform(scrollYProgress, [0, 0.82], [1, 0]);
-
   return (
-    <section className="hero" id="top" ref={ref}>
-      <div className="hero-grid" />
-      <motion.div className="hero-copy" style={{ y: copyY, opacity }}>
-        <motion.div
-          className="eyebrow"
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, ease }}
-        >
-          {t.hero.eyebrow}
-        </motion.div>
-        <h1>
-          {t.hero.lines.map((line, index) => (
-            <motion.span
-              key={line}
-              className={index === t.hero.lines.length - 1 ? "hero-accent" : undefined}
-              initial={{ y: "110%" }}
-              animate={{ y: 0 }}
-              transition={{ duration: 0.85, delay: 0.08 * (index + 1), ease }}
-            >
-              {line}
-            </motion.span>
-          ))}
-        </h1>
-        <motion.p
-          className="hero-lead"
-          initial={{ opacity: 0, y: 18 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.75, delay: 0.5, ease }}
-        >
-          {t.hero.lead}
-        </motion.p>
-        <motion.div
-          className="hero-actions"
-          initial={{ opacity: 0, y: 18 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.75, delay: 0.62, ease }}
-        >
-          <a className="button button-dark" href="#products">
-            {t.hero.cta}
-            <span>↓</span>
-          </a>
-          <a className="text-link" href="mailto:contact@enludus.com">
-            contact@enludus.com
-            <ArrowUpRight />
-          </a>
-        </motion.div>
-      </motion.div>
-
-      <motion.div
-        className="hero-visual"
-        style={{ y: visualY, opacity }}
-        initial={{ opacity: 0, scale: 0.94 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 1.1, delay: 0.25, ease }}
-      >
-        <HeroOrbit />
-      </motion.div>
-
-      <div className="scroll-cue">
-        <span>SCROLL</span>
-        <i />
+    <section className="hero paper-a" id="top">
+      <div className="hero-copy">
+        <p className="label round">{t.hero.label}</p>
+        <h1>{t.hero.title}</h1>
+        <p className="hero-lead">{t.hero.lead}</p>
+        <Note className="doodle doodle-note" />
+        <Pencil className="doodle doodle-pencil" />
       </div>
+      <Slider />
     </section>
   );
 }
 
-function Marquee() {
-  const items = ["PRODUCT", "SOFTWARE", "MOBILE", "WEB", "APPLIED AI", "SYSTEMS"];
-  return (
-    <div className="marquee" aria-hidden="true">
-      <div className="marquee-track">
-        {[0, 1].map((group) => (
-          <div className="marquee-group" key={group}>
-            {items.map((item) => (
-              <span key={item}>
-                {item}
-                <i>✦</i>
-              </span>
-            ))}
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function Intro() {
+function ProductCard({ product, index }: { product: Product; index: number }) {
   const t = useCopy();
+  const Icon = productIcons[product.id];
+  const guide = t.products.guidePaths[product.id];
   return (
-    <section className="intro shell">
-      <SectionLabel>{t.intro.label}</SectionLabel>
-      <div className="intro-grid">
-        <motion.h2
-          initial={{ opacity: 0, y: 45 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.35 }}
-          transition={{ duration: 0.8, ease }}
-        >
-          {t.intro.lead}
-          <span>{t.intro.accent}</span>
-          <br />
-          {t.intro.rest}
-        </motion.h2>
-        <motion.div
-          className="intro-copy"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.35 }}
-          transition={{ duration: 0.75, delay: 0.08, ease }}
-        >
-          {t.intro.body.map((paragraph) => (
-            <p key={paragraph}>{paragraph}</p>
-          ))}
-        </motion.div>
+    <article className={`card ${index % 2 ? "tone-s" : "tone-o"}`} id={product.id}>
+      <div className="card-arch">
+        <span className="card-no round">{String(index + 1).padStart(2, "0")}</span>
+        <Icon className="card-icon wobble" />
       </div>
-    </section>
-  );
-}
-
-function CareerVisual() {
-  const t = useCopy();
-  const bars = [92, 84, 78, 88].map(
-    (value, index) => [t.career.bars[index], value] as const,
-  );
-
-  return (
-    <div className="career-ui">
-      <div className="career-topbar">
-        <span className="mini-logo">C</span>
-        <span>Career</span>
-        <i />
-      </div>
-      <div className="career-content">
-        <div className="career-role">
-          <small>MATCH RESULT</small>
-          <strong>{t.career.role}</strong>
-          <span>{t.career.place}</span>
-        </div>
-        <div className="score-ring-wrap">
-          <svg className="score-ring" viewBox="0 0 120 120">
-            <circle className="score-track" cx="60" cy="60" r="48" />
-            <motion.circle
-              className="score-progress"
-              cx="60"
-              cy="60"
-              r="48"
-              pathLength="1"
-              initial={{ pathLength: 0 }}
-              whileInView={{ pathLength: 0.86 }}
-              viewport={{ once: true, amount: 0.7 }}
-              transition={{ duration: 1.4, ease }}
-            />
-          </svg>
-          <div>
-            <strong>86</strong>
-            <span>{t.career.match}</span>
-          </div>
-        </div>
-        <div className="career-bars">
-          {bars.map(([label, value], index) => (
-            <div className="career-bar-row" key={label}>
-              <div>
-                <span>{label}</span>
-                <b>{value}</b>
-              </div>
-              <div className="career-bar-track">
-                <motion.i
-                  initial={{ width: 0 }}
-                  whileInView={{ width: value + "%" }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.9, delay: 0.1 * index, ease }}
-                />
-              </div>
+      <div className="card-body">
+        <p className="card-what">{product.what}</p>
+        <h3 className="round" lang={/^[\x20-\x7e]+$/.test(product.name) ? "en" : "ja"}>
+          {product.name}
+        </h3>
+        <p className="card-headline">{product.headline}</p>
+        <p className="card-text">{product.body}</p>
+        <dl className="specs">
+          {product.specs.map(([k, v]) => (
+            <div key={k}>
+              <dt>{k}</dt>
+              <dd>{v}</dd>
             </div>
           ))}
-        </div>
-        <div className="career-insight">
-          <span>↗</span>
-          <p>{t.career.insight}</p>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function StudyReelVisual() {
-  const t = useCopy();
-  const heat = [
-    0, 1, 2, 3, 1, 0, 2, 3, 4, 1, 2, 4, 3, 2, 1, 3, 4, 4, 2, 0, 1, 2, 3, 4,
-    3, 1, 0, 2,
-  ];
-
-  return (
-    <div className="study-stage">
-      <motion.div
-        className="study-note note-one"
-        animate={{ y: [0, -9, 0], rotate: [-4, -2, -4] }}
-        transition={{ duration: 6.8, repeat: Infinity, ease: "easeInOut" }}
-      >
-        <small>TODAY</small>
-        <strong>{t.study.total}</strong>
-        <span>{t.study.delta}</span>
-      </motion.div>
-
-      <div className="phone">
-        <div className="phone-island" />
-        <div className="phone-screen">
-          <div className="study-head">
-            <span>StudyReel</span>
-            <i>•••</i>
-          </div>
-          <div className="focus-label">
-            <span className="record-dot" />
-            FOCUSING
-          </div>
-          <strong className="timer">42:18</strong>
-          <span className="subject">{t.study.subject}</span>
-          <div className="study-wave">
-            {[15, 32, 22, 44, 27, 50, 36, 61, 43, 28, 48, 35].map(
-              (height, index) => (
-                <motion.i
-                  key={index}
-                  animate={{ height: [height, height + 14, height] }}
-                  transition={{
-                    duration: 1.2 + index * 0.05,
-                    repeat: Infinity,
-                    delay: index * 0.04,
-                    ease: "easeInOut",
-                  }}
-                />
-              ),
-            )}
-          </div>
-          <button type="button" tabIndex={-1}>
-            {t.study.pause}
-          </button>
-        </div>
-      </div>
-
-      <motion.div
-        className="study-note note-two"
-        animate={{ y: [0, 8, 0], rotate: [4, 2, 4] }}
-        transition={{ duration: 7.4, repeat: Infinity, ease: "easeInOut" }}
-      >
-        <div className="heatmap">
-          {heat.map((level, index) => (
-            <i key={index} data-level={level} />
+        </dl>
+        <p className="card-links">
+          {product.links.map((l) => (
+            <a key={l.href} className="btn" href={l.href} target="_blank" rel="noopener noreferrer">
+              {l.label} <span aria-hidden="true">↗</span>
+            </a>
           ))}
-        </div>
-        <span>{t.study.streak}</span>
-      </motion.div>
-    </div>
-  );
-}
-
-function UsefulMapVisual() {
-  const t = useCopy();
-  return (
-    <div className="map-ui">
-      <div className="map-grid" />
-      <div className="map-search">
-        <span>⌕</span>
-        <strong>{t.map.search}</strong>
-        <i>×</i>
+          {guide && (
+            <a className="btn btn-line" href={guide}>
+              {t.products.guide}
+            </a>
+          )}
+        </p>
       </div>
-
-      <svg className="route-svg" viewBox="0 0 600 430" aria-hidden="true">
-        <path className="route-shadow" d="M98 332 C150 270 177 285 225 222 S330 118 389 163 448 225 518 92" />
-        <motion.path
-          className="route-line"
-          d="M98 332 C150 270 177 285 225 222 S330 118 389 163 448 225 518 92"
-          initial={{ pathLength: 0 }}
-          whileInView={{ pathLength: 1 }}
-          viewport={{ once: true, amount: 0.5 }}
-          transition={{ duration: 1.8, ease }}
-        />
-      </svg>
-
-      <div className="map-pin pin-a"><i /></div>
-      <div className="map-pin pin-b"><i /></div>
-      <div className="map-pin pin-c"><i /></div>
-
-      <div className="route-sheet">
-        <div className="sheet-handle" />
-        <div className="route-sheet-head">
-          <div>
-            <small>BEST BALANCE</small>
-            <strong>{t.map.best}</strong>
-          </div>
-          <span>{t.map.arrive}</span>
-        </div>
-        <div className="transport-chain">
-          <span>🚶 <b>6m</b></span>
-          <i />
-          <span>🚆 <b>22m</b></span>
-          <i />
-          <span>🚶 <b>6m</b></span>
-        </div>
-        <div className="route-options">
-          {t.map.options.map((option, index) => (
-            <button
-              key={option}
-              className={index === 1 ? "active" : undefined}
-              type="button"
-              tabIndex={-1}
-            >
-              {option}
-            </button>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-type ProductCopyProps = {
-  index: string;
-  name: string;
-  label: string;
-  headline: string;
-  body: string;
-  tags: string[];
-  primaryHref: string;
-  primaryLabel: string;
-  detailPath: string;
-};
-
-function ProductCopy({
-  index,
-  name,
-  label,
-  headline,
-  body,
-  tags,
-  primaryHref,
-  primaryLabel,
-  detailPath,
-}: ProductCopyProps) {
-  const t = useCopy();
-  return (
-    <motion.div
-      className="product-copy"
-      initial={{ opacity: 0, y: 35 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.35 }}
-      transition={{ duration: 0.75, ease }}
-    >
-      <div className="product-index">{index}</div>
-      <div className="product-label">{label}</div>
-      <h3>
-        <span>{name}</span>
-        {headline}
-      </h3>
-      <p>{body}</p>
-      <div className="product-tags">
-        {tags.map((tag) => (
-          <span key={tag}>{tag}</span>
-        ))}
-      </div>
-      <div className="product-links">
-        <a href={detailPath} className="source-link">
-          {t.products.guide}
-          <ArrowUpRight />
-        </a>
-        <a href={primaryHref} target="_blank" rel="noreferrer">
-          {primaryLabel}
-          <ArrowUpRight />
-        </a>
-      </div>
-    </motion.div>
+    </article>
   );
 }
 
 function Products() {
   const t = useCopy();
-  const items = t.products.items;
   return (
-    <section className="products" id="products">
-      <div className="shell products-heading">
-        <SectionLabel>{t.products.label}</SectionLabel>
-        <motion.h2
-          initial={{ opacity: 0, y: 35 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.5 }}
-          transition={{ duration: 0.8, ease }}
-        >
-          {t.products.heading[0]}
-          <br />
-          {t.products.heading[1]}
-        </motion.h2>
-      </div>
-
-      <article className="product product-career">
-        <div className="shell product-grid">
-          <ProductCopy
-            index="01"
-            name="Career"
-            label={items.career.label}
-            headline={items.career.headline}
-            body={items.career.body}
-            tags={["React", "TypeScript", "Hono", "Supabase", "Applied AI"]}
-            primaryHref="https://career.enludus.com"
-            primaryLabel={items.career.cta}
-            detailPath="/products/career"
-          />
-          <motion.div
-            className="product-visual career-visual"
-            initial={{ opacity: 0, x: 70, rotate: 2 }}
-            whileInView={{ opacity: 1, x: 0, rotate: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.9, ease }}
-          >
-            <CareerVisual />
-          </motion.div>
-        </div>
-      </article>
-
-      <article className="product product-study">
-        <div className="shell product-grid product-grid-reverse">
-          <motion.div
-            className="product-visual study-visual"
-            initial={{ opacity: 0, x: -70, rotate: -2 }}
-            whileInView={{ opacity: 1, x: 0, rotate: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.9, ease }}
-          >
-            <StudyReelVisual />
-          </motion.div>
-          <ProductCopy
-            index="02"
-            name="StudyReel"
-            label={items.study.label}
-            headline={items.study.headline}
-            body={items.study.body}
-            tags={["Swift", "SwiftUI", "SwiftData", "WidgetKit"]}
-            primaryHref="https://apps.apple.com/jp/app/studyreel/id6756177589"
-            primaryLabel={items.study.cta}
-            detailPath="/products/studyreel"
-          />
-        </div>
-      </article>
-
-      <article className="product product-map">
-        <div className="shell product-grid">
-          <ProductCopy
-            index="03"
-            name="UsefulMap"
-            label={items.map.label}
-            headline={items.map.headline}
-            body={items.map.body}
-            tags={["Swift", "SwiftUI", "MapKit", "Core Location"]}
-            primaryHref="https://apps.apple.com/jp/app/useful-map-%E7%B5%8C%E8%B7%AF%E6%AF%94%E8%BC%83/id6801771854"
-            primaryLabel={items.map.cta}
-            detailPath="/products/useful-map"
-          />
-          <motion.div
-            className="product-visual map-visual"
-            initial={{ opacity: 0, x: 70, rotate: 2 }}
-            whileInView={{ opacity: 1, x: 0, rotate: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.9, ease }}
-          >
-            <UsefulMapVisual />
-          </motion.div>
-        </div>
-      </article>
-
-      <article className="product product-logiscore">
-        <div className="shell product-grid product-grid-reverse">
-          <motion.div
-            className="product-visual"
-            initial={{ opacity: 0, x: -55 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, amount: 0.28 }}
-            transition={{ duration: 0.85, ease }}
-          >
-            <LogiscoreVisual />
-          </motion.div>
-          <ProductCopy
-            index="04"
-            name="Logiscore"
-            label={items.logiscore.label}
-            headline={items.logiscore.headline}
-            body={items.logiscore.body}
-            tags={["Rust", "WebAssembly", "React", "TypeScript", "Web Audio"]}
-            primaryHref="https://logiscore.enludus.com"
-            primaryLabel={items.logiscore.cta}
-            detailPath="/products/logiscore"
-          />
-        </div>
-      </article>
-      <article className="product product-minesweeper">
-        <div className="shell product-grid">
-          <ProductCopy
-            index="05"
-            name="五十音マインスイーパー"
-            label={items.minesweeper.label}
-            headline={items.minesweeper.headline}
-            body={items.minesweeper.body}
-            tags={["Expo", "React Native", "TypeScript", "Web", "iOS"]}
-            primaryHref="https://minesweeper.enludus.com"
-            primaryLabel={items.minesweeper.cta}
-            detailPath="/products/gojuon-minesweeper"
-          />
-          <motion.div
-            className="product-visual"
-            initial={{ opacity: 0, x: 55 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, amount: 0.28 }}
-            transition={{ duration: 0.85, ease }}
-          >
-            <MinesweeperVisual />
-          </motion.div>
-        </div>
-      </article>
-    </section>
-  );
-}
-
-
-function LogiscoreVisual() {
-  const t = useCopy();
-  const notes = [
-    { tone: "G", left: "12%", top: "24%" },
-    { tone: "A", left: "27%", top: "48%" },
-    { tone: "C", left: "43%", top: "14%" },
-    { tone: "E", left: "61%", top: "38%" },
-    { tone: "B", left: "79%", top: "22%" },
-  ];
-  return (
-    <div className="logiscore-art" aria-label={t.logiscoreArt}>
-      <div className="logiscore-source">
-        <span>01&nbsp;&nbsp;fn main() &#123;</span>
-        <span>02&nbsp;&nbsp;&nbsp;&nbsp;let sound = code;</span>
-        <span>03&nbsp;&nbsp;&nbsp;&nbsp;play(sound);</span>
-        <span>04&nbsp;&nbsp;&#125;</span>
-      </div>
-      <div className="logiscore-score">
-        <span className="score-head">ENCODE → PLAY → RECORD → RESTORE</span>
-        <div className="staff-lines" aria-hidden="true">
-          {notes.map((note) => (
-            <span className="score-note" key={note.tone}
-                  style={{ left: note.left, top: note.top }}>♪</span>
-          ))}
-        </div>
-        <div className="instrument-legend">
-          <span>Reliable WAV · FEC</span><span>Secure · AEAD</span><span>MIDI · lossless</span>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function MinesweeperVisual() {
-  const t = useCopy();
-  const characters = [
-    "わ", "ら", "や", "ま", "は", "な", "た", "さ", "か", "あ",
-    "を", "り", "", "み", "ひ", "に", "ち", "し", "き", "い",
-    "ん", "る", "ゆ", "む", "ふ", "ぬ", "つ", "す", "く", "う",
-    "ー", "れ", "", "め", "へ", "ね", "て", "せ", "け", "え",
-    "", "ろ", "よ", "も", "ほ", "の", "と", "そ", "こ", "お",
-  ];
-  const opened = new Map([[8, "2"], [9, "1"], [18, "2"], [27, "1"], [28, "2"], [37, "1"]]);
-  return (
-    <div className="minesweeper-art">
-      <div className="minesweeper-top"><span>ごじゅうおん</span><span>1P ↔ 2P</span></div>
-      <div className="minesweeper-board" aria-label="ゲーム盤のイメージ">
-        {characters.map((char, index) => (
-          <div key={index}
-            className={"minesweeper-cell " + (!char ? "empty" : opened.has(index) ? "opened" : "")}>
-            {char ? (opened.get(index) ?? char) : ""}
-          </div>
-        ))}
-      </div>
-      <div className="minesweeper-caption">{t.minesweeperCaption}</div>
-    </div>
-  );
-}
-
-function Principles() {
-  const t = useCopy();
-  const principles = t.principles.items.map((item, index) => ({
-    ...item,
-    number: String(index + 1).padStart(2, "0"),
-  }));
-
-  return (
-    <section className="principles shell">
-      <SectionLabel>{t.principles.label}</SectionLabel>
-      <div className="principle-list">
-        {principles.map((item, index) => (
-          <motion.div
-            className="principle"
-            key={item.number}
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.6 }}
-            transition={{ duration: 0.65, delay: index * 0.08, ease }}
-          >
-            <span>{item.number}</span>
-            <h3>{item.title}</h3>
-            <p>{item.body}</p>
-          </motion.div>
+    <section className="sec paper-b curve" id="products">
+      <SectionHead en="Products" ja={t.products.label} left={<Pin />} right={<Note />} />
+      <div className="cards">
+        {t.products.items.map((p, i) => (
+          <ProductCard product={p} index={i} key={p.id} />
         ))}
       </div>
     </section>
   );
 }
 
-function About() {
+function Decisions() {
   const t = useCopy();
+  const icons = [CameraSwitchIcon, LockedWindowIcon, HandoffIcon];
   return (
-    <section className="about" id="about">
-      <div className="about-noise" />
-      <div className="shell about-grid">
-        <div className="about-copy">
-          <SectionLabel>{t.about.label}</SectionLabel>
-          <motion.h2
-            initial={{ opacity: 0, y: 35 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.4 }}
-            transition={{ duration: 0.8, ease }}
-          >
-            {t.about.heading[0]}
-            <br />
-            {t.about.heading[1]}
-          </motion.h2>
-          {t.about.body.map((paragraph, index) => (
-            <motion.p
-              key={paragraph}
-              initial={{ opacity: 0, y: 25 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.4 }}
-              transition={{ duration: 0.75, delay: 0.08 + index * 0.06, ease }}
-            >
-              {paragraph}
-            </motion.p>
-          ))}
-          <div className="about-links">
-            <a href="/portfolio">
-              {t.about.links.portfolio}
-              <ArrowUpRight />
+    <section className="sec paper-a curve">
+      <SectionHead en="Our way" ja={t.decisions.label} left={<Leaf />} right={<Pencil />} />
+      <ol className="ways">
+        {t.decisions.items.map((d, i) => {
+          const Icon = icons[i];
+          return (
+            <li key={d.title}>
+              <Icon className="way-icon wobble" />
+              <span className="way-tag round">{d.product}</span>
+              <h3>{d.title}</h3>
+              <p>{d.body}</p>
+            </li>
+          );
+        })}
+      </ol>
+    </section>
+  );
+}
+
+function Journal() {
+  const t = useCopy();
+  if (!latestPosts.length) return null;
+  return (
+    <section className="sec paper-b curve">
+      <SectionHead en="News" ja={t.journal.label} left={<Pencil />} right={<Mug />} />
+      <ul className="news">
+        {latestPosts.map((p) => (
+          <li key={p.slug}>
+            <a href={`/blog/${p.slug}`}>
+              <time className="round" dateTime={p.date}>
+                {p.date.replace(/-/g, ".")}
+              </time>
+              <span lang="ja">{p.title}</span>
+              <i aria-hidden="true">→</i>
             </a>
-            <a href="/blog">
-              {t.about.links.blog}
-              <ArrowUpRight />
-            </a>
-          </div>
-        </div>
-        <div className="about-facts">
-          {t.about.facts.map(([label, value], index) => (
-            <motion.div
-              key={label}
-              initial={{ opacity: 0, scale: 0.94 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.7, delay: index * 0.08, ease }}
-            >
-              <small>{label}</small>
-              <strong>{value}</strong>
-            </motion.div>
+          </li>
+        ))}
+      </ul>
+      <p className="more">
+        <a className="btn btn-line" href="/blog">
+          {t.journal.all}
+        </a>
+        {t.journal.note && <small>{t.journal.note}</small>}
+      </p>
+    </section>
+  );
+}
+
+function Company() {
+  const t = useCopy();
+  const [, founderRow] = t.company.rows;
+  return (
+    <section className="sec paper-a curve" id="company">
+      <SectionHead en="About" ja={t.company.label} left={<Mug />} right={<Leaf />} />
+      <div className="company">
+        <dl className="company-table">
+          {t.company.rows.map(([k, v]) => (
+            <div key={k}>
+              <dt>{k}</dt>
+              <dd>
+                {v.includes("@") ? <a href={`mailto:${v}`}>{v}</a> : v}
+                {k === founderRow[0] && (
+                  <a className="inline" href="/portfolio">
+                    {t.company.founderLink} →
+                  </a>
+                )}
+              </dd>
+            </div>
           ))}
-        </div>
+        </dl>
+        <Studio className="studio" />
       </div>
     </section>
   );
@@ -840,46 +406,44 @@ function About() {
 function Contact() {
   const t = useCopy();
   return (
-    <section className="contact shell" id="contact">
-      <div className="contact-card">
-        <div>
-          <SectionLabel>{t.contact.label}</SectionLabel>
-          <h2>
-            {t.contact.heading[0]}
-            <br />
-            {t.contact.heading[1]}
-          </h2>
-        </div>
-        <div className="contact-action">
-          <p>{t.contact.body}</p>
-          <a href="mailto:contact@enludus.com">
-            contact@enludus.com
-            <ArrowUpRight />
-          </a>
-        </div>
-        <div className="contact-orb" aria-hidden="true">
-          <LogoMark />
-        </div>
-      </div>
+    <section className="band" id="contact" aria-labelledby="contact-title">
+      <p className="round band-en" aria-hidden="true">
+        Contact
+      </p>
+      <h2 id="contact-title">{t.contact.label}</h2>
+      <p>{t.contact.lead}</p>
+      <a className="btn btn-white" href="mailto:contact@enludus.com">
+        contact@enludus.com
+      </a>
     </section>
   );
 }
 
 function Footer() {
   const t = useCopy();
+  const nav = useNav();
+  const Icons = Object.values(productIcons);
   return (
-    <footer className="footer shell">
-      <a className="brand" href="#top">
-        <LogoMark />
-        <span>Enludus</span>
-      </a>
-      <p>{t.footer.tagline}</p>
-      <div>
-        <a href="/privacy">{t.footer.privacy}</a>
-        <a href="/blog">{t.nav.blog}</a>
-        <a href="/portfolio">{t.nav.portfolio}</a>
-        <a href="mailto:contact@enludus.com">{t.footer.contact}</a>
-        <span>© 2026 Enludus</span>
+    <footer className="ft">
+      <div className="ft-edge" aria-hidden="true">
+        {[...Icons, ...Icons].map((Icon, i) => (
+          <Icon key={i} />
+        ))}
+      </div>
+      <div className="ft-row">
+        <a className="hd-brand" href="#top">
+          <LogoMark />
+          <span className="round">Enludus</span>
+        </a>
+        <nav aria-label="Footer">
+          {nav.map(({ href, label }) => (
+            <a key={href} href={href}>
+              {label}
+            </a>
+          ))}
+          <a href="/privacy">{t.footer.privacy}</a>
+        </nav>
+        <span className="round">© 2026 Enludus</span>
       </div>
     </footer>
   );
@@ -888,15 +452,13 @@ function Footer() {
 export default function App({ lang }: { lang: Lang }) {
   return (
     <LangContext.Provider value={lang}>
-      <PointerGlow />
       <Header />
       <main>
         <Hero />
-        <Marquee />
-        <Intro />
         <Products />
-        <Principles />
-        <About />
+        <Decisions />
+        <Journal />
+        <Company />
         <Contact />
       </main>
       <Footer />

@@ -1,19 +1,20 @@
 # Enludus Company Web
 
-Official company / studio website for **Enludus**.
+Official website for **Enludus**, the trade name under which Ibuki Nagase (sole proprietor) makes and runs software.
 
-A motion-rich single-page site built with Vite, React, TypeScript, and Motion. It presents three current products:
+A single-page site built with Vite, React and TypeScript, in lp-anatomy's "warm" mood (modelled on Bikkuri Donkey): two paper colours with oval edges, the logo's three colours only, hand-drawn SVG illustrations in those colours (`src/illustrations.tsx`), Fredoka and Zen Maru Gothic (subset to the page text at build time), a centre slider of real product screens, and arched product cards. It presents five products:
 
-- **Career** — career decision support: https://career.enludus.com
-- **StudyReel** — learning recorder for iOS
-- **UsefulMap** — travel-mode comparison for iOS
+- **StudyReel** — study recorder for iPhone and iPad
+- **UsefulMap** — travel-mode comparison for iPhone and iPad
+- **Career** — job-fit checker: https://career.enludus.com
+- **Logiscore** — sends data as sound: https://logiscore.enludus.com
+- **Gojuon Minesweeper** — word-guessing game: https://minesweeper.enludus.com
 
 ## Stack
 
 - Vite
 - React 19
 - TypeScript
-- Motion (motion/react)
 - Vanilla CSS
 - Vercel
 
@@ -38,20 +39,21 @@ No environment variables are required.
 
 | URL | Source |
 |---|---|
-| `/` | English company site (`index.html` → `src/App.tsx`) |
-| `/ja` | Japanese company site (`ja.html` → same app, `lang="ja"`) |
+| `/` | English top page (`index.html` → `src/App.tsx`) |
+| `/ja` | Japanese top page (`ja.html` → same app, `lang="ja"`) |
 | `/portfolio` | Founder portfolio, static HTML from `site/profile.ts` |
 | `/blog`, `/blog/<slug>` | Blog, static HTML from `content/blog/*.md` |
-| `/blog/feed.xml`, `/sitemap.xml` | Generated at build time |
+| `/blog/feed.xml`, `/sitemap.xml`, `/404` | Generated at build time |
+| `/og/*.png` | Open Graph cards for every page and post, generated at build time (`site/og.ts`) |
 | `/products/*`, `/privacy` | Hand-written pages in `public/` |
 
 A visitor whose browser prefers Japanese is sent from `/` to `/ja` on the first visit. The EN / JA switch in the header is remembered (`localStorage`) and always wins.
 
 ## Content
 
-Company copy for both languages lives in `src/i18n.ts`. The Japanese object is typed from the English one, so a missing or extra key fails `npm run build`. The visual system and responsive behavior live in `src/styles.css`.
+Company copy and product facts (specs, release months, screenshots) for both languages live in `src/i18n.ts`. Product screenshots are WebP files in `public/img/products/`, two widths each, taken from the App Store listings and the live web apps. The Japanese object is typed from the English one, so a missing or extra key fails `npm run build`. The visual system and responsive behavior live in `src/styles.css`.
 
-The portfolio's facts live in `site/profile.ts`; its look lives in `public/site/site.css` (no build step, no Japanese web font) and `public/site/site.js` (reveal-once, the stack band, the JST clock and the blog tag filter — all off for reduced motion and Save-Data). The design follows the "art / portfolio" mood of lp-anatomy's `lp-quality-bar`.
+The portfolio's facts live in `site/profile.ts`. Portfolio, blog, posts and 404 share the company top's warm look: `public/site/site.css`, the same SVG drawings (rendered to static markup at build time by `site/art.ts`), and Fredoka + Zen Maru Gothic subset to each page's text. `public/site/site.js` adds the mobile menu, reveal-once, the stack band, the JST clock and the blog tag filter — all motion off for reduced motion and Save-Data. The hand-written product guides and privacy pages use the same palette and fonts through `public/products/product.css`.
 
 ## Writing a blog post
 
@@ -69,7 +71,8 @@ The portfolio's facts live in `site/profile.ts`; its look lives in `public/site/
    ---
    ```
 
-3. Write Markdown (GitHub flavored: tables, code blocks, lists). Every `##` heading becomes a table-of-contents entry once a post has three or more. Put images in `public/blog/<slug>/` and reference them as `/blog/<slug>/image.webp`.
-4. `npm run dev` and open `/blog`. Commit and push; the post, the portfolio's "Writing" list, the RSS feed and the sitemap update on deploy.
+3. Write Markdown (GitHub flavored: tables, code blocks, lists). Code blocks are coloured at build time; tag them with a language (`ts`, `swift`, `rust`, `go`, `bash`, … see `LANGS` in `site/posts.ts`). Every `##` heading becomes a table-of-contents entry once a post has three or more. Put images in `public/blog/<slug>/` and reference them as `/blog/<slug>/image.webp`.
+4. `npm run dev` and open `/blog`. Commit and push; the post, its share card (`/og/blog/<slug>.png`), related posts, the portfolio's "Writing" list, the RSS feed and the sitemap update on deploy.
 
-The UI mockups are implemented in HTML/CSS/SVG instead of screenshots so the product storytelling remains crisp, animated, responsive, and easy to update.
+The share cards fetch Manrope, Noto Sans JP (subset to the characters used) and DM Mono from Google Fonts during the build. If that fails, every card falls back to `site/og-fallback.png` and the build still succeeds.
+

@@ -1,43 +1,101 @@
 import type { Plugin } from "vite";
+import { copy } from "../src/i18n";
+import { renderCards, type Card } from "./og";
 import { loadPosts, type Post } from "./posts";
-import { blogIndexPage, feed, portfolioPage, postPage, sitemap } from "./pages";
+import { blogIndexPage, feed, notFoundPage, portfolioPage, postPage, sitemap } from "./pages";
 
-/** Every generated file, keyed by its output path. */
+/** Every generated text file, keyed by its output path. */
 function pages(posts: Post[]) {
   const files = new Map<string, string>([
     ["portfolio.html", portfolioPage(posts)],
     ["blog.html", blogIndexPage(posts)],
+    ["404.html", notFoundPage(posts)],
     ["blog/feed.xml", feed(posts.filter((p) => !p.draft))],
     ["sitemap.xml", sitemap(posts.filter((p) => !p.draft))],
   ]);
-  posts.forEach((post, i) => {
-    files.set(`blog/${post.slug}.html`, postPage(post, posts[i - 1], posts[i + 1]));
-  });
+  for (const post of posts) files.set(`blog/${post.slug}.html`, postPage(post, posts));
   return files;
+}
+
+/** Open Graph cards: the two company pages, the portfolio, the blog and every post. */
+function cards(posts: Post[]): Card[] {
+  const dot = (date: string) => date.replace(/-/g, ".");
+  return [
+    { file: "og/home.png", kicker: "INDEPENDENT SOFTWARE", title: "Five apps, made and run by Enludus." },
+    { file: "og/ja.png", kicker: "個人でつくるソフトウェア", title: "5つのアプリを、つくって、運営しています。" },
+    { file: "og/portfolio.png", kicker: "PORTFOLIO", title: "IBUKI NAGASE", variant: "name" },
+    { file: "og/blog.png", kicker: "BLOG", title: "つくっているもの、学んだこと、考えたことの記録。" },
+    ...posts.map((p) => ({ file: `og/blog/${p.slug}.png`, kicker: `BLOG — ${dot(p.date)}`, title: p.title })),
+  ];
 }
 
 /** Maps a request path to a generated file the way Vercel's cleanUrls does. */
 function fileFor(url: string) {
   const path = decodeURIComponent(url.split(/[?#]/)[0]).replace(/^\/+|\/+$/g, "");
-  if (!path || /\.(xml|html)$/.test(path)) return path;
+  if (!path || /\.(xml|html|png)$/.test(path)) return path;
   return `${path}.html`;
 }
 
 /**
- * Builds /portfolio, /blog, /blog/<slug>, the RSS feed and the sitemap as static
- * HTML from site/profile.ts and content/blog/*.md. Drafts show up in `npm run dev`
- * only.
+ * Builds /portfolio, /blog, /blog/<slug>, the 404 page, the RSS feed, the sitemap and
+ * the Open Graph images from site/profile.ts and content/blog/*.md. Drafts show up in
+ * `npm run dev` only.
  */
+const LATEST = "virtual:latest-posts";
+
+function strings(value: unknown): string[] {
+  if (typeof value === "string") return [value];
+  if (Array.isArray(value)) return value.flatMap(strings);
+  if (value && typeof value === "object") return Object.values(value).flatMap(strings);
+  return [];
+}
+
+/**
+ * Font links for the company top. Zen Maru Gothic is requested with `text=` holding
+ * every character the page can show (both languages, the newest post titles, ASCII),
+ * so Google Fonts returns a few dozen KB instead of the whole Japanese face.
+ */
+function fontLinks(titles: string[]) {
+  const ascii = Array.from({ length: 95 }, (_, i) => String.fromCharCode(32 + i)).join("");
+  const chars = [...new Set([...strings(copy).join(""), ...titles.join(""), ...ascii, ..."→←↗©·—「」、。・（）"])]
+    .filter((c) => c.trim())
+    .sort()
+    .join("");
+  const zen = `https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700&display=swap&text=${encodeURIComponent(chars)}`;
+  return [
+    '<link rel="preconnect" href="https://fonts.googleapis.com" />',
+    '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />',
+    '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&display=swap" />',
+    `<link rel="stylesheet" href="${zen}" />`,
+  ].join("\n    ");
+}
+
 export function contentPages(): Plugin {
   let root = process.cwd();
+  const ogCache = new Map<string, Uint8Array>();
   return {
     name: "enludus-content-pages",
     configResolved(config) {
       root = config.root;
     },
+    // The company top lists the newest posts; they are baked in at build time.
+    resolveId(id) {
+      return id === LATEST ? `\0${LATEST}` : undefined;
+    },
+    async transformIndexHtml(html) {
+      if (!html.includes("<!-- fonts:")) return html;
+      const posts = await loadPosts(root, { includeDrafts: false });
+      return html.replace(/<!-- fonts:.*?-->/, fontLinks(posts.slice(0, 3).map((p) => p.title)));
+    },
+    async load(id) {
+      if (id !== `\0${LATEST}`) return;
+      const posts = await loadPosts(root, { includeDrafts: false });
+      const latest = posts.slice(0, 3).map(({ slug, title, date }) => ({ slug, title, date }));
+      return `export default ${JSON.stringify(latest)};`;
+    },
     configureServer(server) {
       server.watcher.add(`${root}/content`);
-      server.middlewares.use((req, res, next) => {
+      server.middlewares.use(async (req, res, next) => {
         const url = req.url ?? "/";
         if (/^\/ja\/?(\?|$)/.test(url)) {
           req.url = url.replace(/^\/ja\/?/, "/ja.html");
@@ -45,21 +103,36 @@ export function contentPages(): Plugin {
         }
         const file = fileFor(url);
         if (!file) return next();
-        let body: string | undefined;
         try {
-          body = pages(loadPosts(root, { includeDrafts: true })).get(file);
+          const posts = await loadPosts(root, { includeDrafts: true });
+          if (file.startsWith("og/")) {
+            const card = cards(posts).find((c) => c.file === file);
+            if (!card) return next();
+            const key = JSON.stringify(card);
+            if (!ogCache.has(key)) {
+              const [png] = (await renderCards(root, [card], (m) => server.config.logger.warn(m))).values();
+              ogCache.set(key, png);
+            }
+            res.setHeader("Content-Type", "image/png");
+            return res.end(ogCache.get(key));
+          }
+          const body = pages(posts).get(file);
+          if (body === undefined) return next();
+          res.setHeader("Content-Type", file.endsWith(".xml") ? "application/xml; charset=utf-8" : "text/html; charset=utf-8");
+          res.end(body);
         } catch (error) {
           res.statusCode = 500;
           res.setHeader("Content-Type", "text/plain; charset=utf-8");
-          return res.end(String(error));
+          res.end(String(error));
         }
-        if (body === undefined) return next();
-        res.setHeader("Content-Type", file.endsWith(".xml") ? "application/xml; charset=utf-8" : "text/html; charset=utf-8");
-        res.end(body);
       });
     },
-    generateBundle() {
-      for (const [fileName, source] of pages(loadPosts(root, { includeDrafts: false }))) {
+    async generateBundle() {
+      const posts = await loadPosts(root, { includeDrafts: false });
+      for (const [fileName, source] of pages(posts)) {
+        this.emitFile({ type: "asset", fileName, source });
+      }
+      for (const [fileName, source] of await renderCards(root, cards(posts), (m) => this.warn(m))) {
         this.emitFile({ type: "asset", fileName, source });
       }
     },

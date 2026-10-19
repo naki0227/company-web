@@ -1,6 +1,7 @@
 import { readdirSync, readFileSync, existsSync } from "node:fs";
 import { join } from "node:path";
 import { Marked, Renderer } from "marked";
+import { createHighlighter, type Highlighter } from "shiki";
 
 export type Post = {
   slug: string;
@@ -47,7 +48,23 @@ function plain(html: string) {
   return html.replace(/<[^>]+>/g, "").replace(/&[a-z#0-9]+;/gi, " ");
 }
 
-function render(markdown: string) {
+// Code is coloured once at build time, so posts ship no highlighting JavaScript.
+const LANGS = [
+  "bash", "css", "diff", "go", "html", "javascript", "json", "jsx", "markdown",
+  "python", "rust", "sql", "swift", "toml", "tsx", "typescript", "yaml",
+];
+const ALIASES: Record<string, string> = { sh: "bash", shell: "bash", js: "javascript", ts: "typescript", md: "markdown", yml: "yaml", py: "python", rs: "rust" };
+let highlighter: Promise<Highlighter> | undefined;
+
+function codeBlock(shiki: Highlighter, text: string, lang = "") {
+  const name = ALIASES[lang] ?? lang;
+  const known = LANGS.includes(name);
+  const html = shiki.codeToHtml(text, { lang: known ? name : "text", theme: "vitesse-dark" });
+  const label = known ? `<span class="code-lang">${attr(lang)}</span>` : "";
+  return `<div class="code">${label}${html}</div>\n`;
+}
+
+function render(markdown: string, shiki: Highlighter) {
   const toc: Post["toc"] = [];
   const marked = new Marked({
     gfm: true,
@@ -70,6 +87,9 @@ function render(markdown: string) {
         const rel = external ? ' target="_blank" rel="noopener noreferrer"' : "";
         return `<a href="${attr(href)}"${t}${rel}>${inner}</a>`;
       },
+      code({ text, lang }) {
+        return codeBlock(shiki, text, lang?.split(/\s/)[0]);
+      },
       table(token) {
         // Wide tables scroll inside the article instead of widening the page.
         return `<div class="table-wrap">${Renderer.prototype.table.call(this, token)}</div>`;
@@ -80,9 +100,11 @@ function render(markdown: string) {
   return { html, toc };
 }
 
-export function loadPosts(root: string, { includeDrafts }: { includeDrafts: boolean }) {
+export async function loadPosts(root: string, { includeDrafts }: { includeDrafts: boolean }) {
   const dir = join(root, "content/blog");
   if (!existsSync(dir)) return [];
+  highlighter ??= createHighlighter({ themes: ["vitesse-dark"], langs: LANGS });
+  const shiki = await highlighter;
   const posts: Post[] = [];
   for (const file of readdirSync(dir)) {
     if (!file.endsWith(".md")) continue;
@@ -99,7 +121,7 @@ export function loadPosts(root: string, { includeDrafts }: { includeDrafts: bool
     }
     const draft = data.draft === "true";
     if (draft && !includeDrafts) continue;
-    const { html, toc } = render(body);
+    const { html, toc } = render(body, shiki);
     const tags = Array.isArray(data.tags) ? data.tags : data.tags ? [String(data.tags)] : [];
     posts.push({
       slug,
