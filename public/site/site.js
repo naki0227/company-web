@@ -71,6 +71,24 @@
     });
   }
 
+  /* Copy button on code blocks. Hidden where the Clipboard API is missing. */
+  if (navigator.clipboard) {
+    [].slice.call(document.querySelectorAll(".prose .code")).forEach(function (block) {
+      var btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "code-copy";
+      btn.textContent = "コピー";
+      btn.addEventListener("click", function () {
+        navigator.clipboard.writeText(block.querySelector("pre").innerText).then(function () {
+          btn.textContent = "コピーしました";
+          setTimeout(function () { btn.textContent = "コピー"; }, 2000);
+        });
+      });
+      block.classList.add("has-copy");
+      block.appendChild(btn);
+    });
+  }
+
   /* Blog tag filter. Without JS every post is listed and the buttons stay hidden. */
   var filter = document.querySelector("[data-filter]");
   if (filter) {
