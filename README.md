@@ -77,3 +77,7 @@ The portfolio's facts live in `site/profile.ts`. Portfolio, blog, posts and 404 
 
 The share cards fetch Manrope, Noto Sans JP (subset to the characters used) and DM Mono from Google Fonts during the build. If that fails, every card falls back to `site/og-fallback.png` and the build still succeeds.
 
+
+## Daily blog sync
+
+A daily routine follows `BLOG_SYNC.md`: it reads each product repository from the commit recorded in `blog-sync.json`, checks App Store versions, compares the code against the posts written about it, and opens one 「ブログ更新」 PR when something is worth adding. The PR also moves the recorded SHAs forward. It never merges.
