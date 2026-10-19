@@ -207,15 +207,22 @@ function sectionHead(no: string, en: string, ja: string, n = 0) {
   </div>`;
 }
 
+/** "技術記事" / "読みもの" label shown on rows and post headers. */
+function kindLabel(post: Post) {
+  return post.kind === "tech"
+    ? '<b class="kind-label kind-label-tech">技術記事</b>'
+    : '<b class="kind-label">読みもの</b>';
+}
+
 function postRows(posts: Post[]) {
   if (!posts.length) return `<p class="empty">最初の記事を準備しています。</p>`;
   return `<ol class="posts">${posts
     .map(
       (post) => `
-    <li data-tags="${esc(post.tags.join("|"))}" data-reveal>
+    <li data-tags="${esc([`kind:${post.kind}`, ...post.tags].join("|"))}" data-reveal>
       <a class="post-row" href="/blog/${post.slug}">
         <time datetime="${post.date}">${dot(post.date)}</time>
-        <span class="post-row-title">${post.draft ? '<b class="badge">下書き</b>' : ""}${esc(post.title)}</span>
+        <span class="post-row-title">${post.draft ? '<b class="badge">下書き</b>' : ""}${kindLabel(post)}${esc(post.title)}</span>
         <span class="post-row-desc">${esc(post.description)}</span>
         <span class="post-row-tags">${post.tags.map((t) => `#${esc(t)}`).join(" ")}</span>
         <span class="arrow" aria-hidden="true">→</span>
@@ -414,8 +421,8 @@ export function portfolioPage(posts: Post[], lang: Lang = "ja") {
 export function blogIndexPage(posts: Post[]) {
   const tags = [...new Set(posts.flatMap((p) => p.tags))].sort((a, b) => a.localeCompare(b, "ja"));
   const filter = tags.length
-    ? `<div class="filter" role="group" aria-label="タグで絞り込む" data-filter hidden>
-    <button type="button" aria-pressed="true" data-tag="">すべて</button>${tags
+    ? `<div class="filter" role="group" aria-label="種類とタグで絞り込む" data-filter hidden>
+    <button type="button" aria-pressed="true" data-tag="">すべて</button><button type="button" class="kind" aria-pressed="false" data-tag="kind:story">読みもの</button><button type="button" class="kind kind-tech" aria-pressed="false" data-tag="kind:tech">技術記事</button>${tags
       .map((t) => `<button type="button" aria-pressed="false" data-tag="${esc(t)}">#${esc(t)}</button>`)
       .join("")}
   </div>`
@@ -489,7 +496,7 @@ export function postPage(post: Post, all: Post[]) {
   <header class="post-head">
     <p class="post-meta"><a href="/blog">Blog</a><span aria-hidden="true">/</span><time datetime="${post.date}">${dot(post.date)}</time>${
       post.updated ? `<span>更新 <time datetime="${post.updated}">${dot(post.updated)}</time></span>` : ""
-    }<span>${post.minutes}分で読めます</span>${post.draft ? '<b class="badge">下書き</b>' : ""}</p>
+    }<span>${post.minutes}分で読めます</span>${kindLabel(post)}${post.draft ? '<b class="badge">下書き</b>' : ""}</p>
     <h1>${esc(post.title)}</h1>
     ${post.description ? `<p class="post-lead">${esc(post.description)}</p>` : ""}
     ${post.tags.length ? `<ul class="chips">${post.tags.map((t) => `<li><a href="/blog?tag=${encodeURIComponent(t)}">#${esc(t)}</a></li>`).join("")}</ul>` : ""}

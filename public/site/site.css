@@ -202,6 +202,11 @@ button { font: inherit; color: inherit; }
 .post-row-desc { grid-area: desc; color: var(--sub); font-size: 14px; line-height: 1.8; }
 .post-row-tags { grid-area: tags; color: var(--sky); font-family: var(--round); font-size: 13px; font-weight: 600; }
 .post-row .arrow { grid-area: arrow; justify-self: end; color: var(--orange); font-family: var(--round); font-size: 20px; }
+.kind-label { display: inline-block; margin-right: 10px; padding: 1px 10px; border-radius: 12px; color: var(--orange); background: var(--orange-t); font-size: 12px; font-weight: 700; vertical-align: 2px; }
+.kind-label-tech { color: var(--white); background: var(--navy); }
+.post-meta .kind-label { margin: 0; vertical-align: 0; }
+.filter .kind { border-color: var(--orange-t); }
+.filter .kind-tech { border-color: #c9d3de; }
 .badge { margin-right: 10px; padding: 1px 10px; border-radius: 12px; color: var(--white); background: var(--orange); font-size: 12px; vertical-align: 2px; }
 .more { margin-top: 28px; text-align: center; }
 .more a { display: inline-flex; align-items: center; min-height: 46px; padding: 0 22px; border: 2px solid var(--orange); border-radius: 23px; color: var(--orange); background: var(--white); font-size: 14px; font-weight: 700; }
