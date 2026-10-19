@@ -293,6 +293,10 @@ button { font: inherit; color: inherit; }
 .prose pre code { padding: 0; color: inherit; background: none; font-size: inherit; }
 .code-lang { position: absolute; top: 8px; right: 14px; color: rgba(244, 239, 232, 0.5); font-family: var(--round); font-size: 12px; font-weight: 600; text-transform: uppercase; pointer-events: none; }
 .prose img { display: block; border-radius: 20px; }
+/* Diagrams in posts: inline SVG so they use the page font and stay sharp. */
+.prose .fig { padding: 18px 16px 14px; border-radius: 24px; background: var(--white); }
+.prose .fig svg { display: block; width: 100%; max-width: 560px; height: auto; margin: 0 auto; font-family: var(--body); }
+.prose .fig figcaption { margin-top: 10px; color: var(--label); font-size: 14px; line-height: 1.7; text-align: center; }
 .prose hr { margin: 3em 0; border: 0; border-top: 2px dotted var(--dot); }
 .prose .table-wrap { overflow-x: auto; border-radius: 20px; background: var(--white); }
 .prose table { width: 100%; border-collapse: collapse; font-size: 15px; line-height: 1.7; }
