@@ -4,7 +4,6 @@ date: 2026-10-19
 description: 16 音の FSK、Goertzel 検出、Hamming(13,8) SECDED＋インターリーブ＋3 重多数決、Argon2id＋ChaCha20-Poly1305、チェックポイント分割と soft combine。MacBook から 1m 先の iPhone へ、録音経由でファイルを 1 バイトも違わずに戻すまでの設計と実測。
 tags: [Logiscore, Rust, WebAssembly, 信号処理, 誤り訂正, 暗号]
 type: tech
-draft: true
 ---
 
 > これは技術編です。何をつくって、実験がどうだったかを読みやすくまとめた読みもの版は「[ファイルを音で送ったら、秒速 1.2 ビットだった](/blog/logiscore-sound)」にあります。

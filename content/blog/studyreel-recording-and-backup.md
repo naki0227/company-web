@@ -4,7 +4,6 @@ date: 2026-10-19
 description: AVCaptureVideoDataOutput から AVAssetWriter へ、勉強していた時間だけで間引くタイムラプス。Vision で 0.2 秒おきに顔を追い、確認画面のあとで CIPixellate を楕円マスクで合成する非破壊のモザイク。SwiftData の CloudKit 同期で起動時に落ちた件と、iCloud Drive へのファイルバックアップ。
 tags: [StudyReel, Swift, iOS, AVFoundation, Vision, SwiftData]
 type: tech
-draft: true
 ---
 
 > これは技術編です。アプリの中で何をしているかを読みやすくまとめた読みもの版は「[StudyReel の「タイムラプス」と「バックアップ」の中身](/blog/studyreel-behind)」にあります。

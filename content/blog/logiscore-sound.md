@@ -3,7 +3,6 @@ title: ファイルを音で送ったら、秒速 1.2 ビットだった
 date: 2026-10-19
 description: Logiscore で、スピーカーから鳴らした音を 1m 先の iPhone で録音し、元のファイルを 1 バイトも違わずに戻せるようになるまでの記録です。
 tags: [Logiscore, Rust, WebAssembly, 設計]
-draft: true
 ---
 
 Logiscore は、テキストやソースコードを音にして、スピーカーで鳴らし、別の端末で録音した音から元のデータをそのまま戻すブラウザツールです。変換も復元も、Rust を WebAssembly にしたエンジンがブラウザの中で行い、ファイルはどこにもアップロードしません。
