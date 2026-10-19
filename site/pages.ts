@@ -81,7 +81,7 @@ function layout(head: Head, current: "portfolio" | "blog" | "", main: string) {
       ["", "/ja#products", "Products", "製品", "Pin"],
       ["blog", "/blog", "Blog", "ブログ", "Pencil"],
       ["portfolio", "/portfolio", "Founder", "代表", "Leaf"],
-      ["", "/ja#company", "About", "会社概要", "Mug"],
+      ["", "/ja#company", "About", "運営者情報", "Mug"],
     ] as const
   )
     .map(
@@ -108,7 +108,7 @@ ${main}
   <div class="ft-row">
     <a class="hd-brand" href="/ja">${LOGO}<span class="round">Enludus</span></a>
     <nav aria-label="フッター">
-      <a href="/ja">会社サイト</a><a href="/portfolio">代表</a><a href="/blog">ブログ</a><a href="/blog/feed.xml">RSS</a><a href="/privacy">プライバシーポリシー</a>
+      <a href="/ja">Enludus トップ</a><a href="/portfolio">代表</a><a href="/blog">ブログ</a><a href="/blog/feed.xml">RSS</a><a href="/privacy">プライバシーポリシー</a>
     </nav>
     <span class="round">© ${new Date().getFullYear()} Enludus</span>
   </div>
@@ -228,7 +228,7 @@ export function portfolioPage(posts: Post[]) {
 <section class="hero paper-a" aria-labelledby="hero-name">
   <div class="hero-meta round">
     <span>Portfolio — ${new Date().getFullYear()}</span>
-    <span>Osaka, Japan</span>
+    <span>Software engineer</span>
     <span><time data-clock>--:--</time> JST</span>
   </div>
   ${art("Studio", "hero-art")}
@@ -477,8 +477,8 @@ export function notFoundPage(posts: Post[]) {
 <section class="sec paper-b curve" aria-label="行き先">
   <ol class="posts nf-links">
     ${[
-      ["/ja", "Enludus トップ", "会社とプロダクトの紹介"],
-      ["/", "Enludus (English)", "Company site in English"],
+      ["/ja", "Enludus トップ", "Enludus とプロダクトの紹介"],
+      ["/", "Enludus (English)", "The top page in English"],
       ["/portfolio", "Portfolio", "長瀬 唯楓のポートフォリオ"],
       ["/blog", "Blog", posts[0] ? `最新：${posts[0].title}` : "記事の一覧"],
     ]

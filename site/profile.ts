@@ -178,7 +178,7 @@ export const about = [
 export const facts = [
   ["University", "大阪電気通信大学", "2024.04 — 2028.03 卒業予定"],
   ["Language", "TOEIC L&R 750", "2026.07"],
-  ["Company", "Enludus", "独立系ソフトウェアスタジオ"],
+  ["Enludus", "個人事業主", "iOS アプリと Web サービスの開発・運営"],
 ] as const;
 
 export const activities = [

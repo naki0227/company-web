@@ -380,7 +380,7 @@ function Company() {
   const [, founderRow] = t.company.rows;
   return (
     <section className="sec paper-a curve" id="company">
-      <SectionHead en="About us" ja={t.company.label} left={<Mug />} right={<Leaf />} />
+      <SectionHead en="About" ja={t.company.label} left={<Mug />} right={<Leaf />} />
       <div className="company">
         <dl className="company-table">
           {t.company.rows.map(([k, v]) => (

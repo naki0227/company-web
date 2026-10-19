@@ -21,9 +21,9 @@ function pages(posts: Post[]) {
 function cards(posts: Post[]): Card[] {
   const dot = (date: string) => date.replace(/-/g, ".");
   return [
-    { file: "og/home.png", kicker: "SOFTWARE STUDIO — OSAKA", title: "Five apps, made and run from Osaka." },
-    { file: "og/ja.png", kicker: "ソフトウェアスタジオ — 大阪", title: "大阪で、5つのアプリをつくって、運営しています。" },
-    { file: "og/portfolio.png", kicker: "PORTFOLIO — OSAKA, JAPAN", title: "IBUKI NAGASE", variant: "name" },
+    { file: "og/home.png", kicker: "INDEPENDENT SOFTWARE", title: "Five apps, made and run by Enludus." },
+    { file: "og/ja.png", kicker: "個人でつくるソフトウェア", title: "5つのアプリを、つくって、運営しています。" },
+    { file: "og/portfolio.png", kicker: "PORTFOLIO", title: "IBUKI NAGASE", variant: "name" },
     { file: "og/blog.png", kicker: "BLOG", title: "つくっているもの、学んだこと、考えたことの記録。" },
     ...posts.map((p) => ({ file: `og/blog/${p.slug}.png`, kicker: `BLOG — ${dot(p.date)}`, title: p.title })),
   ];

@@ -1,6 +1,6 @@
 # Enludus Company Web
 
-Official company / studio website for **Enludus**.
+Official website for **Enludus**, the trade name under which Ibuki Nagase (sole proprietor) makes and runs software.
 
 A single-page site built with Vite, React and TypeScript, in lp-anatomy's "warm" mood (modelled on Bikkuri Donkey): two paper colours with oval edges, the logo's three colours only, hand-drawn SVG illustrations in those colours (`src/illustrations.tsx`), Fredoka and Zen Maru Gothic (subset to the page text at build time), a centre slider of real product screens, and arched product cards. It presents five products:
 
@@ -39,8 +39,8 @@ No environment variables are required.
 
 | URL | Source |
 |---|---|
-| `/` | English company site (`index.html` → `src/App.tsx`) |
-| `/ja` | Japanese company site (`ja.html` → same app, `lang="ja"`) |
+| `/` | English top page (`index.html` → `src/App.tsx`) |
+| `/ja` | Japanese top page (`ja.html` → same app, `lang="ja"`) |
 | `/portfolio` | Founder portfolio, static HTML from `site/profile.ts` |
 | `/blog`, `/blog/<slug>` | Blog, static HTML from `content/blog/*.md` |
 | `/blog/feed.xml`, `/sitemap.xml`, `/404` | Generated at build time |
