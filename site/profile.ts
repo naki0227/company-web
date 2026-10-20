@@ -117,37 +117,6 @@ export const works: Work[] = [
       { label: "記事", href: "/blog/gojuon-minesweeper" },
     ],
   },
-  {
-    name: "Dayline",
-    category: "iOS / Rust / On-device AI",
-    status: "TestFlight で配信中",
-    summary: "1 日の出来事を端末の中で集め、Apple Intelligence でまとめる iOS アプリ。",
-    problem:
-      "会議のメモや予定は、あちこちに散らばる。AI に渡すにも、何を集めて何を渡さないかを自分で決めたい。",
-    approach:
-      "文脈を集めて組み立てる部分を Rust の共通エンジンにし、UniFFI で Swift につないだ。Apple Intelligence 側は文脈の集め方を知らず、Rust 側は Apple Intelligence を知らない。保存の前に機密を伏せ、データは端末内の SQLite に置く。",
-    learning:
-      "境界を先に決めると、言語をまたいでも壊れにくい。署名・App Store Connect への登録まで CI で回し、TestFlight に届けている。",
-    stack: ["Rust", "Swift", "UniFFI", "SQLite"],
-    links: [{ label: "GitHub", href: "https://github.com/naki0227/dayline" }],
-  },
-  {
-    name: "AI Readable Code Lab",
-    category: "Research / AI × Design",
-    status: "実験 Phase 1 完了",
-    summary: "人間に読みやすい設計は AI にも変更しやすいのかを、54 回の実験で確かめた。",
-    problem:
-      "「読みやすいコードは AI にも扱いやすい」とよく言われるが、確かめた数字を見たことがなかった。",
-    approach:
-      "同じ API を 3 つの構成で作り、6 つの変更課題を各 3 回、AI に実行させた。隠しテストと評価を分け、結果は 1 回ずつ記録した。",
-    learning:
-      "構成による差は偶然の範囲に収まり、失敗の多くは評価の約束の食い違いから来ていた。言えることと言えないことを分けて書くことを学んだ。",
-    stack: ["TypeScript", "Fastify", "Vitest"],
-    links: [
-      { label: "記事", href: "/blog/ai-readable-code" },
-      { label: "GitHub", href: "https://github.com/naki0227/ai-readable-code-lab" },
-    ],
-  },
 ];
 
 export const capabilities = [

@@ -89,36 +89,6 @@ export const worksEn: Work[] = [
       { label: "Blog post", href: "/blog/gojuon-minesweeper" },
     ],
   },
-  {
-    name: "Dayline",
-    category: "iOS / Rust / On-device AI",
-    status: "On TestFlight",
-    summary: "An iOS app that gathers the day's events on the device and summarises them with Apple Intelligence.",
-    problem:
-      "Meeting notes and plans end up scattered. Before handing anything to an AI, I want to decide what gets collected and what never leaves.",
-    approach:
-      "Context gathering is a shared Rust engine bridged to Swift with UniFFI. The Apple Intelligence side doesn't know how context was collected, and the Rust side doesn't know about Apple Intelligence. Sensitive values are redacted before storage, and data stays in an on-device SQLite store.",
-    learning:
-      "Fixing the boundaries first keeps a cross-language app from breaking. Signing and App Store Connect upload run in CI all the way to TestFlight.",
-    stack: ["Rust", "Swift", "UniFFI", "SQLite"],
-    links: [{ label: "GitHub", href: "https://github.com/naki0227/dayline" }],
-  },
-  {
-    name: "AI Readable Code Lab",
-    category: "Research / AI × Design",
-    status: "Phase 1 complete",
-    summary: "Testing, over 54 runs, whether code that is easy for people to read is also easier for AI to change.",
-    problem: "People often say readable code is easier for AI too, but I had never seen numbers for it.",
-    approach:
-      "Built the same API in three architectures and had an AI run six change tasks three times each, with hidden tests kept separate from evaluation and every run recorded.",
-    learning:
-      "Differences between architectures stayed within chance, and most failures came from a contradiction in the evaluation contract. I learned to separate what the data shows from what it doesn't.",
-    stack: ["TypeScript", "Fastify", "Vitest"],
-    links: [
-      { label: "Blog post", href: "/blog/ai-readable-code" },
-      { label: "GitHub", href: "https://github.com/naki0227/ai-readable-code-lab" },
-    ],
-  },
 ];
 
 export const capabilitiesEn = [
