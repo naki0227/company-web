@@ -16,6 +16,4 @@ export const workArt: Record<string, Name> = {
   Logiscore: "SoundIcon",
   "五十音マインスイーパー": "KanaIcon",
   "Gojuon Minesweeper": "KanaIcon",
-  Dayline: "LockedWindowIcon",
-  "AI Readable Code Lab": "LoupeIcon",
 };
