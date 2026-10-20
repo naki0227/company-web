@@ -56,6 +56,7 @@ button { font: inherit; color: inherit; }
 .ill .f-o { fill: var(--orange-l); }
 .ill .f-s { fill: var(--sky-l); }
 .ill .f-w { fill: var(--white); }
+.ill .f-n { fill: var(--navy); }
 .ill .f-o.ln, .ill .f-s.ln, .ill .f-w.ln { stroke: var(--navy); stroke-width: 2.6; stroke-linejoin: round; }
 .ill .dash { stroke-dasharray: 2 7; }
 .ill text { fill: var(--navy); font-family: var(--round); font-weight: 600; }

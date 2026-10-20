@@ -14,32 +14,31 @@ const svg = (className: string | undefined, viewBox: string) => ({
   focusable: false,
 });
 
-/** StudyReel: a phone on a stand, recording, with a small clock. */
+/** StudyReel: a film reel with its strip running out, and a small recording light. */
 export function StudyIcon({ className }: Props) {
   return (
     <svg {...svg(className, "0 0 96 96")}>
-      <path className="f-s" d="M18 78h60l-6 10H24z" />
-      <path className="ln" d="M18 78h60l-6 10H24z" />
-      <rect className="f-w ln" x="30" y="10" width="36" height="64" rx="8" />
-      <rect className="f-s" x="35" y="18" width="26" height="44" rx="3" />
-      <circle className="f-o" cx="48" cy="40" r="7" />
-      <path className="ln" d="M44 68h8" />
-      <circle className="f-w ln" cx="74" cy="22" r="12" />
-      <path className="ln" d="M74 15v7l5 4" />
+      <path className="f-s ln" d="M52 66l34 10-5 14-34-10z" />
+      <path className="ln-w" d="M56 74l2 1M66 77l2 1M76 80l2 1" />
+      <circle className="f-w ln" cx="40" cy="42" r="30" />
+      <circle className="f-s ln" cx="40" cy="25" r="7" />
+      <circle className="f-s ln" cx="57" cy="42" r="7" />
+      <circle className="f-s ln" cx="40" cy="59" r="7" />
+      <circle className="f-s ln" cx="23" cy="42" r="7" />
+      <circle className="f-o ln" cx="40" cy="42" r="5" />
+      <circle className="f-o ln" cx="80" cy="16" r="6" />
     </svg>
   );
 }
 
-/** UsefulMap: a folded map, a dashed route and a pin. */
+/** UsefulMap: the app's diamond with a mountain and a winding road. */
 export function MapIcon({ className }: Props) {
   return (
     <svg {...svg(className, "0 0 96 96")}>
-      <path className="f-w ln" d="M12 24l22-8 28 8 22-8v56l-22 8-28-8-22 8z" />
-      <path className="f-s" d="M34 16v56l28 8V24z" opacity=".55" />
-      <path className="ln" d="M34 16v56M62 24v56" />
-      <path className="ln dash" d="M22 62c10-4 12-18 24-18s16 10 26-4" />
-      <path className="f-o ln" d="M72 14c-7 0-12 5-12 11 0 9 12 20 12 20s12-11 12-20c0-6-5-11-12-11z" />
-      <circle className="f-w" cx="72" cy="25" r="4" />
+      <path className="f-s ln" d="M42 10a8 8 0 0 1 12 0l32 32a8 8 0 0 1 0 12L54 86a8 8 0 0 1-12 0L10 54a8 8 0 0 1 0-12z" />
+      <path className="f-o ln" d="M32 40l16-18 10 10 6-6 12 14z" />
+      <path className="ln" d="M46 79c-6-10 14-14 6-24s-16-10-4-20" style={{ strokeWidth: 12 }} />
+      <path className="ln-w" d="M46 79c-6-10 14-14 6-24s-16-10-4-20" style={{ strokeWidth: 6.5 }} />
     </svg>
   );
 }
@@ -58,33 +57,33 @@ export function CareerIcon({ className }: Props) {
   );
 }
 
-/** Logiscore: two notes and the sound they carry. */
+/** Logiscore: the app's level bars, the last one in orange. */
 export function SoundIcon({ className }: Props) {
   return (
     <svg {...svg(className, "0 0 96 96")}>
-      <path className="ln" d="M38 66V22l36-8v44" />
-      <path className="ln" d="M38 34l36-8" />
-      <ellipse className="f-o ln" cx="29" cy="67" rx="10" ry="8" />
-      <ellipse className="f-o ln" cx="65" cy="59" rx="10" ry="8" />
-      <path className="ln-s" d="M14 22c-6 6-6 16 0 22M8 16c-10 10-10 24 0 34" />
-      <path className="ln-s" d="M84 70c4 4 4 10 0 14" />
-      <text className="t-mono" x="60" y="92">01</text>
+      <rect className="f-n ln" x="12" y="12" width="72" height="72" rx="20" />
+      <rect className="f-s" x="24" y="44" width="10" height="26" rx="5" />
+      <rect className="f-s" x="37" y="26" width="10" height="44" rx="5" />
+      <rect className="f-s" x="50" y="52" width="10" height="18" rx="5" />
+      <rect className="f-o" x="63" y="34" width="10" height="36" rx="5" />
     </svg>
   );
 }
 
-/** Gojuon Minesweeper: kana tiles, a number and a flag. */
+/** Gojuon Minesweeper: the app's four tiles — a kana, a number, a flag and a mine. */
 export function KanaIcon({ className }: Props) {
   return (
     <svg {...svg(className, "0 0 96 96")}>
-      <rect className="f-s ln" x="10" y="38" width="36" height="36" rx="6" />
-      <rect className="f-w ln" x="50" y="38" width="36" height="36" rx="6" />
-      <rect className="f-w ln" x="30" y="6" width="36" height="30" rx="6" />
-      <text className="t-kana" x="28" y="64">あ</text>
-      <text className="t-num" x="68" y="65">2</text>
-      <path className="ln" d="M44 12v20" />
-      <path className="f-o ln" d="M44 12l16 5-16 5z" />
-      <path className="ln" d="M24 84h48" />
+      <rect className="f-s ln" x="8" y="8" width="38" height="38" rx="9" />
+      <rect className="f-w ln" x="50" y="8" width="38" height="38" rx="9" />
+      <rect className="f-w ln" x="8" y="50" width="38" height="38" rx="9" />
+      <rect className="f-s ln" x="50" y="50" width="38" height="38" rx="9" />
+      <text className="t-kana" x="27" y="35">あ</text>
+      <text className="t-num" x="69" y="35">1</text>
+      <path className="ln" d="M20 59v20" />
+      <path className="f-o ln" d="M20 59l15 5-15 5z" />
+      <path className="ln" d="M69 57v4M69 77v4M57 69h4M77 69h4M61 61l3 3M74 74l3 3M77 61l-3 3M61 77l3-3" />
+      <circle className="f-n ln" cx="69" cy="69" r="7" />
     </svg>
   );
 }

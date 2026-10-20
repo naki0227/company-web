@@ -25,6 +25,7 @@ export const worksEn: Work[] = [
       { label: "App Store", href: "https://apps.apple.com/jp/app/studyreel/id6756177589" },
       { label: "Blog post", href: "/blog/studyreel-behind" },
     ],
+    shot: { base: "/img/products/studyreel-en", widths: [400, 800], ratio: 869 / 400, alt: "StudyReel gallery: study sessions listed by date", shape: "phone" },
   },
   {
     name: "Career",
@@ -39,6 +40,7 @@ export const worksEn: Work[] = [
       { label: "Open Career", href: "https://career.enludus.com" },
       { label: "Blog post", href: "/blog/career" },
     ],
+    shot: { base: "/img/products/career", widths: [400, 800], ratio: 867 / 400, alt: "Career match result for a sample company: 5 matches, 1 difference, 2 unknowns", shape: "phone" },
   },
   {
     name: "UsefulMap",
@@ -56,6 +58,7 @@ export const worksEn: Work[] = [
       },
       { label: "Blog post", href: "/blog/useful-map" },
     ],
+    shot: { base: "/img/products/usefulmap", widths: [400, 800], ratio: 869 / 400, alt: "UsefulMap: a route from Ochanomizu to Tokyo split into walking and train segments", shape: "phone" },
   },
   {
     name: "Logiscore",
@@ -74,6 +77,7 @@ export const worksEn: Work[] = [
       { label: "GitHub", href: "https://github.com/naki0227/logiscore" },
       { label: "Blog post", href: "/blog/logiscore-sound" },
     ],
+    shot: { base: "/img/products/logiscore", widths: [800, 1440], ratio: 900 / 1440, alt: "Logiscore: source code on the left, the generated score on the right", shape: "screen" },
   },
   {
     name: "Gojuon Minesweeper",
@@ -88,6 +92,7 @@ export const worksEn: Work[] = [
       { label: "Play on the web", href: "https://minesweeper.enludus.com" },
       { label: "Blog post", href: "/blog/gojuon-minesweeper" },
     ],
+    shot: { base: "/img/products/minesweeper", widths: [400, 800], ratio: 867 / 400, alt: "Gojuon Minesweeper: choosing a genre before a match", shape: "phone" },
   },
 ];
 
