@@ -71,6 +71,7 @@ button { font: inherit; color: inherit; }
 .ill .f-o { fill: var(--orange-l); }
 .ill .f-s { fill: var(--sky-l); }
 .ill .f-w { fill: var(--white); }
+.ill .f-n { fill: var(--navy); }
 .ill .f-o.ln, .ill .f-s.ln, .ill .f-w.ln { stroke: var(--navy); stroke-width: 2.6; stroke-linejoin: round; }
 .ill .dash { stroke-dasharray: 2 7; }
 .ill text { fill: var(--navy); font-family: var(--round); font-weight: 600; }
@@ -181,11 +182,16 @@ button { font: inherit; color: inherit; }
 .work details[open] .work-toggle::after { transform: rotate(0deg); }
 .work-body { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); gap: 18px 32px; padding: 6px 28px 28px 126px; }
 .work-summary { font-size: 18px; font-weight: 700; line-height: 1.7; }
-.work-notes { grid-column: 2; grid-row: 1 / span 3; margin: 0; padding: 16px 20px; border-radius: 20px; background: var(--paper-a); }
+.work-notes { grid-column: 2; grid-row: 1 / span 4; margin: 0; padding: 16px 20px; border-radius: 20px; background: var(--paper-a); }
 .work-notes div + div { margin-top: 12px; padding-top: 12px; border-top: 2px dotted #e2d6c8; }
 .work-notes dt { font-size: 13px; font-weight: 700; }
 .work-notes dt span { margin-right: 8px; color: var(--orange); font-family: var(--round); font-weight: 600; }
 .work-notes dd { margin: 4px 0 0; color: var(--sub); font-size: 14px; line-height: 1.9; }
+.work-shot { margin: 0; }
+.work-shot img { display: block; width: 100%; height: auto; border: 6px solid var(--paper-a); border-radius: 34px; background: var(--paper-a); }
+.work-shot.is-phone { width: 200px; }
+.work-shot.is-screen { max-width: 420px; }
+.work-shot.is-screen img { border-radius: 20px; }
 .work-links { display: flex; flex-wrap: wrap; gap: 8px; }
 .work-links a { display: inline-flex; align-items: center; gap: 4px; min-height: 40px; padding: 0 16px; border: 2px solid var(--orange); border-radius: 20px; color: var(--orange); background: var(--white); font-size: 13px; font-weight: 700; }
 .chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; padding: 0; list-style: none; }

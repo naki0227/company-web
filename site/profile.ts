@@ -26,6 +26,8 @@ export type Work = {
   learning?: string;
   stack: string[];
   links: { label: string; href: string }[];
+  /** Screenshot under /img/products (`<base>-<width>.webp`), shown when the row is opened. */
+  shot?: { base: string; widths: number[]; ratio: number; alt: string; shape: "phone" | "screen" };
 };
 
 export const works: Work[] = [
@@ -46,6 +48,7 @@ export const works: Work[] = [
       { label: "App Store", href: "https://apps.apple.com/jp/app/studyreel/id6756177589" },
       { label: "記事", href: "/blog/studyreel-behind" },
     ],
+    shot: { base: "/img/products/studyreel-ja", widths: [400, 800], ratio: 869 / 400, alt: "StudyReel のギャラリー画面。勉強の記録が日付ごとに並ぶ", shape: "phone" },
   },
   {
     name: "Career",
@@ -62,6 +65,7 @@ export const works: Work[] = [
       { label: "Career を開く", href: "https://career.enludus.com" },
       { label: "記事", href: "/blog/career" },
     ],
+    shot: { base: "/img/products/career", widths: [400, 800], ratio: 867 / 400, alt: "Career の分析結果画面（サンプル企業）。近い 5、相違 1、不明 2", shape: "phone" },
   },
   {
     name: "UsefulMap",
@@ -81,6 +85,7 @@ export const works: Work[] = [
       },
       { label: "記事", href: "/blog/useful-map" },
     ],
+    shot: { base: "/img/products/usefulmap", widths: [400, 800], ratio: 869 / 400, alt: "UsefulMap の画面。御茶ノ水駅から東京駅までを徒歩と電車の区間に分けて表示", shape: "phone" },
   },
   {
     name: "Logiscore",
@@ -100,6 +105,7 @@ export const works: Work[] = [
       { label: "GitHub", href: "https://github.com/naki0227/logiscore" },
       { label: "記事", href: "/blog/logiscore-sound" },
     ],
+    shot: { base: "/img/products/logiscore", widths: [800, 1440], ratio: 900 / 1440, alt: "Logiscore の画面。左にソースコード、右に生成された楽譜", shape: "screen" },
   },
   {
     name: "五十音マインスイーパー",
@@ -116,6 +122,7 @@ export const works: Work[] = [
       { label: "Web で遊ぶ", href: "https://minesweeper.enludus.com" },
       { label: "記事", href: "/blog/gojuon-minesweeper" },
     ],
+    shot: { base: "/img/products/minesweeper", widths: [400, 800], ratio: 867 / 400, alt: "五十音マインスイーパーの画面。対戦前にジャンルを選ぶ", shape: "phone" },
   },
 ];
 

@@ -1,5 +1,6 @@
 import { art, workArt } from "./art";
 import type { Post } from "./posts";
+import type { Work } from "./profile";
 import { aboutEn, activitiesEn, capabilitiesEn, factsEn, personEn, skillsEn, worksEn } from "./profile-en";
 import {
   about,
@@ -117,6 +118,14 @@ function fontLinks(html: string) {
 }
 
 const LOGO = `<span class="logo-mark" aria-hidden="true"><span class="logo-bar logo-bar-a"></span><span class="logo-bar logo-bar-b"></span><span class="logo-bar logo-bar-c"></span><span class="logo-dot"></span></span>`;
+
+/** A work's screenshot. It sits inside a closed <details>, so lazy loading keeps it off the wire until opened. */
+function shot(s: NonNullable<Work["shot"]>) {
+  const [w] = s.widths;
+  const srcset = s.widths.map((x) => `${s.base}-${x}.webp ${x}w`).join(", ");
+  const sizes = s.shape === "phone" ? "200px" : "(max-width: 760px) 90vw, 420px";
+  return `<figure class="work-shot is-${s.shape}"><img src="${s.base}-${w}.webp" srcset="${srcset}" sizes="${sizes}" width="${w}" height="${Math.round(w * s.ratio)}" alt="${esc(s.alt)}" loading="lazy" decoding="async" /></figure>`;
+}
 
 function layout(head: Head, current: "portfolio" | "blog" | "", main: string) {
   const url = SITE + head.path;
@@ -294,6 +303,7 @@ export function portfolioPage(posts: Post[], lang: Lang = "ja") {
         <div class="work-body">
           <p class="work-summary">${esc(work.summary)}</p>
           <dl class="work-notes">${rows}</dl>
+          ${work.shot ? shot(work.shot) : ""}
           <ul class="chips">${work.stack.map((s) => `<li>${esc(s)}</li>`).join("")}</ul>
           ${links ? `<p class="work-links">${links}</p>` : ""}
         </div>
