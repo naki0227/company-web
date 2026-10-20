@@ -4,13 +4,14 @@ date: 2026-10-19
 description: 動画を Gemini に見せて編集指示書 JSON を作り、Rust から FFmpeg を呼んで縦型動画に焼く Nue の中身を、ソースを引用して書きます。3 言語・3 サービスの構成を Rust CLI と Next.js API route にまとめ直した理由と、移行途中で残っている穴も含めます。
 tags: [Nue, Rust, Next.js, FFmpeg, Gemini, 設計]
 type: tech
+updated: 2026-10-20
 ---
 
 > これは技術編です。何をつくって、なぜ構成をまとめ直したかを読みやすくまとめた読みもの版は「[動画編集を AI に任せるために、3 つに分けたサービスを 1 つに戻した](/blog/nue)」にあります。
 
 Nue は、動画をアップロードすると Gemini が中身を見て **編集指示書（edit plan）** という JSON を作り、Rust から FFmpeg を呼んで 1080×1920 の縦型動画とサムネイルを書き出すパイプラインです。開発中で、構成を移行している途中です。
 
-この記事では、リポジトリの現在の `main`（最新コミットは「Migrate CLI to Rust, add Next.js API routes, and retire Go/Python as legacy」）を、ソースを引用しながら順に追います。数字と定数はすべてソースの値です。
+この記事では、リポジトリの `main` を、ソースを引用しながら順に追います。読んでいるのは 2026-04-13 の時点（最新コミットは「Migrate CLI to Rust, add Next.js API routes, and retire Go/Python as legacy」、`de4435a`）で、そのあと構成が大きく変わりました。**どこが変わったかは、末尾の「更新（2026-10-20）」にまとめています。** 本文はこの時点のソースの記録として残しています。数字と定数はすべてソースの値です。
 
 ## 全体の流れ
 
@@ -407,3 +408,27 @@ Go と Python は `profiles: [legacy]` に退避しただけなので、ファ�
 解析とレンダリングは `analyze_video` と `process_instruction` という別の関数のまま 1 つのバイナリに入り、間に JSON を挟むので `analyze` だけ、`render` だけでも動かせます。HTTP は Next.js に寄せ、Rust はファイルだけを見ます。
 
 残っている作業もはっきりしています。手動指示とメタデータのマージ、雰囲気に合わせた BGM 選択の移植、効果音の時間軸の補正、トランジションとダッキングの復活、状態遷移の穴埋め、ジョブごとの一時ディレクトリ、そしてテスト。どれも「サービスを増やす」ではなく「1 つのプログラムの中を整える」作業なので、前よりずっと手を付けやすくなっています。
+
+## 更新（2026-10-20）
+
+本文は `de4435a` 時点のソースを読んだものです。そのあとの更新（Nue v2）で、本文の次の記述は変わりました。
+
+| 本文の記述 | いまの `main` |
+| --- | --- |
+| crate は `muscle/src/main.rs` の 1 ファイル（1,446 行）で、モジュール分割はまだ | `assets` `gemini` `jobs` `local` `main` `media` `meta` `plan` `render` `subtitles` の 10 ファイルに分割。`main.rs` は 549 行で、指示書の型は `plan.rs` に集め、`docs/edit-plan.schema.json` に仕様を書いた |
+| Gemini が指示書を作り、失敗したら「全部そのまま」の 1 カットの指示書 | 既定の `--analyzer auto` は、API キーがあれば Gemini、なければ手元の解析（無音検出、音量のピーク、場面の切り替え、whisper.cpp の字幕）。Gemini が失敗したり使えるカットを返さなかったりしたときも、手元の解析で指示書を作る |
+| Web 画面が保存する台本・手動指示・オプション（`_metadata.json`）を Rust は読まない | `meta.rs` が読んで、解析した指示書に重ねる。CLI からも `--script` と `--meta` で渡せる |
+| 起動するのは muscle、trend_watcher、web。Go と Python は `profiles: [legacy]` で残っている | Go の gateway、Python の brain、trend_watcher を削除。compose のサービスは muscle と web だけ |
+| 一時ファイル `seg_0000.mp4`・`concat_list.txt` がジョブ ID を含まない | 書き出しは `data/temp/<job_id>`、解析は `data/temp/<job_id>_analyze` を作業ディレクトリにする |
+| 効果音の時刻が元動画のままで、カットを飛ばすとずれる | 効果音は編集後の時間軸の上に置く（`plan.rs` に、元の時刻を編集後の時刻へ変える関数がある） |
+| 音声トラックのない素材では連結が失敗するはず | 無音の素材は `anullsrc` で無音を作る。`render_smoke.rs` に、無音のクリップを横型で書き出すテストがある |
+| BGM は固定の音量で、話し声に合わせて下げる処理は旧版で消えている | `sidechaincompress` を戻した（`threshold=0.02:ratio=8:attack=20:release=400`）。BGM は指示書の雰囲気の語を名前に含むファイルを優先して選ぶ |
+| セグメントのエンコードで落ちても状態が `rendering` のまま | worker の最上位で、どの段階のエラーも `failed` と、そのエラーの文面を状態ファイルに書く |
+| 出力の配信は `Range` に未対応 | `Range` に対応した（Safari と iOS の動画再生に必要）。ファイルはストリームで返す |
+| 自動テストは 1 つもなく、CI の `paths` が構成と合っていない | 複数のモジュールに単体テストがあり、FFmpeg を実際に呼ぶ結合テストと、Gemini の API を模したテストがある。CI は push ごとに、fmt・clippy・テスト、Web のビルド、Docker イメージでの書き出し、iOS のテストを走らせる |
+
+変わっていないこともあります。アップロードは `file.arrayBuffer()` でファイル全体をメモリに載せてから書いています。
+
+新しく足したものもあります。Web 画面でカットや字幕、効果音を直して書き出し直す機能（`GET` / `PUT /api/jobs/:id/plan`）、アイコンのスタンプ、横型と正方形の出力、`.srt` の書き出し、そして指示書の仕様を共有する iOS アプリ（`ios/`）です。Gemini は、使うかどうかを選べる解析の 1 つになりました。
+
+この更新では、`de4435a` 以降のコミットの差分と、いまのソースの該当箇所を読んで確かめました。本文のほかの記述（並行性、Gemini への渡し方の分岐など）は、いまのソースでは読み直していません。

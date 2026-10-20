@@ -5,9 +5,9 @@
     "naki0227/StudyReel": { "sha": "970ddb7f2f7dc234483c74121d678c5de232a139", "posts": ["studyreel-behind", "studyreel-recording-and-backup", "beyond-working-code"] },
     "naki0227/useful-map": { "sha": "3011ec9a62ea2ef2659095268c5307dd44472566", "posts": ["useful-map", "useful-map-routing"] },
     "naki0227/gojuon-minesweeper": { "sha": "50372d76985fc0208d1fff6e36aa8e9668298cb5", "posts": ["gojuon-minesweeper", "gojuon-minesweeper-tech"] },
-    "naki0227/job-match-analysis": { "sha": "d24f18868e1dec2fff200ef28eed9de17c4f9d93", "posts": ["career", "career-matching"] },
+    "naki0227/job-match-analysis": { "sha": "90a60961d64c6c2a3b36a9c1ee0b51715fb50aa2", "posts": ["career", "career-matching"] },
     "naki0227/logiscore": { "sha": "74eddd4105d1ddc509754d8fee22423e70e9c463", "posts": ["logiscore-sound", "logiscore-sound-transport"] },
-    "naki0227/nue": { "sha": "de4435abf6640ffcd98802bb1a1fe5f5c60e6beb", "posts": ["nue", "nue-pipeline"] },
+    "naki0227/nue": { "sha": "bea8f7fbc7b588034486dbc453a7ef2d8a180c0a", "posts": ["nue", "nue-pipeline"] },
     "naki0227/lp-anatomy": { "sha": "f91e61cca90cbcce61659c07b0fbf807ec29c95b", "posts": ["lp-anatomy"] }
   },
   "appStore": {
