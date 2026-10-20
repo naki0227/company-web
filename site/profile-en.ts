@@ -21,7 +21,10 @@ export const worksEn: Work[] = [
     learning:
       "Real use showed that screen dimming and display modes change how the app behaves. I turned those into a per-setting checklist and keep improving against it.",
     stack: ["Swift", "SwiftUI", "SwiftData", "WidgetKit"],
-    links: [{ label: "App Store", href: "https://apps.apple.com/jp/app/studyreel/id6756177589" }],
+    links: [
+      { label: "App Store", href: "https://apps.apple.com/jp/app/studyreel/id6756177589" },
+      { label: "Blog post", href: "/blog/studyreel-behind" },
+    ],
   },
   {
     name: "Career",
@@ -32,7 +35,10 @@ export const worksEn: Work[] = [
     approach:
       "Collect and structure public information, then sort it into what matches, what doesn't, and what the post never says. AI organises the material; the decision stays with the person.",
     stack: ["React", "TypeScript", "Hono", "Supabase"],
-    links: [{ label: "Open Career", href: "https://career.enludus.com" }],
+    links: [
+      { label: "Open Career", href: "https://career.enludus.com" },
+      { label: "Blog post", href: "/blog/career" },
+    ],
   },
   {
     name: "UsefulMap",
@@ -48,6 +54,7 @@ export const worksEn: Work[] = [
         label: "App Store",
         href: "https://apps.apple.com/jp/app/useful-map-%E7%B5%8C%E8%B7%AF%E6%AF%94%E8%BC%83/id6801771854",
       },
+      { label: "Blog post", href: "/blog/useful-map" },
     ],
   },
   {
@@ -65,6 +72,7 @@ export const worksEn: Work[] = [
     links: [
       { label: "Try Logiscore", href: "https://logiscore.enludus.com" },
       { label: "GitHub", href: "https://github.com/naki0227/logiscore" },
+      { label: "Blog post", href: "/blog/logiscore-sound" },
     ],
   },
   {
@@ -76,31 +84,40 @@ export const worksEn: Work[] = [
     approach:
       "The kana chart is the board; mine counts are the clues to the hidden word. Web and iOS come from the same Expo codebase.",
     stack: ["Expo", "React Native", "TypeScript"],
-    links: [{ label: "Play on the web", href: "https://minesweeper.enludus.com" }],
+    links: [
+      { label: "Play on the web", href: "https://minesweeper.enludus.com" },
+      { label: "Blog post", href: "/blog/gojuon-minesweeper" },
+    ],
   },
   {
-    name: "Nue",
-    category: "Backend / Video",
-    status: "In development",
-    summary: "A video pipeline that connects AI analysis and rendering.",
-    problem: "Editing effort keeps people from publishing video. I want to automate everything from import through analysis to export.",
+    name: "Dayline",
+    category: "iOS / Rust / On-device AI",
+    status: "On TestFlight",
+    summary: "An iOS app that gathers the day's events on the device and summarises them with Apple Intelligence.",
+    problem:
+      "Meeting notes and plans end up scattered. Before handing anything to an AI, I want to decide what gets collected and what never leaves.",
     approach:
-      "Gemini watches the footage and writes a JSON edit plan; Rust renders it with FFmpeg into vertical video. Moving from three services (Go, Python, Rust) to a Rust CLI plus Next.js.",
+      "Context gathering is a shared Rust engine bridged to Swift with UniFFI. The Apple Intelligence side doesn't know how context was collected, and the Rust side doesn't know about Apple Intelligence. Sensitive values are redacted before storage, and data stays in an on-device SQLite store.",
     learning:
-      "Separating responsibilities is not the same as separating services. I kept the boundary as a JSON edit plan and put the processing in one program.",
-    stack: ["Rust", "Next.js", "Gemini", "FFmpeg"],
-    links: [{ label: "GitHub", href: "https://github.com/naki0227/nue" }],
+      "Fixing the boundaries first keeps a cross-language app from breaking. Signing and App Store Connect upload run in CI all the way to TestFlight.",
+    stack: ["Rust", "Swift", "UniFFI", "SQLite"],
+    links: [{ label: "GitHub", href: "https://github.com/naki0227/dayline" }],
   },
   {
-    name: "LP Anatomy",
-    category: "Web Design / Study",
-    status: "Updated daily",
-    summary: "A study notebook that takes apart one well-made website a day, from the source.",
-    problem: "I could tell a site was good, but not explain why in words and numbers.",
+    name: "AI Readable Code Lab",
+    category: "Research / AI × Design",
+    status: "Phase 1 complete",
+    summary: "Testing, over 54 runs, whether code that is easy for people to read is also easier for AI to change.",
+    problem: "People often say readable code is easier for AI too, but I had never seen numbers for it.",
     approach:
-      "Read the HTML, CSS and JS; measure colour, type, motion and transfer size; and turn them into patterns by mood. This page is built to that notebook's quality bar.",
-    stack: ["HTML", "CSS", "Playwright"],
-    links: [],
+      "Built the same API in three architectures and had an AI run six change tasks three times each, with hidden tests kept separate from evaluation and every run recorded.",
+    learning:
+      "Differences between architectures stayed within chance, and most failures came from a contradiction in the evaluation contract. I learned to separate what the data shows from what it doesn't.",
+    stack: ["TypeScript", "Fastify", "Vitest"],
+    links: [
+      { label: "Blog post", href: "/blog/ai-readable-code" },
+      { label: "GitHub", href: "https://github.com/naki0227/ai-readable-code-lab" },
+    ],
   },
 ];
 

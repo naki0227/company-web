@@ -44,6 +44,7 @@ export const works: Work[] = [
     links: [
       { label: "紹介ページ", href: "/products/studyreel" },
       { label: "App Store", href: "https://apps.apple.com/jp/app/studyreel/id6756177589" },
+      { label: "記事", href: "/blog/studyreel-behind" },
     ],
   },
   {
@@ -59,6 +60,7 @@ export const works: Work[] = [
     links: [
       { label: "紹介ページ", href: "/products/career" },
       { label: "Career を開く", href: "https://career.enludus.com" },
+      { label: "記事", href: "/blog/career" },
     ],
   },
   {
@@ -77,6 +79,7 @@ export const works: Work[] = [
         label: "App Store",
         href: "https://apps.apple.com/jp/app/useful-map-%E7%B5%8C%E8%B7%AF%E6%AF%94%E8%BC%83/id6801771854",
       },
+      { label: "記事", href: "/blog/useful-map" },
     ],
   },
   {
@@ -95,6 +98,7 @@ export const works: Work[] = [
       { label: "紹介ページ", href: "/products/logiscore" },
       { label: "Logiscore を試す", href: "https://logiscore.enludus.com" },
       { label: "GitHub", href: "https://github.com/naki0227/logiscore" },
+      { label: "記事", href: "/blog/logiscore-sound" },
     ],
   },
   {
@@ -110,33 +114,39 @@ export const works: Work[] = [
     links: [
       { label: "紹介ページ", href: "/products/gojuon-minesweeper" },
       { label: "Web で遊ぶ", href: "https://minesweeper.enludus.com" },
+      { label: "記事", href: "/blog/gojuon-minesweeper" },
     ],
   },
   {
-    name: "Nue",
-    category: "Backend / Video",
-    status: "開発中",
-    summary: "AI 解析とレンダリングをつなぐ動画処理基盤。",
+    name: "Dayline",
+    category: "iOS / Rust / On-device AI",
+    status: "TestFlight で配信中",
+    summary: "1 日の出来事を端末の中で集め、Apple Intelligence でまとめる iOS アプリ。",
     problem:
-      "動画を作るとき、編集の作業量が発信のハードルになる。素材の取り込みから解析、書き出しまでを自動化したい。",
+      "会議のメモや予定は、あちこちに散らばる。AI に渡すにも、何を集めて何を渡さないかを自分で決めたい。",
     approach:
-      "Gemini が動画を見て編集指示書（JSON）を作り、Rust が FFmpeg で縦型動画に書き出す。Go・Python・Rust の 3 サービス構成から、Rust の CLI と Next.js の 2 つへ移行している。",
+      "文脈を集めて組み立てる部分を Rust の共通エンジンにし、UniFFI で Swift につないだ。Apple Intelligence 側は文脈の集め方を知らず、Rust 側は Apple Intelligence を知らない。保存の前に機密を伏せ、データは端末内の SQLite に置く。",
     learning:
-      "責務を分けることと、サービスを分けることは別の判断。境目は JSON の指示書として残し、処理は 1 つのプログラムにまとめた。",
-    stack: ["Rust", "Next.js", "Gemini", "FFmpeg"],
-    links: [{ label: "GitHub", href: "https://github.com/naki0227/nue" }],
+      "境界を先に決めると、言語をまたいでも壊れにくい。署名・App Store Connect への登録まで CI で回し、TestFlight に届けている。",
+    stack: ["Rust", "Swift", "UniFFI", "SQLite"],
+    links: [{ label: "GitHub", href: "https://github.com/naki0227/dayline" }],
   },
   {
-    name: "LP Anatomy",
-    category: "Web Design / Study",
-    status: "毎日更新",
-    summary: "美しいサイトを毎日1つ、ソースから解剖する学習ノート。",
+    name: "AI Readable Code Lab",
+    category: "Research / AI × Design",
+    status: "実験 Phase 1 完了",
+    summary: "人間に読みやすい設計は AI にも変更しやすいのかを、54 回の実験で確かめた。",
     problem:
-      "「いいサイト」を見ても、なぜ良いのかを言葉と数値で説明できなかった。",
+      "「読みやすいコードは AI にも扱いやすい」とよく言われるが、確かめた数字を見たことがなかった。",
     approach:
-      "HTML・CSS・JS を読み、配色・文字・動き・通信量を実測して、雰囲気ごとの型にまとめる。このページも、そのノートの品質基準で組んでいる。",
-    stack: ["HTML", "CSS", "Playwright"],
-    links: [],
+      "同じ API を 3 つの構成で作り、6 つの変更課題を各 3 回、AI に実行させた。隠しテストと評価を分け、結果は 1 回ずつ記録した。",
+    learning:
+      "構成による差は偶然の範囲に収まり、失敗の多くは評価の約束の食い違いから来ていた。言えることと言えないことを分けて書くことを学んだ。",
+    stack: ["TypeScript", "Fastify", "Vitest"],
+    links: [
+      { label: "記事", href: "/blog/ai-readable-code" },
+      { label: "GitHub", href: "https://github.com/naki0227/ai-readable-code-lab" },
+    ],
   },
 ];
 
