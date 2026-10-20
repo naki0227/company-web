@@ -1,6 +1,7 @@
 import type { Plugin } from "vite";
 import { copy } from "../src/i18n";
 import { renderCards, type Card } from "./og";
+import { lazyCss } from "./fonts";
 import { loadPosts, type Post } from "./posts";
 import { blogIndexPage, feed, notFoundPage, portfolioPage, postPage, sitemap } from "./pages";
 
@@ -66,10 +67,11 @@ function fontLinks(titles: string[]) {
   return [
     '<link rel="preconnect" href="https://fonts.googleapis.com" />',
     '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />',
-    '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&display=swap" />',
-    `<link rel="stylesheet" href="${zen}" />`,
+    ...[FREDOKA, zen].map(lazyCss),
   ].join("\n    ");
 }
+
+const FREDOKA = "https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&display=swap";
 
 export function contentPages(): Plugin {
   let root = process.cwd();

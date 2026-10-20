@@ -52,6 +52,8 @@ function LogoMark() {
 function rememberLang(lang: Lang) {
   try {
     localStorage.setItem("enludus-lang", lang);
+    // The edge redirect on "/" reads this cookie, so the choice holds before any script runs.
+    document.cookie = `enludus-lang=${lang}; path=/; max-age=31536000; samesite=lax`;
   } catch {
     // Private mode or blocked storage: the switch still navigates.
   }
