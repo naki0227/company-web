@@ -20,6 +20,16 @@
     <link rel="alternate" hreflang="ja" href="https://enludus.com/ja" />
     <link rel="alternate" hreflang="x-default" href="https://enludus.com/" />
     <link rel="alternate" type="application/rss+xml" title="Enludus ブログ" href="/blog/feed.xml" />
+    <script>
+      // A visitor who chose English before the switch set a cookie: the edge sent them
+      // here by browser language, so carry the old choice over once and go back.
+      try {
+        if (localStorage.getItem("enludus-lang") === "en" && document.cookie.indexOf("enludus-lang=") < 0) {
+          document.cookie = "enludus-lang=en; path=/; max-age=31536000; samesite=lax";
+          if (location.pathname === "/ja") location.replace("/" + location.hash);
+        }
+      } catch (e) {}
+    </script>
     <!-- fonts: injected by site/plugin.ts (Zen Maru Gothic subset to the page text) -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>Enludus — 5つのアプリを、つくって運営しています</title>

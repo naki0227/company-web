@@ -24,6 +24,7 @@
       // EN/JA switch is remembered and always wins.
       try {
         var saved = localStorage.getItem("enludus-lang");
+        if (saved && document.cookie.indexOf("enludus-lang=") < 0) document.cookie = "enludus-lang=" + saved + "; path=/; max-age=31536000; samesite=lax";
         var prefersJa = (navigator.languages || [navigator.language]).some(function (l) { return /^ja\b/i.test(l || ""); });
         if (location.pathname === "/" && (saved === "ja" || (!saved && prefersJa))) location.replace("/ja" + location.hash);
       } catch (e) {}

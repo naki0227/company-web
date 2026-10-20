@@ -1,4 +1,5 @@
 import { art, workArt } from "./art";
+import { lazyCss } from "./fonts";
 import type { Post } from "./posts";
 import type { Work } from "./profile";
 import { aboutEn, activitiesEn, capabilitiesEn, factsEn, personEn, skillsEn, worksEn } from "./profile-en";
@@ -113,8 +114,8 @@ function fontLinks(html: string) {
   const chars = [...new Set([...text, ...ascii])].filter((c) => c.trim()).sort().join("");
   return `<link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&display=swap">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700&display=swap&text=${encodeURIComponent(chars)}">`;
+${lazyCss("https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&display=swap")}
+${lazyCss(`https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700&display=swap&text=${encodeURIComponent(chars)}`)}`;
 }
 
 const LOGO = `<span class="logo-mark" aria-hidden="true"><span class="logo-bar logo-bar-a"></span><span class="logo-bar logo-bar-b"></span><span class="logo-bar logo-bar-c"></span><span class="logo-dot"></span></span>`;
