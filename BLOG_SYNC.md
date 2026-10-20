@@ -65,7 +65,7 @@ App Store（`appStore` の各アプリ）:
 - リポジトリ・PR・App Store のデータにあることだけを書く。数字・利用者・発言・動機を作らない。わからないことは書かない。
 - 会社名を出さない（インターン先、勤務先、プロダクトが扱うデータの会社も含む）。オーナー以外の人名を出さない。大阪に触れない。Enludus は個人事業で、会社と書かない。
 - 秘密情報・鍵・内部の URL・エンドポイント・合言葉を書かない。
-- front matter は title / date / description / tags（インライン配列）と、必要なら `type: tech`・`updated`。`draft: true` は付けない（PR がレビューの場）。
+- front matter は title / date / description / tags（インライン配列）と、必要なら `type: tech`・`updated`。新しく書く記事に `draft: true` は付けない（PR がレビューの場）。ただし、すでに `draft: true` の記事はオーナーが非公開にしているので、外さない（更新を足すのはよい）。
 
 ## 4. 記録を進める
 
