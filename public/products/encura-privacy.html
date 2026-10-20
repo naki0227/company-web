@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>EnCura プライバシーポリシー | Enludus</title>
+<meta name="description" content="iOSアプリ「EnCura」におけるAI学芸員への質問、作品の写真、館内マップの投稿、位置情報の取り扱い。"/>
+<link rel="canonical" href="https://enludus.com/products/encura-privacy"/>
+<link rel="stylesheet" href="/products/product.css"/><meta name="theme-color" content="#ffffff"/><script defer src="/_vercel/insights/script.js"></script></head><body>
+<header><a href="/ja" class="brand">Enludus</a><nav><a href="/ja#products">製品一覧</a><a href="mailto:contact@enludus.com">お問い合わせ</a></nav></header>
+<main class="wrap"><nav class="crumb" aria-label="パンくず"><a href="/ja">Enludus</a> / EnCura / プライバシーポリシー</nav>
+<div class="legal"><h1>EnCura プライバシーポリシー</h1><p>最終更新：2026年10月20日</p>
+<p>このページでは、Enludusが提供するiOSアプリ「EnCura」（以下「本アプリ」）での情報の取り扱いを説明します。本アプリにアカウント登録はありません。名前やメールアドレスを入力する場面もありません。</p>
+
+<h2>匿名の利用者ID</h2>
+<p>本アプリは起動時に、データベース（<a href="https://supabase.com/" rel="noopener">Supabase</a>）に匿名でサインインし、ランダムな利用者IDを受け取ります。このIDは、AI学芸員の呼び出しや館内マップの投稿を本アプリからの正しい利用として受け付けるためだけに使います。氏名、メールアドレス、電話番号などとは結び付きません。</p>
+
+<h2>AI学芸員への質問と作品の写真</h2>
+<p>AI学芸員に送った文章と、カメラで撮った作品の写真は、回答を作るために、Enludusのサーバー（SupabaseのEdge Function）を経由して、Googleの<a href="https://ai.google.dev/" rel="noopener">Gemini API</a>に送られます。同じ会話の直前のやり取り（最大20往復）も、話の流れを保つために一緒に送ります。</p>
+<p>Enludusのサーバーは質問や写真を保存しません。Googleでの取り扱いは<a href="https://ai.google.dev/gemini-api/terms" rel="noopener">Gemini APIの利用規約</a>と<a href="https://policies.google.com/privacy" rel="noopener">Googleのプライバシーポリシー</a>に従います。利用するプランによっては、Googleが品質の向上のために送信内容を確認・利用する場合があります。個人情報や、人の顔がはっきり写った写真は送らないでください。</p>
+<p>作品の写真は、送る前に画像の縮小・圧縮のため、Enludusが運用する画像処理サーバー（Google Cloud Run）に送ることがあります。処理はメモリ上で行い、写真は保存しません。</p>
+<p>会話の内容は端末にも保存しません。画面を閉じると消えます。</p>
+
+<h2>館内マップの投稿</h2>
+<p>会場の館内マップを撮影して投稿すると、まずその画像が館内マップかどうかをGemini APIで判定します。館内マップと判定された画像は、Supabaseのストレージに保存され、会場ページで本アプリのすべての利用者に公開されます。画像には会場の情報が付きますが、投稿者を示す情報は表示しません。</p>
+<p>ご自身が撮影した画像、または共有の許可を得た画像だけを投稿してください。投稿した画像の削除を希望する場合は、下記の連絡先までご連絡ください。</p>
+
+<h2>位置情報</h2>
+<p>「近くの美術館」を使うと、現在地を取得し、美術館の一覧を近い順に並べます。並べ替えは端末の中だけで行い、現在地をEnludusや第三者に送ることはありません。位置情報の利用は、端末の設定でいつでも止められます。</p>
+
+<h2>カメラと写真ライブラリ</h2>
+<p>作品のスキャンと館内マップの撮影のためにカメラを、写真を選ぶために写真ライブラリを使います。使うのは、利用者が撮影・選択した画像だけです。</p>
+
+<h2>コンテンツの表示</h2>
+<p>展覧会、今日の一枚、美術ニュースなどの情報はSupabaseから読み込みます。作品の画像は<a href="https://commons.wikimedia.org/" rel="noopener">Wikimedia Commons</a>などから、文字のフォントはGoogle Fontsから読み込みます。これらの通信では、通常のWeb閲覧と同じく、端末のIPアドレスなどが各サービスに届きます。</p>
+
+<h2>外部サイトへのリンク</h2>
+<p>関連書籍・グッズや近くの宿を探すボタン、出典、地図は、外部のサイトやアプリを開きます。リンクにはアフィリエイトリンクが含まれる場合があります。リンク先での情報の取り扱いは、それぞれのサイトの方針に従います。</p>
+
+<h2>端末に保存する情報</h2>
+<p>注意事項に同意したかどうかだけを端末に保存します。アプリを削除すると消えます。</p>
+
+<h2>解析・広告</h2>
+<p>本アプリには、利用状況の解析ツールや広告SDKは組み込まれていません。各サービスは、不正利用の防止や障害の調査のために、アクセスの記録（日時、IPアドレスなど）を一定期間保存します。</p>
+
+<h2>お問い合わせ</h2>
+<p>本アプリのプライバシーに関するご質問、投稿した画像の削除のご依頼は<a href="mailto:contact@enludus.com">contact@enludus.com</a>までご連絡ください。メールで受け付けた情報の取り扱いは、<a href="/privacy">Enludusのプライバシーポリシー</a>をご確認ください。</p>
+
+<h2>方針の変更</h2>
+<p>機能の追加や法令への対応により、本ポリシーを改定することがあります。変更内容はこのページでお知らせします。</p>
+
+<h2 id="en" lang="en">English</h2>
+<div lang="en">
+<p>EnCura has no account registration and never asks for your name or email address.</p>
+<p><strong>Anonymous ID.</strong> On launch the app signs in anonymously to its database (Supabase) and receives a random user ID. It is used only to accept requests from the app, such as the AI curator and map posts, and is not linked to any personal details.</p>
+<p><strong>AI curator and artwork photos.</strong> Your questions and the photos you take are sent through Enludus's server (a Supabase Edge Function) to Google's Gemini API to generate answers, together with up to the last 20 exchanges of the conversation. Enludus's server does not store them. Google handles them under the Gemini API Terms and Google's Privacy Policy; depending on the plan, Google may review or use them to improve its services. Please do not send personal information or clear photos of people's faces. Photos may first be sent to an image server run by Enludus (Google Cloud Run) to be resized; they are processed in memory and not stored. Conversations are not stored on your device either.</p>
+<p><strong>Venue map posts.</strong> A floor map you post is first checked by the Gemini API. If it is a map, it is stored in Supabase Storage and shown to all users on the venue page, without anything identifying who posted it. Post only images you took or have permission to share. To have a posted image removed, contact us.</p>
+<p><strong>Location.</strong> "Nearby" uses your current location to sort museums by distance on your device. Your location is never sent to Enludus or anyone else.</p>
+<p><strong>Camera and photos.</strong> Used only for the images you take or choose for artwork scans and map posts.</p>
+<p><strong>Content.</strong> Exhibitions, Today's Art and news are loaded from Supabase; artwork images from Wikimedia Commons and others; fonts from Google Fonts. As with any web request, these services receive your IP address.</p>
+<p><strong>Links.</strong> Buttons for books, goods, nearby hotels, sources and maps open external sites or apps, and may include affiliate links.</p>
+<p><strong>On-device data.</strong> Only whether you accepted the notice is stored on your device.</p>
+<p><strong>Analytics and ads.</strong> The app contains no analytics tools or advertising SDKs. Services keep access logs (time, IP address) for a limited period for security and troubleshooting.</p>
+<p><strong>Contact.</strong> <a href="mailto:contact@enludus.com">contact@enludus.com</a></p>
+</div>
+<p><a href="/products/encura-terms">EnCura 利用規約</a></p>
+</div></main>
+<footer><div>© 2026 Enludus</div><div><a href="/products/encura-terms">EnCura 利用規約</a><a href="/privacy">サイトのプライバシーポリシー</a><a href="mailto:contact@enludus.com">お問い合わせ</a></div></footer></body></html>
