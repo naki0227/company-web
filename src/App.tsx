@@ -152,7 +152,7 @@ function SectionHead({ en, ja, left, right }: { en: string; ja: string; left: Re
   );
 }
 
-function Shot({ image, sizes }: { image: Product["image"]; sizes: string }) {
+function Shot({ image, sizes, priority = false }: { image: Product["image"]; sizes: string; priority?: boolean }) {
   const [small] = image.widths;
   return (
     <img
@@ -162,7 +162,9 @@ function Shot({ image, sizes }: { image: Product["image"]; sizes: string }) {
       width={small}
       height={Math.round(small * image.ratio)}
       alt={image.alt}
-      loading="lazy"
+      // The first slide is the largest thing on the first screen: fetch it right away.
+      loading={priority ? "eager" : "lazy"}
+      fetchPriority={priority ? "high" : "auto"}
       decoding="async"
     />
   );
@@ -218,7 +220,7 @@ function Slider() {
               tabIndex={offset === 0 ? 0 : -1}
             >
               <span className={`slide-frame slide-${p.image.shape}`}>
-                <Shot image={p.image} sizes="(max-width: 760px) 70vw, 340px" />
+                <Shot image={p.image} sizes="(max-width: 760px) 70vw, 340px" priority={i === 0} />
               </span>
               <span className="slide-cap">
                 <Icon className="slide-icon" />
