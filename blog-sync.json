@@ -3,11 +3,12 @@
   "checkedAt": "2026-10-20",
   "repos": {
     "naki0227/StudyReel": {
-      "sha": "970ddb7f2f7dc234483c74121d678c5de232a139",
+      "sha": "2dffd741111b4ca9568793b55c1780faa5724eb6",
       "posts": [
         "studyreel-behind",
         "studyreel-recording-and-backup",
-        "beyond-working-code"
+        "beyond-working-code",
+        "studyreel-1-5"
       ]
     },
     "naki0227/useful-map": {
@@ -18,7 +19,7 @@
       ]
     },
     "naki0227/gojuon-minesweeper": {
-      "sha": "50372d76985fc0208d1fff6e36aa8e9668298cb5",
+      "sha": "e78565ad68b0d3b98a40aafb7bf6f9d64725242b",
       "posts": [
         "gojuon-minesweeper",
         "gojuon-minesweeper-tech"
@@ -32,27 +33,27 @@
       ]
     },
     "naki0227/logiscore": {
-      "sha": "74eddd4105d1ddc509754d8fee22423e70e9c463",
+      "sha": "3a6d3d06dd4f11df23e85be7b3f15b48702952b4",
       "posts": [
         "logiscore-sound",
         "logiscore-sound-transport"
       ]
     },
     "naki0227/nue": {
-      "sha": "bea8f7fbc7b588034486dbc453a7ef2d8a180c0a",
+      "sha": "45cf00197fa49eb73af8b40568f6cbbe3d517f57",
       "posts": [
         "nue",
         "nue-pipeline"
       ]
     },
     "naki0227/lp-anatomy": {
-      "sha": "f91e61cca90cbcce61659c07b0fbf807ec29c95b",
+      "sha": "788dea0f39d1e9f8de5581120e4efff4d0b9bb08",
       "posts": [
         "lp-anatomy"
       ]
     },
     "naki0227/world-oriented-programming": {
-      "sha": "5cc77dfc386ef653b6102e149e3a88d9943ca6fb",
+      "sha": "416dc2430236c32e1d886427a7710e9283be316d",
       "posts": [
         "sekai",
         "sekai-tech"
@@ -66,21 +67,141 @@
       ]
     },
     "naki0227/mini-game": {
-      "sha": "5c2441bb9608faac5c7dd066c6a26299deb01eec",
+      "sha": "639a2385109d094ba287d922cd7f99b0408c5f4c",
       "posts": [
         "asobi-yokocho",
         "asobi-yokocho-tech"
       ]
+    },
+    "naki0227/1in1jo": {
+      "sha": "d734ac6477a89d43b76ec20256b5b076195e5a99",
+      "posts": []
+    },
+    "naki0227/AGN": {
+      "sha": "b2265c6679f0d6021ea62c7d8c39fbe5c44b4a30",
+      "posts": []
+    },
+    "naki0227/AITH": {
+      "sha": "011d759cb052e7e8c1d2955eb59de5bd13836d23",
+      "posts": []
+    },
+    "naki0227/AutomatedHub": {
+      "sha": "686028218fbec34fcc19046ce5623923b621fd38",
+      "posts": []
+    },
+    "naki0227/Eeyo": {
+      "sha": "3d422f054c742d23c3693565e255d83fd5937c85",
+      "posts": []
+    },
+    "naki0227/KoeTect": {
+      "sha": "955205ee9180eecad7d735e8b234eea0e1bf8ccb",
+      "posts": []
+    },
+    "naki0227/Logos": {
+      "sha": "1dacea41d559e0448ca903e982aced4b037ca1dd",
+      "posts": []
+    },
+    "naki0227/Metamo": {
+      "sha": "a39f3c654256d96b5b2b60bf7b70f0effb6fd212",
+      "posts": []
+    },
+    "naki0227/adaptive-development-governance-platform": {
+      "sha": "eecea62654460f43844e680dd34afea0fa09ff10",
+      "posts": []
+    },
+    "naki0227/aidentity": {
+      "sha": "6296e36ae5b23f50b5652c191690ab77a572e5ae",
+      "posts": []
+    },
+    "naki0227/amu": {
+      "sha": "ba263ac0780af9f96cb1a2fdfe287cdbdc0462de",
+      "posts": []
+    },
+    "naki0227/auto_CM_director": {
+      "sha": "0a2a0cba32b9e6309f24e003cd954aba895501e6",
+      "posts": []
+    },
+    "naki0227/autonomous-analytics-platform": {
+      "sha": "7cafe064f7cd33ddb221db3b3f9c4647608716de",
+      "posts": []
+    },
+    "naki0227/aws-kubernetes-lab": {
+      "sha": "7e7f8fec840c43491bd3a541f604fbd9b59dec80",
+      "posts": []
+    },
+    "naki0227/context_cue": {
+      "sha": "277c5dcc09970c0c73c65a1bfde13c95f0c5246c",
+      "posts": []
+    },
+    "naki0227/covenant": {
+      "sha": "e758a5e30a74ee3d46e17a41ccae811d02223ca9",
+      "posts": []
+    },
+    "naki0227/dabuchi": {
+      "sha": "29b760a3e9ca7691626f1dcb0eb851fdb9594267",
+      "posts": []
+    },
+    "naki0227/dayline": {
+      "sha": "edd69fc1bd5efda786f8b6a56d3e96fb37e437e2",
+      "posts": []
+    },
+    "naki0227/doodle-beasts": {
+      "sha": "8f30c69cca13c56653fc25f016e252baafee2ce9",
+      "posts": []
+    },
+    "naki0227/e2e-ci-cd-app": {
+      "sha": "288733c468ac51b9ab2553018ce3a739e5aaf600",
+      "posts": []
+    },
+    "naki0227/eac": {
+      "sha": "e7f8400b0580aba5a825bb7dfb5d9d0fd0837953",
+      "posts": []
+    },
+    "naki0227/encura": {
+      "sha": "0cf4264bb76e9669740a451ca60cd1de0c0f611a",
+      "posts": []
+    },
+    "naki0227/kiro": {
+      "sha": "2773822e7c19e8e713130410f92c262c5f89e78b",
+      "posts": []
+    },
+    "naki0227/kotodama": {
+      "sha": "e025376c8e773f3cbf1ecbaa725c080e96b688b0",
+      "posts": []
+    },
+    "naki0227/low_polygon": {
+      "sha": "c891b29eb981906a21508b616c1e4143914086e1",
+      "posts": []
+    },
+    "naki0227/mikka_bouzu": {
+      "sha": "a261a33b7ba8cc22bbfeccf783cdb20a78419ae7",
+      "posts": []
+    },
+    "naki0227/my-language-dojo": {
+      "sha": "61ea72ec83954e752c4fb14b3f90f88546a4c093",
+      "posts": []
+    },
+    "naki0227/preplay": {
+      "sha": "b7695d864dbb5e3addc2e24dd85dd03b4f2cf444",
+      "posts": []
+    },
+    "naki0227/umeda_underground_map": {
+      "sha": "a66ecf18164ccad5479fa08c6a1985d3886fcc54",
+      "posts": []
     }
   },
   "appStore": {
     "StudyReel": {
       "id": "6756177589",
-      "version": "1.4"
+      "version": "1.5"
     },
     "UsefulMap": {
       "id": "6801771854",
       "version": "1.0"
+    },
+    "GojuonMinesweeper": {
+      "id": "6819539119",
+      "version": "1.0.2"
     }
   }
 }
