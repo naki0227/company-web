@@ -82,7 +82,7 @@ export const worksEn: Work[] = [
   {
     name: "Gojuon Minesweeper",
     category: "Game / Expo",
-    status: "Playable on the web",
+    status: "On the web and the App Store",
     summary: "A word-guessing game for two players sharing one screen, played on the kana chart.",
     problem: "I wanted the “reason from the numbers” fun of Minesweeper as a word game two people can play around one screen.",
     approach:
@@ -90,6 +90,7 @@ export const worksEn: Work[] = [
     stack: ["Expo", "React Native", "TypeScript"],
     links: [
       { label: "Play on the web", href: "https://minesweeper.enludus.com" },
+      { label: "App Store", href: "https://apps.apple.com/jp/app/id6819539119" },
       { label: "Blog post", href: "/blog/gojuon-minesweeper" },
     ],
     shot: { base: "/img/products/minesweeper", widths: [400, 800], ratio: 867 / 400, alt: "Gojuon Minesweeper: choosing a genre before a match", shape: "phone" },

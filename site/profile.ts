@@ -110,7 +110,7 @@ export const works: Work[] = [
   {
     name: "五十音マインスイーパー",
     category: "Game / Expo",
-    status: "Web で公開中",
+    status: "Web・App Store で公開中",
     summary: "1つの画面を2人で囲む、五十音とアルファベットの推理ゲーム。",
     problem:
       "マインスイーパーの「数字から推理する」面白さを、1つの画面を囲んで2人で遊べることば遊びにしたい。",
@@ -120,6 +120,7 @@ export const works: Work[] = [
     links: [
       { label: "紹介ページ", href: "/products/gojuon-minesweeper" },
       { label: "Web で遊ぶ", href: "https://minesweeper.enludus.com" },
+      { label: "App Store", href: "https://apps.apple.com/jp/app/id6819539119" },
       { label: "記事", href: "/blog/gojuon-minesweeper" },
     ],
     shot: { base: "/img/products/minesweeper", widths: [400, 800], ratio: 867 / 400, alt: "五十音マインスイーパーの画面。対戦前にジャンルを選ぶ", shape: "phone" },
