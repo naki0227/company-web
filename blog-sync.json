@@ -121,24 +121,12 @@
       "sha": "0a2a0cba32b9e6309f24e003cd954aba895501e6",
       "posts": []
     },
-    "naki0227/autonomous-analytics-platform": {
-      "sha": "7cafe064f7cd33ddb221db3b3f9c4647608716de",
-      "posts": []
-    },
     "naki0227/aws-kubernetes-lab": {
       "sha": "7e7f8fec840c43491bd3a541f604fbd9b59dec80",
       "posts": []
     },
-    "naki0227/context_cue": {
-      "sha": "277c5dcc09970c0c73c65a1bfde13c95f0c5246c",
-      "posts": []
-    },
     "naki0227/covenant": {
       "sha": "e758a5e30a74ee3d46e17a41ccae811d02223ca9",
-      "posts": []
-    },
-    "naki0227/dabuchi": {
-      "sha": "29b760a3e9ca7691626f1dcb0eb851fdb9594267",
       "posts": []
     },
     "naki0227/dayline": {
@@ -190,6 +178,11 @@
       "posts": []
     }
   },
+  "excluded": [
+    "naki0227/dabuchi",
+    "naki0227/context_cue",
+    "naki0227/autonomous-analytics-platform"
+  ],
   "appStore": {
     "StudyReel": {
       "id": "6756177589",
