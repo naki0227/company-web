@@ -25,7 +25,7 @@ App Store（`appStore` の各アプリ）:
 
 - `https://itunes.apple.com/lookup?id=<id>&country=jp` の `version`・`currentVersionReleaseDate`・`releaseNotes` を見る。
 - 記録より新しいバージョンが出ていたら、アップデート記事の対象。
-- 五十音マインスイーパーの iOS 版は審査中。lookup で見つかるまでは公開扱いしない。
+- 五十音マインスイーパーの iOS 版は 2026-10-13 に App Store で公開された（id 6819539119）。
 
 ### blog-sync.json にないリポジトリ
 
