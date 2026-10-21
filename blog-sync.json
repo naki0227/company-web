@@ -1,9 +1,9 @@
 {
   "note": "Last commit / App Store version that the blog has caught up with. Updated by each daily blog PR (see BLOG_SYNC.md).",
-  "checkedAt": "2026-10-20",
+  "checkedAt": "2026-10-22",
   "repos": {
     "naki0227/StudyReel": {
-      "sha": "2dffd741111b4ca9568793b55c1780faa5724eb6",
+      "sha": "a443f2e57b94afd69bafc2e3fd40668b212944a6",
       "posts": [
         "studyreel-behind",
         "studyreel-recording-and-backup",
@@ -12,28 +12,28 @@
       ]
     },
     "naki0227/useful-map": {
-      "sha": "3011ec9a62ea2ef2659095268c5307dd44472566",
+      "sha": "8301b48e929b07b83e221ecd0a78205b48305eb4",
       "posts": [
         "useful-map",
         "useful-map-routing"
       ]
     },
     "naki0227/gojuon-minesweeper": {
-      "sha": "e78565ad68b0d3b98a40aafb7bf6f9d64725242b",
+      "sha": "967fa4604c79d670a467ddc9f8dd866293a9685a",
       "posts": [
         "gojuon-minesweeper",
         "gojuon-minesweeper-tech"
       ]
     },
     "naki0227/job-match-analysis": {
-      "sha": "90a60961d64c6c2a3b36a9c1ee0b51715fb50aa2",
+      "sha": "f8919844945ca970f7b2a9ef3f2092b96c4a38a9",
       "posts": [
         "career",
         "career-matching"
       ]
     },
     "naki0227/logiscore": {
-      "sha": "3a6d3d06dd4f11df23e85be7b3f15b48702952b4",
+      "sha": "d7a162aaba6e54187e13a582e820a26e198cfb8c",
       "posts": [
         "logiscore-sound",
         "logiscore-sound-transport"
@@ -47,7 +47,7 @@
       ]
     },
     "naki0227/lp-anatomy": {
-      "sha": "788dea0f39d1e9f8de5581120e4efff4d0b9bb08",
+      "sha": "888785007b87fffe414d9a9cf9f0052d63c071d5",
       "posts": [
         "lp-anatomy"
       ]
@@ -67,7 +67,7 @@
       ]
     },
     "naki0227/mini-game": {
-      "sha": "639a2385109d094ba287d922cd7f99b0408c5f4c",
+      "sha": "3adc0c0d3727f5f95eb9570cc5490ca471d79fab",
       "posts": [
         "asobi-yokocho",
         "asobi-yokocho-tech"
@@ -158,7 +158,7 @@
       "posts": []
     },
     "naki0227/low_polygon": {
-      "sha": "c891b29eb981906a21508b616c1e4143914086e1",
+      "sha": "89c23ae1ae399a0979a53db5847c6d0eef2ca82e",
       "posts": []
     },
     "naki0227/mikka_bouzu": {
