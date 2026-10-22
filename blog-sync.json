@@ -8,7 +8,8 @@
         "studyreel-behind",
         "studyreel-recording-and-backup",
         "beyond-working-code",
-        "studyreel-1-5"
+        "studyreel-1-5",
+        "studyreel-1-7"
       ]
     },
     "naki0227/useful-map": {
@@ -47,7 +48,7 @@
       ]
     },
     "naki0227/lp-anatomy": {
-      "sha": "888785007b87fffe414d9a9cf9f0052d63c071d5",
+      "sha": "f4f368fb9003cf3fb083aa6bc9e57568a110fcb0",
       "posts": [
         "lp-anatomy"
       ]
@@ -67,7 +68,7 @@
       ]
     },
     "naki0227/mini-game": {
-      "sha": "3adc0c0d3727f5f95eb9570cc5490ca471d79fab",
+      "sha": "bea3ef9fc9fa823af43a97696ba58aef32ebdc09",
       "posts": [
         "asobi-yokocho",
         "asobi-yokocho-tech"
@@ -158,7 +159,7 @@
       "posts": []
     },
     "naki0227/low_polygon": {
-      "sha": "89c23ae1ae399a0979a53db5847c6d0eef2ca82e",
+      "sha": "abe9339e63824e10612a785f0434b46c91575e1a",
       "posts": []
     },
     "naki0227/mikka_bouzu": {
@@ -186,7 +187,7 @@
   "appStore": {
     "StudyReel": {
       "id": "6756177589",
-      "version": "1.5"
+      "version": "1.7"
     },
     "UsefulMap": {
       "id": "6801771854",
