@@ -58,6 +58,49 @@ const LANGS = [
 const ALIASES: Record<string, string> = { sh: "bash", shell: "bash", js: "javascript", ts: "typescript", md: "markdown", yml: "yaml", py: "python", rs: "rust" };
 let highlighter: Promise<Highlighter> | undefined;
 
+/** Pixel size of a WebP, PNG or JPEG, so images reserve their space before they load. */
+function imageSize(file: string): [number, number] | undefined {
+  if (!existsSync(file)) return undefined;
+  const b = readFileSync(file);
+  if (b.toString("ascii", 0, 4) === "RIFF" && b.toString("ascii", 8, 12) === "WEBP") {
+    const kind = b.toString("ascii", 12, 16);
+    if (kind === "VP8X") return [1 + b.readUIntLE(24, 3), 1 + b.readUIntLE(27, 3)];
+    if (kind === "VP8L") {
+      const bits = b.readUInt32LE(21);
+      return [1 + (bits & 0x3fff), 1 + ((bits >> 14) & 0x3fff)];
+    }
+    if (kind === "VP8 ") return [b.readUInt16LE(26) & 0x3fff, b.readUInt16LE(28) & 0x3fff];
+  }
+  if (b.readUInt32BE(0) === 0x89504e47) return [b.readUInt32BE(16), b.readUInt32BE(20)];
+  if (b[0] === 0xff && b[1] === 0xd8) {
+    for (let i = 2; i < b.length - 9; ) {
+      if (b[i] !== 0xff) return undefined;
+      const marker = b[i + 1];
+      if (marker >= 0xc0 && marker <= 0xcf && ![0xc4, 0xc8, 0xcc].includes(marker)) return [b.readUInt16BE(i + 7), b.readUInt16BE(i + 5)];
+      i += 2 + b.readUInt16BE(i + 2);
+    }
+  }
+  return undefined;
+}
+
+/**
+ * `![alt](/img/blog/x.webp "caption")` becomes a figure with its size set, and
+ * `![alt](/img/blog/x.mp4 "caption")` a video that loads nothing until played; it
+ * uses the .webp next to it (same name) as its poster. Portrait media stays narrow.
+ */
+function media(root: string, href: string, alt: string, caption: string) {
+  const video = /\.(mp4|webm)$/.test(href);
+  const poster = video ? href.replace(/\.(mp4|webm)$/, ".webp") : href;
+  const size = href.startsWith("/") ? imageSize(join(root, "public", poster)) : undefined;
+  const dims = size ? ` width="${size[0]}" height="${size[1]}"` : "";
+  const tall = size && size[1] > size[0] * 1.2 ? " is-tall" : "";
+  const body = video
+    ? `<video src="${attr(href)}"${size ? ` poster="${attr(poster)}"` : ""}${dims} controls playsinline preload="none" aria-label="${attr(alt)}"></video>`
+    : `<img src="${attr(href)}" alt="${attr(alt)}"${dims} loading="lazy" decoding="async">`;
+  const cap = caption ? `<figcaption>${caption}</figcaption>` : "";
+  return `<figure class="media${tall}">${body}${cap}</figure>`;
+}
+
 function codeBlock(shiki: Highlighter, text: string, lang = "") {
   const name = ALIASES[lang] ?? lang;
   const known = LANGS.includes(name);
@@ -66,7 +109,7 @@ function codeBlock(shiki: Highlighter, text: string, lang = "") {
   return `<div class="code">${label}${html}</div>\n`;
 }
 
-function render(markdown: string, shiki: Highlighter) {
+function render(markdown: string, shiki: Highlighter, root: string) {
   const toc: Post["toc"] = [];
   const marked = new Marked({
     gfm: true,
@@ -79,8 +122,13 @@ function render(markdown: string, shiki: Highlighter) {
         return `<h2 id="${id}"><a class="anchor" href="#${id}" aria-hidden="true" tabindex="-1">#</a>${inner}</h2>\n`;
       },
       image({ href, title, text }) {
-        const t = title ? ` title="${attr(title)}"` : "";
-        return `<img src="${attr(href)}" alt="${attr(text)}"${t} loading="lazy" decoding="async">`;
+        return media(root, href, text, title ? attr(title) : "");
+      },
+      paragraph(token) {
+        // An image on its own line is a figure, not text inside a <p>.
+        const only = token.tokens.filter((t) => !(t.type === "text" && !t.raw.trim()));
+        if (only.length === 1 && only[0].type === "image") return this.parser.parseInline(only) + "\n";
+        return Renderer.prototype.paragraph.call(this, token);
       },
       link({ href, title, tokens }) {
         const inner = this.parser.parseInline(tokens);
@@ -123,7 +171,7 @@ export async function loadPosts(root: string, { includeDrafts }: { includeDrafts
     }
     const draft = data.draft === "true";
     if (draft && !includeDrafts) continue;
-    const { html, toc } = render(body, shiki);
+    const { html, toc } = render(body, shiki, root);
     const tags = Array.isArray(data.tags) ? data.tags : data.tags ? [String(data.tags)] : [];
     posts.push({
       slug,
