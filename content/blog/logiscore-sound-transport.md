@@ -185,6 +185,8 @@ if votes > repetitions / 2 { byte |= mask; }
 
 環境ごとの強さは、プロファイル表で切り替えます（Quiet / Balanced / Conversation / Noisy / Online / LongDistance / FixedFallback）。Conversation はインターリーブ深さ 16・3 重、Noisy・Online・LongDistance は深さ 16・5 重。自動選択は、キャリブレーションで測ったノイズフロア・SNR・クリッピング率・残響から **決定的なしきい値表** で選びます。機械学習にしなかったのは、送信側と受信側、ネイティブと WASM で **同じ入力から必ず同じ結果** が出ることを優先したからです。
 
+![操作パネルの拡大。モード「空気伝送・WAV」の下に、環境の選択欄（おまかせ）、速さと確実さのスライダー（確実さ 70%）、選ばれたプロファイル・推定の確かさ・予想再生時間が並ぶ](/img/blog/logiscore-sound-transport/wav-environment-panel.webp "空気伝送モードの操作パネル。環境と、速さと確実さの釣り合いからプロファイルを選ぶ")
+
 ## 4. 実験：MacBook → 空気 1m → iPhone
 
 ここからが本番です。

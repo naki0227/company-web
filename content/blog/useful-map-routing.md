@@ -99,6 +99,8 @@ do {
 
 `現在地 →徒歩→ 最寄駅 →公共交通→ 到着駅 →徒歩→ 目的地` のように、区間ごとに手段を持てます。`RouteNode` には `isInferred`（自動推定した駅か）と `isCurrentLocation` を持たせ、推定駅を手で選び直したら `isInferred` を落とします。`RouteOption` は消さずに、Google へ 1 区間を渡すときの境界の型として残しました。
 
+![現在地、御茶ノ水駅（推定）、東京駅の 3 つのノードと、そのあいだの徒歩と公共交通の 2 区間を表示した経路の画面](/img/gallery/usefulmap-3-600.webp "RoutePlan をそのまま描いた画面。推定した駅には「推定」と出る")
+
 ## 乗降地点の推定
 
 公共交通のプランは、まず出発地と目的地の 2 点だけで作り、両端に最寄りの停留所を差し込みます（`RoutePlanBuilder.insertingStations`）。
