@@ -161,7 +161,9 @@
     },
     "naki0227/low_polygon": {
       "sha": "a6496a6ddf5d13ee68818d8c06f51fe1d6e1487e",
-      "posts": []
+      "posts": [
+        "low-polygon"
+      ]
     },
     "naki0227/mikka_bouzu": {
       "sha": "a261a33b7ba8cc22bbfeccf783cdb20a78419ae7",
@@ -177,7 +179,9 @@
     },
     "naki0227/umeda_underground_map": {
       "sha": "3b6204bc42ca084de8687b4a7cdc0862c1d8a26f",
-      "posts": []
+      "posts": [
+        "umeda-underground-map"
+      ]
     }
   },
   "excluded": [
