@@ -178,6 +178,8 @@ world.createImpulseJoint(RAPIER.JointData.rope(PH.ROPE, { x: 0, y: 0, z: 0 }, HO
 
 単位は cm で、重力は本物の 15〜33% に弱めています。指の操作でも間に合うようにするためで、乗るたびに少しずつ強くなり、テンポが上がります。成功は「玉が指定の皿の輪の内側で、皿との相対速度が 7 以下の状態が 0.15 秒続いたとき」です。
 
+![けん玉のプレイ画面。和室で、赤い玉がけんの中皿に乗っている。上に「12 回つづいた」の表示](/img/blog/asobi-yokocho-tech/kendama-play.webp "けん玉。玉が中皿に乗って止まったところ")
+
 Rapier のゲームはどれも、固定の時間刻み（だるま落としとけん玉は 1/600 秒）で `world.step()` を回し、CCD のサブステップ数を明示しています（ハンガーキャッチ以外の 3 本はソルバーの反復回数も）。
 
 ## 自前の物理：皿回し、紙飛行機、竹とんぼ、雪だるま
@@ -262,6 +264,8 @@ renderer.setPixelRatio(Math.min(dpr, 1.75)); renderer.setSize(W, H, false);
 3. その画面を撮り、真ん中あたりを 4:3 に切り抜いてサムネイルにする
 4. 1200×630 のページを組み、左にタイトルと説明、右に少し傾けたスマホの画面を置いて OGP を撮る
 
+![だるま落としのシェア用カード画像。左に「だるま落とし」のタイトルと説明、右に傾けたスマホのゲーム画面](/img/blog/asobi-yokocho-tech/otoshi-ogp.webp "compose.mjs が作った、だるま落としの ogp.png（1200×630）")
+
 ```js
 for (const a of JSON.parse(actions)) {
   if (a.click) await p.mouse.click(a.click[0], a.click[1]);
@@ -292,6 +296,8 @@ for (const a of JSON.parse(actions)) {
 ```
 
 `noren` はカードの上ののれんに 1 枠ずつ入る文字です。ハブとゲームは同じオリジンなので、ハブは各ゲームの `localStorage` を読んで、`best` 関数で「あなたの最高」を出します。読めなかったら「まだ遊んでいません」です。
+
+![あそび横丁のハブのページ。タイトルの下に、のれんつきのゲームのカードが3列に並んでいる](/img/blog/asobi-yokocho-tech/hub-desktop.webp "ハブのページ（幅 1280px）。カードの左下に「あなたの最高」か「まだ遊んでいません」が出る")
 
 ```js
 function readBest(g) {
