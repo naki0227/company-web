@@ -300,8 +300,10 @@ button { font: inherit; color: inherit; }
 .code-lang { position: absolute; top: 8px; right: 14px; color: rgba(244, 239, 232, 0.5); font-family: var(--round); font-size: 12px; font-weight: 600; text-transform: uppercase; pointer-events: none; }
 .prose img { display: block; border-radius: 20px; }
 .prose .media { margin: 28px 0; }
-.prose .media img, .prose .media video { display: block; width: 100%; height: auto; border-radius: 20px; background: var(--paper-a); }
+/* Same frame as the product pages' screenshots: a white edge and a soft bottom shadow. */
+.prose .media img, .prose .media video { display: block; width: 100%; height: auto; border: 6px solid var(--white); border-radius: 24px; background: var(--white); box-shadow: 0 4px 0 rgba(73, 35, 29, 0.1); }
 .prose .media.is-tall { max-width: 320px; margin-inline: auto; }
+.prose .media.is-tall img, .prose .media.is-tall video { border-width: 5px; border-radius: 28px; }
 .prose .media figcaption { margin-top: 10px; color: var(--label); font-size: 14px; line-height: 1.7; text-align: center; }
 .code-copy { position: absolute; top: 8px; right: 10px; padding: 3px 12px; border: 0; border-radius: 999px; color: var(--navy); background: rgba(244, 239, 232, 0.85); font: 600 12px/1.6 var(--body); cursor: pointer; }
 .code-copy:hover { background: var(--white); }
