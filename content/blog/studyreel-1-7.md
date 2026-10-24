@@ -5,7 +5,7 @@ description: iOS アプリ StudyReel のバージョン 1.7 が App Store に出
 tags: [StudyReel, iOS, 更新]
 ---
 
-StudyReel のバージョン 1.7 が、2026 年 10 月 22 日に [App Store](https://apps.apple.com/jp/app/id6756177589) で公開されました。前の記事で書いたのは 1.5 です。「[StudyReel 1.5 の更新](/blog/studyreel-1-5)」を見てください。
+StudyReel のバージョン 1.7 が、2026 年 10 月 22 日に [App Store](https://apps.apple.com/jp/app/id6756177589) で公開されました。前のバージョンは 1.6 で、目標や過去問の点数の記録、テーマカラーはそこで入りました（「[StudyReel 1.6 の更新](/blog/studyreel-1-6)」）。
 
 1.7 は小さな更新で、いちばんの中身は、**過去問の点数が反映されない問題の直し**です。
 
