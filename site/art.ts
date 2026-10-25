@@ -11,9 +11,13 @@ export function art(name: Name, className = "") {
 
 export const workArt: Record<string, Name> = {
   StudyReel: "StudyIcon",
-  Career: "CareerIcon",
-  UsefulMap: "MapIcon",
+  "job match": "CareerIcon",
+  "Useful Map": "MapIcon",
   Logiscore: "SoundIcon",
   "五十音マインスイーパー": "KanaIcon",
   "Gojuon Minesweeper": "KanaIcon",
+  "あそび横丁": "StallIcon",
+  "Asobi Yokocho": "StallIcon",
+  "梅田地下ナビ": "UndergroundIcon",
+  "Umeda Underground Navi": "UndergroundIcon",
 };

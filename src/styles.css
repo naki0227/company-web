@@ -183,6 +183,12 @@ button { font: inherit; color: inherit; }
 .specs dt { color: var(--label); font-weight: 700; }
 .specs dd { margin: 0; }
 .card-links { display: flex; flex-wrap: wrap; gap: 10px; margin-top: auto; padding-top: 20px; }
+/* The mini-game collection sits after the five apps: one wide card whose arch faces left. */
+.extra { max-width: 900px; margin: clamp(40px, 6vw, 64px) auto 0; }
+.extra-label { display: flex; flex-direction: column; align-items: center; margin-bottom: 18px; color: var(--label); font-size: 14px; font-weight: 700; line-height: 1.4; }
+.extra-label .round { color: var(--orange-l); font-size: 28px; font-weight: 600; }
+.card-wide { flex-direction: row; border-radius: 200px 30px 30px 200px; }
+.card-wide .card-arch { flex: 0 0 clamp(200px, 28vw, 260px); height: auto; margin: 10px 0 10px 10px; border-radius: 190px 20px 20px 190px; }
 
 /* Decisions */
 .ways { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(20px, 3vw, 32px); max-width: 1180px; margin: 0 auto; padding: 0; list-style: none; }
@@ -282,6 +288,11 @@ button { font: inherit; color: inherit; }
 }
 @media (max-width: 1100px) {
   .doodle { display: none; }
+}
+@media (max-width: 760px) {
+  .extra { max-width: 360px; }
+  .card-wide { flex-direction: column; border-radius: 200px 200px 30px 30px; }
+  .card-wide .card-arch { flex: none; height: 220px; margin: 10px 10px 0; border-radius: 190px 190px 20px 20px; }
 }
 @media (max-width: 600px) {
   .sh-side .ill { width: 40px; }

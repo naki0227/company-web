@@ -15,6 +15,7 @@ import {
   Pencil,
   Pin,
   SoundIcon,
+  StallIcon,
   Studio,
   StudyIcon,
 } from "./illustrations";
@@ -314,6 +315,48 @@ function ProductCard({ product, index }: { product: Product; index: number }) {
   );
 }
 
+/** Outside the five apps: the mini-game collection, as one wide card after the list. */
+function ExtraCard() {
+  const t = useCopy();
+  const x = t.products.extra;
+  return (
+    <div className="extra">
+      <p className="extra-label">
+        <span className="round" aria-hidden="true">
+          Also
+        </span>
+        {x.label}
+      </p>
+      <article className="card card-wide tone-o" id={x.id}>
+        <div className="card-arch">
+          <StallIcon className="card-icon wobble" />
+        </div>
+        <div className="card-body">
+          <p className="card-what">{x.what}</p>
+          <h3 className="round" lang={/^[\x20-\x7e]+$/.test(x.name) ? "en" : "ja"}>
+            {x.name}
+          </h3>
+          <p className="card-headline">{x.headline}</p>
+          <p className="card-text">{x.body}</p>
+          <p className="card-links">
+            {x.links.map((l) =>
+              l.href.startsWith("/") ? (
+                <a key={l.href} className="btn btn-line" href={l.href}>
+                  {l.label}
+                </a>
+              ) : (
+                <a key={l.href} className="btn" href={l.href} target="_blank" rel="noopener noreferrer">
+                  {l.label} <span aria-hidden="true">↗</span>
+                </a>
+              ),
+            )}
+          </p>
+        </div>
+      </article>
+    </div>
+  );
+}
+
 function Products() {
   const t = useCopy();
   return (
@@ -324,6 +367,7 @@ function Products() {
           <ProductCard product={p} index={i} key={p.id} />
         ))}
       </div>
+      <ExtraCard />
     </section>
   );
 }

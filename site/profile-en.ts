@@ -17,7 +17,7 @@ export const worksEn: Work[] = [
     problem:
       "As a cram-school tutor I kept hearing “I can't show my parents that I studied at home.” Self-reported hours don't capture the work itself; I wanted to record the process.",
     approach:
-      "Photograph the desk at intervals and assemble a time-lapse, instead of recording video the whole time, to spare the battery and the time it takes to look back. There is also a timer-only mode and a home-screen widget.",
+      "Photograph the desk at intervals and assemble a time-lapse by default, to spare the battery and the time it takes to look back; Pro adds full recording for when you want everything. There is also a timer-only mode and a home-screen widget. Up to version 1.8 I added goals with a D-day, a weekly vlog, past exam papers, iCloud backup and study buddies.",
     learning:
       "Real use showed that screen dimming and display modes change how the app behaves. I turned those into a per-setting checklist and keep improving against it.",
     stack: ["Swift", "SwiftUI", "SwiftData", "WidgetKit"],
@@ -28,7 +28,7 @@ export const worksEn: Work[] = [
     shot: { base: "/img/products/studyreel-en", widths: [400, 800], ratio: 869 / 400, alt: "StudyReel gallery: study sessions listed by date", shape: "phone" },
   },
   {
-    name: "Career",
+    name: "job match",
     category: "Web / Applied AI",
     status: "Live at career.enludus.com",
     summary: "A career tool that reads public job posts against what you care about.",
@@ -37,13 +37,13 @@ export const worksEn: Work[] = [
       "Collect and structure public information, then sort it into what matches, what doesn't, and what the post never says. AI organises the material; the decision stays with the person.",
     stack: ["React", "TypeScript", "Hono", "Supabase"],
     links: [
-      { label: "Open Career", href: "https://career.enludus.com" },
+      { label: "Open job match", href: "https://career.enludus.com" },
       { label: "Blog post", href: "/blog/career" },
     ],
-    shot: { base: "/img/products/career", widths: [400, 800], ratio: 867 / 400, alt: "Career match result for a sample company: 5 matches, 1 difference, 2 unknowns", shape: "phone" },
+    shot: { base: "/img/products/career", widths: [400, 800], ratio: 867 / 400, alt: "job match result for a sample company: 5 matches, 1 difference, 2 unknowns", shape: "phone" },
   },
   {
-    name: "UsefulMap",
+    name: "Useful Map",
     category: "iOS / Mobility",
     status: "On the App Store",
     summary: "A map app that compares ways to travel before you open directions.",
@@ -58,7 +58,7 @@ export const worksEn: Work[] = [
       },
       { label: "Blog post", href: "/blog/useful-map" },
     ],
-    shot: { base: "/img/products/usefulmap", widths: [400, 800], ratio: 869 / 400, alt: "UsefulMap: a route from Ochanomizu to Tokyo split into walking and train segments", shape: "phone" },
+    shot: { base: "/img/products/usefulmap", widths: [400, 800], ratio: 869 / 400, alt: "Useful Map: a route from Ochanomizu to Tokyo split into walking and train segments", shape: "phone" },
   },
   {
     name: "Logiscore",
@@ -83,17 +83,53 @@ export const worksEn: Work[] = [
     name: "Gojuon Minesweeper",
     category: "Game / Expo",
     status: "On the web and the App Store",
-    summary: "A word-guessing game for two players sharing one screen, played on the kana chart.",
+    summary: "A word-guessing game played on the kana chart: two players on one screen, online matches, and modes for playing alone.",
     problem: "I wanted the “reason from the numbers” fun of Minesweeper as a word game two people can play around one screen.",
     approach:
-      "The kana chart is the board; mine counts are the clues to the hidden word. Web and iOS come from the same Expo codebase.",
-    stack: ["Expo", "React Native", "TypeScript"],
+      "The kana chart is the board; mine counts are the clues to the hidden word. Online matches (with a shared passphrase or a random opponent, served by Supabase), an Endless mode for one player and a daily puzzle at 7 every morning all reuse the same rules code. Over 14,000 Japanese answers and over 7,700 English ones. Web and iOS come from the same Expo codebase.",
+    stack: ["Expo", "React Native", "TypeScript", "Supabase"],
     links: [
       { label: "Play on the web", href: "https://minesweeper.enludus.com" },
       { label: "App Store", href: "https://apps.apple.com/jp/app/id6819539119" },
       { label: "Blog post", href: "/blog/gojuon-minesweeper" },
     ],
     shot: { base: "/img/products/minesweeper", widths: [400, 800], ratio: 867 / 400, alt: "Gojuon Minesweeper: choosing a genre before a match", shape: "phone" },
+  },
+  {
+    name: "Asobi Yokocho",
+    category: "Web / Game",
+    status: "Live at asobi.enludus.com",
+    summary: "A row of browser mini games — no sign-in, no install — with a new stall added one at a time.",
+    problem:
+      "I wanted small games you can start in a spare minute and want to retry right away, built on Japanese pastimes and small everyday motions like kendama or ring toss.",
+    approach:
+      "A coding agent writes the game code; I choose the subjects, write the shared spec and decide what gets checked before release. Success is decided by the physics, and difficulty is tuned by letting bots play and measuring the success rate. Records stay in the player's browser.",
+    learning:
+      "Once building gets fast, writing down what to check becomes the main job. Every fix goes back into the spec as one more line, so it helps the next game too.",
+    stack: ["JavaScript", "three.js", "Rapier", "matter.js"],
+    links: [
+      { label: "Play", href: "https://asobi.enludus.com" },
+      { label: "Blog post", href: "/blog/asobi-yokocho" },
+      { label: "GitHub", href: "https://github.com/naki0227/mini-game" },
+    ],
+    shot: { base: "/img/products/asobi-yokocho", widths: [400, 600], ratio: 1140 / 600, alt: "Nigiri stack: ten pieces of sushi stacked straight on a plate under swinging chopsticks", shape: "phone" },
+  },
+  {
+    name: "Umeda Underground Navi",
+    category: "PWA / Navigation",
+    status: "In development",
+    summary: "A wayfinding PWA for the underground malls of Umeda, where GPS doesn't reach.",
+    problem: "Umeda's underground has many exits and passages and is easy to get lost in, and GPS is barely usable below ground.",
+    approach:
+      "Estimate your position once, from the entrance you came in by or a shop you can see, then guide you segment by segment. The map is built from OpenStreetMap and shipped with the app; route search (Dijkstra) and the estimate both run on the device. While guiding, a first-person drawing shows the passage ahead.",
+    learning:
+      "On a flat map the important landmarks got buried, so I reworked the label priorities and show fine detail only when it's needed. Checking the map data on site and testing on real phones are still to do.",
+    stack: ["React", "Vite", "PWA", "OpenStreetMap"],
+    links: [
+      { label: "Open", href: "https://umeda.enludus.com" },
+      { label: "Blog post", href: "/blog/umeda-underground-map" },
+    ],
+    shot: { base: "/img/products/umeda", widths: [400, 600], ratio: 1298 / 600, alt: "Umeda Underground Navi while guiding: a small heading-up map with “77 m, turn left”, and a full-screen drawing of the passage with shop signs on both sides", shape: "phone" },
   },
 ];
 
