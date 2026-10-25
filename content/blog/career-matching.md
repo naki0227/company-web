@@ -1,15 +1,15 @@
 ---
-title: Career の求人照合を全部書く ── 公式サイト探索・取得境界・選択式の AI 判定・unknown の型
+title: job match の求人照合を全部書く ── 公式サイト探索・取得境界・選択式の AI 判定・unknown の型
 date: 2026-10-19
-description: 企業名から公式サイトをたどって求人を見つけ、SSRF と robots を守って取得し、ラベル付きの断片に分け、決定的な parser と選択肢だけの AI 判定で 8 軸を読み、unknown を 0 点にせず比較する。Career の照合パイプラインをソースごと追います。
-tags: [Career, TypeScript, Hono, Supabase, PostgreSQL, Playwright, 設計]
+description: 企業名から公式サイトをたどって求人を見つけ、SSRF と robots を守って取得し、ラベル付きの断片に分け、決定的な parser と選択肢だけの AI 判定で 8 軸を読み、unknown を 0 点にせず比較する。job match の照合パイプラインをソースごと追います。
+tags: [job match, TypeScript, Hono, Supabase, PostgreSQL, Playwright, 設計]
 type: tech
 updated: 2026-10-25
 ---
 
 > これは技術編です。何を作ったのか、どう使うのか、何に悩んだのかを読みやすくまとめた読みもの版は「[求人を「近い・違う・まだ分からない」に分けて読む](/blog/career)」にあります。
 
-Career は、公開求人と利用者の希望を、8 つの軸と 3 つの必須条件で比べる Web アプリです。結果は軸ごとの「近い / 相違 / 一部近い / 不明」と、ページ上の根拠だけで、総合点は出しません。
+job match は、公開求人と利用者の希望を、8 つの軸と 3 つの必須条件で比べる Web アプリです。結果は軸ごとの「近い / 相違 / 一部近い / 不明」と、ページ上の根拠だけで、総合点は出しません。
 
 求人を見つけるところから比較の結果を保存するところまでを、コード・ADR・migration の値で順に書きます。設計の柱は 1 つで、**書いていないことを推測で埋めない** です。以下のほとんどの判断は、ここから来ています。
 
@@ -204,7 +204,7 @@ AI に渡す context は、件数や総文字数で **選別しません**（ADR
 
 ## 8. AI への質問：選択肢しか返せない形にする
 
-残った軸を、TypeSafe の Jev に 1 回の request でまとめて聞きます。Jev は Noul（yes の確率）・Choice（選択肢ごとの確率）・Score（ルーブリック上の期待値）を返す判定用のモデルで、Career は Choice だけを使います。Score は 0〜100 の希望値とは尺度が違うので、使わないと決めています。
+残った軸を、TypeSafe の Jev に 1 回の request でまとめて聞きます。Jev は Noul（yes の確率）・Choice（選択肢ごとの確率）・Score（ルーブリック上の期待値）を返す判定用のモデルで、job match は Choice だけを使います。Score は 0〜100 の希望値とは尺度が違うので、使わないと決めています。
 
 ### request の形
 
