@@ -39,7 +39,7 @@ export const works: Work[] = [
     problem:
       "塾講師として聞いた「家で勉強したことを、親に伝えられない」という声。時間の自己申告だけでは残せない、学習の過程を記録したかった。",
     approach:
-      "学習風景を定期撮影してタイムラプスに。常時録画はせず、バッテリーと見返す時間に配慮した。撮影しない計測モードと、ホーム画面から使えるウィジェットも用意。",
+      "学習風景を定期撮影してタイムラプスに。基本はタイムラプスでバッテリーと見返す時間に配慮し、全部を録画したいときは Pro の「全部録画」も選べる。撮影しない計測モードと、ホーム画面から使えるウィジェットも用意。1.8 までに、目標と D-day、1 週間の Vlog、過去問、iCloud バックアップ、勉強仲間などを足してきた。",
     learning:
       "画面の消灯や表示モードで動作が変わることを実際の利用で見つけた。端末設定ごとの確認項目を整理して改善している。",
     stack: ["Swift", "SwiftUI", "SwiftData", "WidgetKit"],
@@ -51,7 +51,7 @@ export const works: Work[] = [
     shot: { base: "/img/products/studyreel-ja", widths: [400, 800], ratio: 869 / 400, alt: "StudyReel のギャラリー画面。勉強の記録が日付ごとに並ぶ", shape: "phone" },
   },
   {
-    name: "Career",
+    name: "job match",
     category: "Web / Applied AI",
     status: "career.enludus.com で公開中",
     summary: "公開求人と自分の希望を照らし合わせる、キャリア選択の支援ツール。",
@@ -62,13 +62,13 @@ export const works: Work[] = [
     stack: ["React", "TypeScript", "Hono", "Supabase"],
     links: [
       { label: "紹介ページ", href: "/products/career" },
-      { label: "Career を開く", href: "https://career.enludus.com" },
+      { label: "job match を開く", href: "https://career.enludus.com" },
       { label: "記事", href: "/blog/career" },
     ],
-    shot: { base: "/img/products/career", widths: [400, 800], ratio: 867 / 400, alt: "Career の分析結果画面（サンプル企業）。近い 5、相違 1、不明 2", shape: "phone" },
+    shot: { base: "/img/products/career", widths: [400, 800], ratio: 867 / 400, alt: "job match の分析結果画面（サンプル企業）。近い 5、相違 1、不明 2", shape: "phone" },
   },
   {
-    name: "UsefulMap",
+    name: "Useful Map",
     category: "iOS / Mobility",
     status: "App Store で公開中",
     summary: "経路を開く前に、移動手段を比べて選べる地図アプリ。",
@@ -85,7 +85,7 @@ export const works: Work[] = [
       },
       { label: "記事", href: "/blog/useful-map" },
     ],
-    shot: { base: "/img/products/usefulmap", widths: [400, 800], ratio: 869 / 400, alt: "UsefulMap の画面。御茶ノ水駅から東京駅までを徒歩と電車の区間に分けて表示", shape: "phone" },
+    shot: { base: "/img/products/usefulmap", widths: [400, 800], ratio: 869 / 400, alt: "Useful Map の画面。御茶ノ水駅から東京駅までを徒歩と電車の区間に分けて表示", shape: "phone" },
   },
   {
     name: "Logiscore",
@@ -111,12 +111,12 @@ export const works: Work[] = [
     name: "五十音マインスイーパー",
     category: "Game / Expo",
     status: "Web・App Store で公開中",
-    summary: "1つの画面を2人で囲む、五十音とアルファベットの推理ゲーム。",
+    summary: "五十音とアルファベットの推理ゲーム。1つの画面を2人で囲むほか、オンライン対戦とひとり用のモードもある。",
     problem:
       "マインスイーパーの「数字から推理する」面白さを、1つの画面を囲んで2人で遊べることば遊びにしたい。",
     approach:
-      "五十音表を盤面にして、地雷の数を手がかりに答えのことばを当てる。Expo で Web と iOS を同じコードから出している。",
-    stack: ["Expo", "React Native", "TypeScript"],
+      "五十音表を盤面にして、地雷の数を手がかりに答えのことばを当てる。合言葉かランダムで相手と組むオンライン対戦（サーバーは Supabase）、ひとりで続けるエンドレス、毎朝 7 時に出る「今日の一問」を、同じルールのコードから足した。問題は日本語 1 万 4 千以上、英語 7,700 以上。Expo で Web と iOS を同じコードから出している。",
+    stack: ["Expo", "React Native", "TypeScript", "Supabase"],
     links: [
       { label: "紹介ページ", href: "/products/gojuon-minesweeper" },
       { label: "Web で遊ぶ", href: "https://minesweeper.enludus.com" },
@@ -124,6 +124,43 @@ export const works: Work[] = [
       { label: "記事", href: "/blog/gojuon-minesweeper" },
     ],
     shot: { base: "/img/products/minesweeper", widths: [400, 800], ratio: 867 / 400, alt: "五十音マインスイーパーの画面。対戦前にジャンルを選ぶ", shape: "phone" },
+  },
+  {
+    name: "あそび横丁",
+    category: "Web / Game",
+    status: "asobi.enludus.com で公開中",
+    summary: "ログインもインストールもいらない、ブラウザですぐ遊べるミニゲーム集。屋台を 1 軒ずつ足している。",
+    problem:
+      "ちょっとした待ち時間に、すぐ遊べて何度でもやり直したくなる小さなゲームがほしい。題材は、けん玉や輪投げのような、日本の遊びや暮らしの中の小さな動作。",
+    approach:
+      "ゲームのコードはコーディングエージェントが書き、自分は題材を選ぶこと、共通の仕様を書くこと、出す前に何を確かめるかを決めることを受け持つ。成功の判定は物理の結果で決め、ボットに遊ばせて成功率を測って難しさを合わせる。記録はサーバーに送らず、ブラウザにだけ残す。",
+    learning:
+      "速く作れるようになると、「何を確かめるか」を書くことが仕事の中心になる。直したことは、次の 1 本にも効くように仕様へ 1 行ずつ書き足している。",
+    stack: ["JavaScript", "three.js", "Rapier", "matter.js"],
+    links: [
+      { label: "遊ぶ", href: "https://asobi.enludus.com" },
+      { label: "記事", href: "/blog/asobi-yokocho" },
+      { label: "GitHub", href: "https://github.com/naki0227/mini-game" },
+    ],
+    shot: { base: "/img/products/asobi-yokocho", widths: [400, 600], ratio: 1140 / 600, alt: "にぎり積みのプレイ画面。揺れる箸の下で、皿の上にお寿司が10貫まっすぐ積み上がっている", shape: "phone" },
+  },
+  {
+    name: "梅田地下ナビ",
+    category: "PWA / Navigation",
+    status: "開発中",
+    summary: "GPS が届かない梅田の地下街で使う、道案内の PWA。",
+    problem:
+      "梅田の地下は出口や通路が多く、迷いやすい。地下では GPS もほとんど当てにならない。",
+    approach:
+      "入った出入口や近くに見えるお店から現在地を一度だけ推定し、そこから区間ごとに案内する。地図は OpenStreetMap から作ってアプリに入れ、経路探索（Dijkstra 法）も推定も端末の中で計算する。案内中は、進む向きの通路を一人称の絵で見せる。",
+    learning:
+      "平面の地図にしたら大事な目印が埋もれたので、ラベルの優先順位を決め直し、細かい情報は必要なときだけ出すようにした。地図データの現地確認と実機での確認は、これから。",
+    stack: ["React", "Vite", "PWA", "OpenStreetMap"],
+    links: [
+      { label: "開く", href: "https://umeda.enludus.com" },
+      { label: "記事", href: "/blog/umeda-underground-map" },
+    ],
+    shot: { base: "/img/products/umeda", widths: [400, 600], ratio: 1298 / 600, alt: "梅田地下ナビの案内中の画面。左上に進む向きが上の小さな地図と「77m 左へ」、画面いっぱいに通路の絵と左右の店の看板", shape: "phone" },
   },
 ];
 

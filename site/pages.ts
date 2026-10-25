@@ -407,8 +407,8 @@ export function portfolioPage(posts: Post[], lang: Lang = "ja") {
     {
       title: en ? "Ibuki Nagase — Portfolio | Enludus" : "長瀬 唯楓 — Portfolio | Enludus",
       description: en
-        ? `Portfolio of Ibuki Nagase. ${personEn.lead} StudyReel, Career, UsefulMap, Logiscore and more — what I've made and how I think.`
-        : `${person.name}（Ibuki Nagase）のポートフォリオ。${person.lead}StudyReel・Career・UsefulMap・Logiscore など、つくったものと考え方をまとめています。`,
+        ? `Portfolio of Ibuki Nagase. ${personEn.lead} StudyReel, job match, Useful Map, Logiscore and more — what I've made and how I think.`
+        : `${person.name}（Ibuki Nagase）のポートフォリオ。${person.lead}StudyReel・job match・Useful Map・Logiscore など、つくったものと考え方をまとめています。`,
       path: en ? "/en/portfolio" : "/portfolio",
       image: "/og/portfolio.png",
       lang,

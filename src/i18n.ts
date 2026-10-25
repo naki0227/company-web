@@ -2,6 +2,16 @@ export type Lang = "en" | "ja";
 
 export const homePath: Record<Lang, string> = { en: "/", ja: "/ja" };
 
+export type Extra = {
+  id: string;
+  label: string;
+  name: string;
+  what: string;
+  headline: string;
+  body: string;
+  links: { label: string; href: string }[];
+};
+
 export type Product = {
   id: string;
   name: string;
@@ -46,12 +56,12 @@ const en = {
         platform: "iPhone / iPad",
         since: "2025.12",
         headline: "Put the phone on the desk. Your study session becomes a time-lapse.",
-        body: "A timer alone says “2 hours”. StudyReel also keeps what those two hours looked like — a short time-lapse, saved by date, with faces mosaicked if you want. Recording is optional: it works as a plain timer too.",
+        body: "A timer alone says “2 hours”. StudyReel also keeps what those two hours looked like — a short time-lapse, saved by date, with faces mosaicked if you want. Recording is optional: it works as a plain timer too. Recent updates added goals with a D-day countdown, a weekly vlog, iCloud backup and study buddies.",
         specs: [
-          ["Platform", "iOS 18.5+, iPhone and iPad"],
-          ["Released", "December 2025 on the App Store"],
+          ["Platform", "iOS 18.0+, iPhone and iPad"],
+          ["Released", "December 2025 on the App Store (version 1.8, October 2026)"],
           ["Built with", "Swift, SwiftUI, SwiftData, WidgetKit"],
-          ["Price", "Free, with StudyReel Pro in-app purchase"],
+          ["Price", "Free; StudyReel Pro is monthly or yearly"],
         ],
         image: { base: "/img/products/studyreel-en", widths: [400, 800], ratio: 869 / 400, alt: "StudyReel gallery: study sessions listed by date", shape: "phone" },
         links: [
@@ -60,38 +70,38 @@ const en = {
       },
       {
         id: "usefulmap",
-        name: "UsefulMap",
+        name: "Useful Map",
         what: "Compares how to get there",
         platform: "iPhone / iPad",
         since: "2026.08",
         headline: "Walk, train or car — decide before you open directions.",
-        body: "UsefulMap lines up the ways to make a trip and splits a route into segments you can read at a glance. When you need every transfer, it hands the trip to Google Maps instead of rebuilding a transit planner.",
+        body: "Useful Map lines up the ways to make a trip and splits a route into segments you can read at a glance. When you need every transfer, it hands the trip to Google Maps instead of rebuilding a transit planner.",
         specs: [
           ["Platform", "iOS 17+, iPhone and iPad"],
           ["Released", "August 2026 on the App Store"],
           ["Built with", "Swift, SwiftUI, MapKit, Core Location"],
           ["Price", "Free"],
         ],
-        image: { base: "/img/products/usefulmap", widths: [400, 800], ratio: 869 / 400, alt: "UsefulMap: a route from Ochanomizu to Tokyo split into walking and train segments", shape: "phone" },
+        image: { base: "/img/products/usefulmap", widths: [400, 800], ratio: 869 / 400, alt: "Useful Map: a route from Ochanomizu to Tokyo split into walking and train segments", shape: "phone" },
         links: [
           { label: "App Store", href: "https://apps.apple.com/jp/app/useful-map-%E7%B5%8C%E8%B7%AF%E6%AF%94%E8%BC%83/id6801771854" },
         ],
       },
       {
         id: "career",
-        name: "Career",
+        name: "job match",
         what: "Checks if a job fits you",
         platform: "Web",
         since: "Live",
         headline: "Read job posts against what you actually care about.",
-        body: "Every company writes requirements differently. Career collects public job information and sorts it into what matches you, what doesn't, and what the post never says — so the open questions are clear before you apply.",
+        body: "Every company writes requirements differently. job match collects public job information and sorts it into what matches you, what doesn't, and what the post never says — so the open questions are clear before you apply.",
         specs: [
           ["Platform", "Web, sign in with Google"],
           ["Address", "career.enludus.com"],
           ["Built with", "React, TypeScript, Hono, Supabase"],
         ],
-        image: { base: "/img/products/career", widths: [400, 800], ratio: 867 / 400, alt: "Career match result for a sample company: 5 matches, 1 difference, 2 unknowns", shape: "phone" },
-        links: [{ label: "Open Career", href: "https://career.enludus.com" }],
+        image: { base: "/img/products/career", widths: [400, 800], ratio: 867 / 400, alt: "job match result for a sample company: 5 matches, 1 difference, 2 unknowns", shape: "phone" },
+        links: [{ label: "Open job match", href: "https://career.enludus.com" }],
       },
       {
         id: "logiscore",
@@ -102,7 +112,7 @@ const en = {
         headline: "Play a file out loud. Record it on another device. Get the exact file back.",
         body: "Logiscore turns text, source code or a whole folder into music. Error correction and optional password encryption run in Rust compiled to WebAssembly, inside your browser — nothing is uploaded.",
         specs: [
-          ["Platform", "Web (desktop browsers)"],
+          ["Platform", "Web (browser)"],
           ["Address", "logiscore.enludus.com"],
           ["Built with", "Rust, WebAssembly, React, Web Audio"],
           ["Data", "Processed in the browser only"],
@@ -120,12 +130,13 @@ const en = {
         platform: "Web / iOS",
         since: "Live",
         headline: "Minesweeper on the kana chart. Read the numbers, guess the word.",
-        body: "Two players share one screen. Open safe letters, use the mine counts as clues, and name the hidden word before the other player does. The Japanese board alone has 14,016 answers.",
+        body: "Open safe letters, use the mine counts as clues, and name the hidden word before the other player does. Play two on one screen, or online with a shared passphrase or a random opponent. On your own there is Endless mode, and a new daily puzzle every morning at 7.",
         specs: [
           ["Platform", "Web, iOS (App Store)"],
           ["Address", "minesweeper.enludus.com"],
-          ["Built with", "Expo, React Native, TypeScript"],
-          ["Answers", "14,016 in Japanese, plus English"],
+          ["Modes", "Two players (one screen or online), Endless, Daily puzzle"],
+          ["Built with", "Expo, React Native, TypeScript, Supabase"],
+          ["Answers", "Over 14,000 in Japanese, over 7,700 in English"],
         ],
         image: { base: "/img/products/minesweeper", widths: [400, 800], ratio: 867 / 400, alt: "Gojuon Minesweeper: choosing a genre before a match", shape: "phone" },
         links: [
@@ -141,6 +152,18 @@ const en = {
       logiscore: "/products/logiscore",
       minesweeper: "/products/gojuon-minesweeper",
     } as Record<string, string>,
+    extra: {
+      id: "asobi",
+      label: "Beyond the five apps",
+      name: "Asobi Yokocho",
+      what: "Mini games",
+      headline: "A row of little stalls, each one a game you can play right away.",
+      body: "Browser mini games built on Japanese pastimes and small everyday motions — stacking sushi, ring toss, a bottle flip. No sign-in, no install; your records stay in your browser. New stalls keep opening.",
+      links: [
+        { label: "Play at asobi.enludus.com", href: "https://asobi.enludus.com" },
+        { label: "Blog post (Japanese)", href: "/blog/asobi-yokocho" },
+      ],
+    } as Extra,
   },
   decisions: {
     label: "Decisions we keep making",
@@ -157,8 +180,8 @@ const en = {
       },
       {
         title: "Don't rebuild what already works.",
-        body: "UsefulMap answers “which way?” and leaves step-by-step transit to Google Maps.",
-        product: "UsefulMap",
+        body: "Useful Map answers “which way?” and leaves step-by-step transit to Google Maps.",
+        product: "Useful Map",
       },
     ],
   },
@@ -220,19 +243,19 @@ const ja: Copy = {
         platform: "iPhone / iPad",
         since: "2025.12",
         headline: "机にスマホを置くだけで、勉強した時間がタイムラプスになる。",
-        body: "タイマーだけだと「2時間」という数字しか残りません。StudyReel はその2時間の様子も、短いタイムラプスとして日付ごとに残します。顔はモザイクで隠せます。撮影はしなくても、ふつうのタイマーとして使えます。",
+        body: "タイマーだけだと「2時間」という数字しか残りません。StudyReel はその2時間の様子も、短いタイムラプスとして日付ごとに残します。顔はモザイクで隠せます。撮影はしなくても、ふつうのタイマーとして使えます。最近のアップデートで、目標と D-day、1 週間の Vlog、iCloud バックアップ、勉強仲間が加わりました。",
         specs: [
-          ["対応", "iOS 18.5 以降、iPhone・iPad"],
-          ["公開", "2025年12月、App Store"],
+          ["対応", "iOS 18.0 以降、iPhone・iPad"],
+          ["公開", "2025年12月、App Store（最新は 2026年10月の 1.8）"],
           ["技術", "Swift, SwiftUI, SwiftData, WidgetKit"],
-          ["料金", "無料（StudyReel Pro をアプリ内で購入可）"],
+          ["料金", "無料（StudyReel Pro は月額・年額）"],
         ],
         image: { base: "/img/products/studyreel-ja", widths: [400, 800], ratio: 869 / 400, alt: "StudyReel のギャラリー画面。勉強の記録が日付ごとに並ぶ", shape: "phone" },
         links: [{ label: "App Store", href: "https://apps.apple.com/jp/app/studyreel/id6756177589" }],
       },
       {
         id: "usefulmap",
-        name: "UsefulMap",
+        name: "Useful Map",
         what: "移動手段を比べる",
         platform: "iPhone / iPad",
         since: "2026.08",
@@ -244,26 +267,26 @@ const ja: Copy = {
           ["技術", "Swift, SwiftUI, MapKit, Core Location"],
           ["料金", "無料"],
         ],
-        image: { base: "/img/products/usefulmap", widths: [400, 800], ratio: 869 / 400, alt: "UsefulMap の画面。御茶ノ水駅から東京駅までを徒歩と電車の区間に分けて表示", shape: "phone" },
+        image: { base: "/img/products/usefulmap", widths: [400, 800], ratio: 869 / 400, alt: "Useful Map の画面。御茶ノ水駅から東京駅までを徒歩と電車の区間に分けて表示", shape: "phone" },
         links: [
           { label: "App Store", href: "https://apps.apple.com/jp/app/useful-map-%E7%B5%8C%E8%B7%AF%E6%AF%94%E8%BC%83/id6801771854" },
         ],
       },
       {
         id: "career",
-        name: "Career",
+        name: "job match",
         what: "求人が自分に合うか確かめる",
         platform: "Web",
         since: "公開中",
         headline: "求人票を、自分が大事にしたいことと並べて読む。",
-        body: "求人の条件は会社ごとに書き方がばらばらです。Career は公開されている求人情報を集め、「合っている点」「合っていない点」「求人に書かれていない点」に分けて見せます。応募の前に、確かめるべきことがはっきりします。",
+        body: "求人の条件は会社ごとに書き方がばらばらです。job match は公開されている求人情報を集め、「合っている点」「合っていない点」「求人に書かれていない点」に分けて見せます。応募の前に、確かめるべきことがはっきりします。",
         specs: [
           ["対応", "Web（Google でログイン）"],
           ["URL", "career.enludus.com"],
           ["技術", "React, TypeScript, Hono, Supabase"],
         ],
-        image: { base: "/img/products/career", widths: [400, 800], ratio: 867 / 400, alt: "Career の分析結果画面（サンプル企業）。近い 5、相違 1、不明 2", shape: "phone" },
-        links: [{ label: "Career を開く", href: "https://career.enludus.com" }],
+        image: { base: "/img/products/career", widths: [400, 800], ratio: 867 / 400, alt: "job match の分析結果画面（サンプル企業）。近い 5、相違 1、不明 2", shape: "phone" },
+        links: [{ label: "job match を開く", href: "https://career.enludus.com" }],
       },
       {
         id: "logiscore",
@@ -274,7 +297,7 @@ const ja: Copy = {
         headline: "ファイルを音で鳴らして、別の端末で録音すると、元のファイルに戻る。",
         body: "テキストやソースコード、フォルダごとを音楽に変換します。誤り訂正と任意のパスワード暗号化は、WebAssembly にした Rust がブラウザの中で行います。どこにもアップロードしません。",
         specs: [
-          ["対応", "Web（パソコンのブラウザ）"],
+          ["対応", "Web（ブラウザ）"],
           ["URL", "logiscore.enludus.com"],
           ["技術", "Rust, WebAssembly, React, Web Audio"],
           ["データ", "ブラウザの中だけで処理"],
@@ -292,12 +315,13 @@ const ja: Copy = {
         platform: "Web / iOS",
         since: "公開中",
         headline: "五十音表でマインスイーパー。数字を読んで、ことばを当てる。",
-        body: "ひとつの画面を2人で囲んで遊びます。安全な文字を開き、地雷の数を手がかりに、相手より先に答えのことばを見つけます。日本語の問題だけで 14,016 問あります。",
+        body: "安全な文字を開き、地雷の数を手がかりに、相手より先に答えのことばを見つけます。ひとつの画面を2人で囲むほか、合言葉やランダムで相手と組むオンライン対戦もあります。ひとりで続けるエンドレスと、毎朝7時に出る「今日の一問」も遊べます。",
         specs: [
           ["対応", "Web、iOS（App Store）"],
           ["URL", "minesweeper.enludus.com"],
-          ["技術", "Expo, React Native, TypeScript"],
-          ["問題数", "日本語 14,016 問、英語もあり"],
+          ["遊び方", "2人で対戦（同じ画面・オンライン）、エンドレス、今日の一問"],
+          ["技術", "Expo, React Native, TypeScript, Supabase"],
+          ["問題数", "日本語 1万4千以上、英語 7,700 以上"],
         ],
         image: { base: "/img/products/minesweeper", widths: [400, 800], ratio: 867 / 400, alt: "五十音マインスイーパーの画面。対戦前にジャンルを選ぶ", shape: "phone" },
         links: [
@@ -307,6 +331,18 @@ const ja: Copy = {
       },
     ],
     guidePaths: en.products.guidePaths,
+    extra: {
+      id: "asobi",
+      label: "ほかにも",
+      name: "あそび横丁",
+      what: "ミニゲーム集",
+      headline: "屋台が並ぶ横丁で、すぐ遊べるミニゲームを。",
+      body: "にぎり積み、輪投げ、ボトルフリップのような、日本の遊びや暮らしの中の小さな動作を題材にしたミニゲーム集です。ログインもインストールもいらず、記録はブラウザにだけ残ります。屋台は今も増えています。",
+      links: [
+        { label: "asobi.enludus.com で遊ぶ", href: "https://asobi.enludus.com" },
+        { label: "記事を読む", href: "/blog/asobi-yokocho" },
+      ],
+    },
   },
   decisions: {
     label: "いつも決めていること",
@@ -323,8 +359,8 @@ const ja: Copy = {
       },
       {
         title: "すでに良いものは、作り直さない。",
-        body: "UsefulMap が答えるのは「どう行くか」まで。乗り換えの細かい案内は Google マップに任せています。",
-        product: "UsefulMap",
+        body: "Useful Map が答えるのは「どう行くか」まで。乗り換えの細かい案内は Google マップに任せています。",
+        product: "Useful Map",
       },
     ],
   },
