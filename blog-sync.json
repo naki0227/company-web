@@ -1,6 +1,6 @@
 {
   "note": "Last commit / App Store version that the blog has caught up with. Updated by each daily blog PR (see BLOG_SYNC.md).",
-  "checkedAt": "2026-10-26",
+  "checkedAt": "2026-10-27",
   "repos": {
     "naki0227/StudyReel": {
       "sha": "9191d98dc6fe2c3feb9405d79643c29f048e621e",
@@ -50,7 +50,7 @@
       ]
     },
     "naki0227/lp-anatomy": {
-      "sha": "987def53f2ff0264d13472b9769b23eb08c3b59a",
+      "sha": "86ec031b8a600ffca2bbe0375c4f3f689554b33f",
       "posts": [
         "lp-anatomy"
       ]
@@ -70,7 +70,7 @@
       ]
     },
     "naki0227/mini-game": {
-      "sha": "e768cc4a97e3771a80410e080bf58a97a75bf4f7",
+      "sha": "af521c1ea754fdeb8d3b387419178f9a634b6170",
       "posts": [
         "asobi-yokocho",
         "asobi-yokocho-tech"
@@ -149,7 +149,7 @@
       "posts": []
     },
     "naki0227/encura": {
-      "sha": "e8e77785d59fa00a34f132d5dfec5298cd8a1d73",
+      "sha": "b8e57a2c8c61e3bed84a8908bb9776c1b90459f9",
       "posts": []
     },
     "naki0227/kiro": {
@@ -161,7 +161,7 @@
       "posts": []
     },
     "naki0227/low_polygon": {
-      "sha": "42d636e0a36fc978b21a78ca09a7b6855c01bd74",
+      "sha": "2f5e23e572e59bc8e5397590cd5642d6ed97ec49",
       "posts": [
         "low-polygon"
       ]
@@ -175,11 +175,11 @@
       "posts": []
     },
     "naki0227/preplay": {
-      "sha": "b7695d864dbb5e3addc2e24dd85dd03b4f2cf444",
+      "sha": "a728cf2baa3d70bc5501b1160dc7f6f3de002552",
       "posts": []
     },
     "naki0227/umeda_underground_map": {
-      "sha": "eb7fb888ee5bb67fcc5c48b67bb3e684fb8c8a6a",
+      "sha": "0614135833feee7cb582879475cbe62698c00832",
       "posts": [
         "umeda-underground-map"
       ]
