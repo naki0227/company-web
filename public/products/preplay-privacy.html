@@ -7,7 +7,7 @@
 <header><a href="/ja" class="brand">Enludus</a><nav><a href="/ja#products">製品一覧</a><a href="mailto:contact@enludus.com">お問い合わせ</a></nav></header>
 <main class="wrap"><nav class="crumb" aria-label="パンくず"><a href="/ja">Enludus</a> / <a href="https://apps.apple.com/jp/app/preplay/id6758872014" rel="noopener">Preplay</a> / プライバシーポリシー</nav>
 <div class="legal"><h1>Preplay プライバシーポリシー</h1><p>最終更新：2026年10月26日</p>
-<p>このページでは、Enludusが提供するiOSアプリ「Preplay」（以下「本アプリ」）での情報の取り扱いを説明します。本アプリにはアカウント登録がなく、名前やメールアドレスなど利用者を特定できる情報は集めません。外部と通信するのは、下記の「AIで遊びを作る」「みんなの遊び」「通報」を使うときだけです。</p>
+<p>このページでは、Enludusが提供するiOSアプリ「Preplay」（以下「本アプリ」）での情報の取り扱いを説明します。本アプリにはアカウント登録がなく、名前やメールアドレスなど利用者を特定できる情報は集めません。外部と通信するのは、下記の「AIで遊びを作る」「AIが作った遊びの評価」「みんなの遊び」「通報」を使うときだけです。</p>
 
 <h2>状況の検知（位置情報・動き・音の大きさ）</h2>
 <p>「その場に合わせる」をオンにしたときだけ、今いる状況に合った遊びを選ぶために、次の情報を使います。初期状態はオフで、オンにするときに説明したうえで、iOSの許可を求めます。</p>
@@ -17,6 +17,10 @@
 <h2>AIで遊びを作る</h2>
 <p>「AIでこの場の遊びを作る」を押したときだけ、「静か」「歩いている」などの状況を表す言葉（決まった7種類の中から選ばれたもの）と人数を、本アプリのサーバーを経由してGoogleのGemini APIに送り、新しい遊びを作ります。位置情報や音声、利用者を特定できる情報は送りません。</p>
 <p>本アプリのサーバーは、受け取った言葉を保存しません。サーバーとGemini APIの処理では、通信の記録（IPアドレスなど）が各事業者の標準的な記録として一時的に残ることがあります。</p>
+<p>サービスの状態を把握するため、サーバーは遊びを作った回数を、日付と結果（成功・失敗など）ごとの数だけ記録します。誰が使ったかは記録しません。</p>
+
+<h2>AIが作った遊びの評価</h2>
+<p>AIが作った遊びで👍か👎を押すと、その遊びの名前、ルール、状況を表す言葉と、評価だけをクラウドのデータベース（Supabase）に保存します。利用者や端末を特定できる情報は送りません。評価は、AIが作る遊びを良くするために使い、評価の高い遊びは「みんなの遊び」に載せることがあります。</p>
 
 <h2>みんなの遊び</h2>
 <p>「みんなの遊び」に公開すると、その遊びの名前、ルール、タグ、お題、由来（「AI」など）がクラウドのデータベース（Supabase）に保存され、本アプリを使うすべての人が見られるようになります。公開する人の名前や端末の情報は保存しません。公開した遊びは、利用者を特定できる情報と結びつきません。</p>
@@ -26,7 +30,7 @@
 <p>「みんなの遊び」で不適切な内容を通報すると、通報された遊びのIDと日時だけを保存します。通報した人の情報は保存しません。通報した遊びは、その端末ではすぐに表示されなくなり、通報が一定数集まった遊びはすべての人に表示されなくなります。開発者は通報を確認し、必要に応じて削除します。</p>
 
 <h2>お気に入り・お題・設定</h2>
-<p>お気に入りに保存した遊び、追加したお題、「その場に合わせる」の設定、通報して非表示にした遊び、遊び終わった回数は、端末内にだけ保存します。アプリを削除すると、これらも削除されます。</p>
+<p>お気に入りに保存した遊び、追加したお題、「その場に合わせる」の設定、通報して非表示にした遊び、遊び終わった回数、電波がないときに表示するための「みんなの遊び」の一覧は、端末内にだけ保存します。アプリを削除すると、これらも削除されます。</p>
 
 <h2>共有</h2>
 <p>「友達に送る」で作る文章は、利用者が共有先を選んだときだけ、その相手やアプリに渡されます。本アプリが自動で送ることはありません。</p>
@@ -45,12 +49,13 @@
 
 <h2 id="en" lang="en">English</h2>
 <div lang="en">
-<p>Preplay has no account and does not collect your name, email address or anything else that identifies you. It only connects to the network when you use "Make a game with AI", "Community games" or "Report", described below.</p>
+<p>Preplay has no account and does not collect your name, email address or anything else that identifies you. It only connects to the network when you use "Make a game with AI", "Rate an AI game", "Community games" or "Report", described below.</p>
 <p><strong>Sensing the situation.</strong> Only when "その場に合わせる" (match the situation) is turned on — it is off by default, and iOS asks for permission after an explanation — the app uses your location (only to tell whether you are walking or standing still), the motion sensor (whether the device is moving) and the microphone (only the sound level in decibels; nothing is recorded). All of this is used on your device to pick a game and is never sent to the developer or anyone else. You can turn it off at any time or revoke the permissions in iOS Settings.</p>
-<p><strong>Make a game with AI.</strong> Only when you tap the AI button, a few words describing the situation (chosen from a fixed list of seven, such as "quiet" or "walking") and the group size are sent through the app's server to Google's Gemini API to create a game. No location, audio or identifying information is sent. The app's server does not store these words; the hosting providers may briefly keep standard connection logs such as IP addresses.</p>
+<p><strong>Make a game with AI.</strong> Only when you tap the AI button, a few words describing the situation (chosen from a fixed list of seven, such as "quiet" or "walking") and the group size are sent through the app's server to Google's Gemini API to create a game. No location, audio or identifying information is sent. The app's server does not store these words; the hosting providers may briefly keep standard connection logs such as IP addresses. To monitor the service, the server counts how many games were made per day and outcome (success, failure and so on); nothing about who used it is recorded.</p>
+<p><strong>Rate an AI game.</strong> When you tap 👍 or 👎 on a game made by AI, only that game's name, rules, situation words and your rating are stored in the cloud database (Supabase). Nothing that identifies you or your device is sent. Ratings are used to improve the AI's games, and highly rated games may be added to Community games.</p>
 <p><strong>Community games.</strong> When you publish a game, its name, rules, tags, topics and origin (such as "AI") are stored in a cloud database (Supabase) and visible to everyone using the app. Nothing about you or your device is stored with it. To have a published game removed, email us with the game's name.</p>
 <p><strong>Reports.</strong> When you report a community game, only the game's ID and the time are stored, nothing about you. The game is hidden on your device at once, and hidden for everyone once it gets enough reports. The developer reviews reports and removes games when needed.</p>
-<p><strong>Favorites, topics and settings.</strong> Saved games, your own topics, the sensing setting, hidden games and the number of finished games are stored only on your device and are deleted with the app.</p>
+<p><strong>Favorites, topics and settings.</strong> Saved games, your own topics, the sensing setting, hidden games, the number of finished games and a copy of the community list (shown when you are offline) are stored only on your device and are deleted with the app.</p>
 <p><strong>Sharing.</strong> Text you share goes only to the people or apps you choose.</p>
 <p><strong>Review prompt.</strong> After you finish a few games, the app may show the App Store review prompt. iOS decides whether and how often it appears; your rating is not sent to the developer (except reviews you post on the App Store).</p>
 <p><strong>Analytics and ads.</strong> The app contains no analytics tools or advertising SDKs.</p>
