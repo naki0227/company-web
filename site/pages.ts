@@ -25,6 +25,8 @@ const STATIC_PATHS = [
   "/privacy",
   "/products/studyreel",
   "/products/studyreel-privacy",
+  "/products/hibimachi",
+  "/products/hibimachi-privacy",
   "/products/encura-privacy",
   "/products/preplay-privacy",
   "/products/encura-terms",
