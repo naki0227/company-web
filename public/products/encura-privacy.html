@@ -6,7 +6,7 @@
 <link rel="stylesheet" href="/products/product.css"/><meta name="theme-color" content="#ffffff"/><script defer src="/_vercel/insights/script.js"></script></head><body>
 <header><a href="/ja" class="brand">Enludus</a><nav><a href="/ja#products">製品一覧</a><a href="mailto:contact@enludus.com">お問い合わせ</a></nav></header>
 <main class="wrap"><nav class="crumb" aria-label="パンくず"><a href="/ja">Enludus</a> / EnCura / プライバシーポリシー</nav>
-<div class="legal"><h1>EnCura プライバシーポリシー</h1><p>最終更新：2026年10月20日</p>
+<div class="legal"><h1>EnCura プライバシーポリシー</h1><p>最終更新：2026年10月26日</p>
 <p>このページでは、Enludusが提供するiOSアプリ「EnCura」（以下「本アプリ」）での情報の取り扱いを説明します。本アプリにアカウント登録はありません。名前やメールアドレスを入力する場面もありません。</p>
 
 <h2>匿名の利用者ID</h2>
@@ -15,7 +15,7 @@
 <h2>AI学芸員への質問と作品の写真</h2>
 <p>AI学芸員に送った文章と、カメラで撮った作品の写真は、回答を作るために、Enludusのサーバー（SupabaseのEdge Function）を経由して、Googleの<a href="https://ai.google.dev/" rel="noopener">Gemini API</a>に送られます。同じ会話の直前のやり取り（最大20往復）も、話の流れを保つために一緒に送ります。</p>
 <p>Enludusのサーバーは質問や写真を保存しません。Googleでの取り扱いは<a href="https://ai.google.dev/gemini-api/terms" rel="noopener">Gemini APIの利用規約</a>と<a href="https://policies.google.com/privacy" rel="noopener">Googleのプライバシーポリシー</a>に従います。利用するプランによっては、Googleが品質の向上のために送信内容を確認・利用する場合があります。個人情報や、人の顔がはっきり写った写真は送らないでください。</p>
-<p>作品の写真は、送る前に画像の縮小・圧縮のため、Enludusが運用する画像処理サーバー（Google Cloud Run）に送ることがあります。処理はメモリ上で行い、写真は保存しません。</p>
+<p>作品の写真は、送る前に端末の中で縮小・圧縮します。そのための別のサーバーには送りません。</p>
 <p>会話の内容は端末にも保存しません。画面を閉じると消えます。</p>
 
 <h2>館内マップの投稿</h2>
@@ -23,7 +23,7 @@
 <p>ご自身が撮影した画像、または共有の許可を得た画像だけを投稿してください。投稿した画像の削除を希望する場合は、下記の連絡先までご連絡ください。</p>
 
 <h2>位置情報</h2>
-<p>「近くの美術館」を使うと、現在地を取得し、美術館の一覧を近い順に並べます。並べ替えは端末の中だけで行い、現在地をEnludusや第三者に送ることはありません。位置情報の利用は、端末の設定でいつでも止められます。</p>
+<p>ホームの展覧会一覧と「近くの美術館」では、現在地を取得し、展覧会や美術館を近い順に並べます。並べ替えは端末の中だけで行い、現在地をEnludusや第三者に送ることはありません。位置情報の利用は、端末の設定でいつでも止められます。</p>
 
 <h2>カメラと写真ライブラリ</h2>
 <p>作品のスキャンと館内マップの撮影のためにカメラを、写真を選ぶために写真ライブラリを使います。使うのは、利用者が撮影・選択した画像だけです。</p>
@@ -50,9 +50,9 @@
 <div lang="en">
 <p>EnCura has no account registration and never asks for your name or email address.</p>
 <p><strong>Anonymous ID.</strong> On launch the app signs in anonymously to its database (Supabase) and receives a random user ID. It is used only to accept requests from the app, such as the AI curator and map posts, and is not linked to any personal details.</p>
-<p><strong>AI curator and artwork photos.</strong> Your questions and the photos you take are sent through Enludus's server (a Supabase Edge Function) to Google's Gemini API to generate answers, together with up to the last 20 exchanges of the conversation. Enludus's server does not store them. Google handles them under the Gemini API Terms and Google's Privacy Policy; depending on the plan, Google may review or use them to improve its services. Please do not send personal information or clear photos of people's faces. Photos may first be sent to an image server run by Enludus (Google Cloud Run) to be resized; they are processed in memory and not stored. Conversations are not stored on your device either.</p>
+<p><strong>AI curator and artwork photos.</strong> Your questions and the photos you take are sent through Enludus's server (a Supabase Edge Function) to Google's Gemini API to generate answers, together with up to the last 20 exchanges of the conversation. Enludus's server does not store them. Google handles them under the Gemini API Terms and Google's Privacy Policy; depending on the plan, Google may review or use them to improve its services. Please do not send personal information or clear photos of people's faces. Photos are resized on your device before they are sent. Conversations are not stored on your device either.</p>
 <p><strong>Venue map posts.</strong> A floor map you post is first checked by the Gemini API. If it is a map, it is stored in Supabase Storage and shown to all users on the venue page, without anything identifying who posted it. Post only images you took or have permission to share. To have a posted image removed, contact us.</p>
-<p><strong>Location.</strong> "Nearby" uses your current location to sort museums by distance on your device. Your location is never sent to Enludus or anyone else.</p>
+<p><strong>Location.</strong> The home screen's exhibition list and "Nearby" use your current location to sort exhibitions and museums by distance on your device. Your location is never sent to Enludus or anyone else.</p>
 <p><strong>Camera and photos.</strong> Used only for the images you take or choose for artwork scans and map posts.</p>
 <p><strong>Content.</strong> Exhibitions, Today's Art and news are loaded from Supabase; artwork images from Wikimedia Commons and others; fonts from Google Fonts. As with any web request, these services receive your IP address.</p>
 <p><strong>Links.</strong> Buttons for books, goods, nearby hotels, sources and maps open external sites or apps, and may include affiliate links.</p>
