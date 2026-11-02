@@ -1,9 +1,9 @@
 {
   "note": "Last commit / App Store version that the blog has caught up with. Updated by each daily blog PR (see BLOG_SYNC.md).",
-  "checkedAt": "2026-11-02",
+  "checkedAt": "2026-11-03",
   "repos": {
     "naki0227/StudyReel": {
-      "sha": "9191d98dc6fe2c3feb9405d79643c29f048e621e",
+      "sha": "b93b4c540e34ee695c7c8d3c37b8d1f5013a5fa6",
       "posts": [
         "studyreel-behind",
         "studyreel-recording-and-backup",
@@ -15,28 +15,28 @@
       ]
     },
     "naki0227/useful-map": {
-      "sha": "8301b48e929b07b83e221ecd0a78205b48305eb4",
+      "sha": "0861b4b037fba1fdd55ee422b9095efc0c61e2fd",
       "posts": [
         "useful-map",
         "useful-map-routing"
       ]
     },
     "naki0227/gojuon-minesweeper": {
-      "sha": "21b76564e4afc8bb32d2a4b177e92e196d03b491",
+      "sha": "90368cf3cddb39b22374bbf5c6275533d673d999",
       "posts": [
         "gojuon-minesweeper",
         "gojuon-minesweeper-tech"
       ]
     },
     "naki0227/job-match-analysis": {
-      "sha": "af944740643e0fad0db4b09f1eca5f64299c4eca",
+      "sha": "7f2274e4113935b242514502a5b8cff2dcfcaf06",
       "posts": [
         "career",
         "career-matching"
       ]
     },
     "naki0227/logiscore": {
-      "sha": "d7a162aaba6e54187e13a582e820a26e198cfb8c",
+      "sha": "a7368efa15e5267b9856d5669f7efa16afa8dfb8",
       "posts": [
         "logiscore-sound",
         "logiscore-sound-transport"
@@ -50,7 +50,7 @@
       ]
     },
     "naki0227/lp-anatomy": {
-      "sha": "e3bfab57b70f72c756f3490a6964c6c91779deef",
+      "sha": "e7aba5ac2ddfc44dd9ed32a30b9681c4b0ab2070",
       "posts": [
         "lp-anatomy"
       ]
@@ -70,7 +70,7 @@
       ]
     },
     "naki0227/mini-game": {
-      "sha": "3b466e0e5ef186af4a6c6e3237736b1314bf956a",
+      "sha": "e826b5bdf0a266c4fbaff115673b3554e2ada66b",
       "posts": [
         "asobi-yokocho",
         "asobi-yokocho-tech"
@@ -149,7 +149,7 @@
       "posts": []
     },
     "naki0227/encura": {
-      "sha": "db1ee27be80bdbf4693b0f224efde6e5cf5c4fcb",
+      "sha": "5b9817750a95730a02f535069600df004179ee99",
       "posts": []
     },
     "naki0227/kiro": {
@@ -161,7 +161,7 @@
       "posts": []
     },
     "naki0227/low_polygon": {
-      "sha": "ad312d75daa3e98ad0a564f3aba9aca13c60ed85",
+      "sha": "27eac36537efb065ba7e523273db7699596434ae",
       "posts": [
         "low-polygon"
       ]
@@ -175,7 +175,7 @@
       "posts": []
     },
     "naki0227/preplay": {
-      "sha": "a728cf2baa3d70bc5501b1160dc7f6f3de002552",
+      "sha": "ee16539e1e0d3855b913bde5de9be1dec8235ec2",
       "posts": []
     },
     "naki0227/umeda_underground_map": {
