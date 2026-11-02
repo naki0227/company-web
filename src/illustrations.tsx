@@ -31,7 +31,7 @@ export function StudyIcon({ className }: Props) {
   );
 }
 
-/** UsefulMap: the app's diamond with a mountain and a winding road. */
+/** Useful Map: the app's diamond with a mountain and a winding road. */
 export function MapIcon({ className }: Props) {
   return (
     <svg {...svg(className, "0 0 96 96")}>
@@ -43,7 +43,7 @@ export function MapIcon({ className }: Props) {
   );
 }
 
-/** Career: a briefcase with a check badge. */
+/** job match: a briefcase with a check badge. */
 export function CareerIcon({ className }: Props) {
   return (
     <svg {...svg(className, "0 0 96 96")}>
@@ -221,6 +221,48 @@ export function LoupeIcon({ className }: Props) {
       <rect className="f-o" x="22" y="52" width="18" height="10" rx="2" />
       <circle className="f-s ln" cx="62" cy="58" r="16" />
       <path className="ln" d="M74 70l12 12" />
+    </svg>
+  );
+}
+
+/** Asobi Yokocho: a festival stall with a striped awning, a goldfish bag and a kendama. */
+export function StallIcon({ className }: Props) {
+  return (
+    <svg {...svg(className, "0 0 96 96")}>
+      <path className="f-s ln" d="M10 30l8-18h60l8 18z" />
+      <path className="ln" d="M14 44v40M82 44v40" />
+      <path className="f-o ln" d="M10 30h12.67v8a6.33 6.33 0 0 1-12.67 0z" />
+      <path className="f-w ln" d="M22.67 30h12.67v8a6.33 6.33 0 0 1-12.67 0z" />
+      <path className="f-o ln" d="M35.33 30h12.67v8a6.33 6.33 0 0 1-12.67 0z" />
+      <path className="f-w ln" d="M48 30h12.67v8a6.33 6.33 0 0 1-12.67 0z" />
+      <path className="f-o ln" d="M60.67 30h12.67v8a6.33 6.33 0 0 1-12.67 0z" />
+      <path className="f-w ln" d="M73.33 30h12.67v8a6.33 6.33 0 0 1-12.67 0z" />
+      <path className="ln" d="M32 44v5" />
+      <path className="f-s ln" d="M28 49h8l5 10c0 4-4 7-9 7s-9-3-9-7z" />
+      <path className="f-o" d="M27 59c2-3 7-3 9 0-2 3-7 3-9 0zM35 59l4-3v6z" />
+      <rect className="f-w ln" x="61" y="58" width="6" height="12" rx="2" />
+      <rect className="f-w ln" x="53" y="56" width="22" height="6" rx="3" />
+      <circle className="f-o ln" cx="64" cy="48" r="7" />
+      <circle className="f-w" cx="61.5" cy="45.5" r="2" />
+      <rect className="f-w ln" x="8" y="70" width="80" height="16" rx="4" />
+      <path className="ln-s" d="M18 78h14M42 78h14M66 78h12" />
+    </svg>
+  );
+}
+
+/** Umeda Underground Navi: stairs going down from a street entrance, and an arrow along the passage below. */
+export function UndergroundIcon({ className }: Props) {
+  return (
+    <svg {...svg(className, "0 0 96 96")}>
+      <path className="f-w ln" d="M40 58h44a6 6 0 0 1 6 6v16a6 6 0 0 1-6 6H40z" />
+      <path className="f-s ln" d="M12 48h8v9h8v9h8v9h8v11H12z" />
+      <path className="ln" d="M14 32v16M46 32v16" />
+      <rect className="f-o ln" x="8" y="22" width="44" height="10" rx="4" />
+      <path className="ln" d="M4 48h88" />
+      <path className="ln" d="M70 48V12" />
+      <path className="f-o ln" d="M58 12h22l7 7-7 7H58z" />
+      <path className="ln w" d="M63 19h12" />
+      <path className="ln-s" d="M52 72h26M71 65l7 7-7 7" />
     </svg>
   );
 }

@@ -1,9 +1,9 @@
 {
   "note": "Last commit / App Store version that the blog has caught up with. Updated by each daily blog PR (see BLOG_SYNC.md).",
-  "checkedAt": "2026-10-23",
+  "checkedAt": "2026-10-25",
   "repos": {
     "naki0227/StudyReel": {
-      "sha": "a443f2e57b94afd69bafc2e3fd40668b212944a6",
+      "sha": "9191d98dc6fe2c3feb9405d79643c29f048e621e",
       "posts": [
         "studyreel-behind",
         "studyreel-recording-and-backup",
@@ -21,14 +21,14 @@
       ]
     },
     "naki0227/gojuon-minesweeper": {
-      "sha": "05f6d70164906fceaaa2d90a747c0d497970361c",
+      "sha": "136f6d3db83eb710e7439bf64a351ec430b274c7",
       "posts": [
         "gojuon-minesweeper",
         "gojuon-minesweeper-tech"
       ]
     },
     "naki0227/job-match-analysis": {
-      "sha": "f8919844945ca970f7b2a9ef3f2092b96c4a38a9",
+      "sha": "af944740643e0fad0db4b09f1eca5f64299c4eca",
       "posts": [
         "career",
         "career-matching"
@@ -49,7 +49,7 @@
       ]
     },
     "naki0227/lp-anatomy": {
-      "sha": "5a17a00c13162a239c450ec1302a31408c5f8b06",
+      "sha": "fc9099aed91cdb3f6d3d0cc76e7bf860cc0b5538",
       "posts": [
         "lp-anatomy"
       ]
@@ -69,7 +69,7 @@
       ]
     },
     "naki0227/mini-game": {
-      "sha": "54d579d67453be664ffbe45cdc9ffbff8b589416",
+      "sha": "cccf641a6d929b2a972ad00f0c0293e001535a21",
       "posts": [
         "asobi-yokocho",
         "asobi-yokocho-tech"
@@ -160,7 +160,7 @@
       "posts": []
     },
     "naki0227/low_polygon": {
-      "sha": "a6496a6ddf5d13ee68818d8c06f51fe1d6e1487e",
+      "sha": "5e52c07716839f21b2525ed52135c16d58643b4e",
       "posts": [
         "low-polygon"
       ]
@@ -178,7 +178,7 @@
       "posts": []
     },
     "naki0227/umeda_underground_map": {
-      "sha": "3b6204bc42ca084de8687b4a7cdc0862c1d8a26f",
+      "sha": "96fe45d7dd3e7d1aab3ac532b87703d71d7d583e",
       "posts": [
         "umeda-underground-map"
       ]

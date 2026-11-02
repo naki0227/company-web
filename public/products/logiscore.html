@@ -18,16 +18,16 @@
 <section class="gallery" aria-label="アプリの画面"><p class="gallery-title"><span>Screen</span>アプリの画面</p><figure class="gallery-wide"><img src="/img/products/logiscore-800.webp" srcset="/img/products/logiscore-800.webp 800w, /img/products/logiscore-1440.webp 1440w" sizes="(max-width: 1000px) 92vw, 980px" width="800" height="500" alt="Logiscore の画面。左にソースコード、右に生成された楽譜" loading="lazy" decoding="async"/></figure></section>
 <div class="layout"><article><section id="section-1"><span class="index">01 / Overview</span><h2>どんなアプリか</h2><p>Logiscoreは、データを音に変換して伝え、受け取った音から元のデータを復元するアプリです。テキストやコードを「聴ける形」にしたまま、ケーブルやネットワークを使わずに端末間で受け渡せるかを試せます。</p>
 <p>2026年9月の検証では、MacBookのスピーカーから再生した音を1m離れたiPhoneのボイスメモで録音し、M4Aファイルからテキストを誤りなく復元できることを確認しました。</p></section>
-<section id="section-2"><span class="index">02 / How to use</span><h2>使い方</h2><ol class="step-list"><li><strong>書く</strong> — メッセージを入力するか、ソースコードやプロジェクトフォルダを読み込みます。</li><li><strong>変換する</strong> — ENCODEを押すと、選んだモードに応じてMIDIまたはWAVが作られます。</li><li><strong>再生して録音する</strong> — PLAYで音を鳴らし、別の端末で録音します。ファイルとしてダウンロードすることもできます。</li><li><strong>復元する</strong> — 録音やファイルを読み込むと、元のデータが表示されます。</li></ol>
-<p>初めての方は、画面上部の「Try the over-the-air demo」から、空気中を通す送信をすぐに試せます。</p></section>
-<section id="section-3"><span class="index">03 / Modes</span><h2>用途に合わせた5つのモード</h2><ul><li><strong>Auto / Fast</strong> — 小さなMIDIファイルに変換します。共有やダウンロード向けです。</li><li><strong>Music</strong> — 4声のリズムを持つ、より音楽らしいMIDIを作ります。</li><li><strong>Reliable</strong> — スピーカーからマイクへ通すためのWAVです。CRC-32、ハミング符号、インターリーブ、多数決復元を組み合わせた誤り訂正を行います。</li><li><strong>Secure</strong> — Reliableに加え、Argon2idとChaCha20-Poly1305でパスワード暗号化します。正しいパスワードがないと内容は表示されません。</li></ul>
+<section id="section-2"><span class="index">02 / How to use</span><h2>使い方</h2><ol class="step-list"><li><strong>書く</strong> — メッセージを入力するか、ソースコードやプロジェクトフォルダを読み込みます。</li><li><strong>変換する</strong> — 「変換する」を押すと、選んだモードに応じてMIDIまたはWAVが作られます。</li><li><strong>再生して録音する</strong> — 「再生」で音を鳴らし、別の端末で録音します。ファイルとしてダウンロードすることもできます。</li><li><strong>復元する</strong> — 録音やファイルを読み込むと、元のデータが表示されます。</li></ol>
+<p>初めての方は、画面上部のガイドにある「空気伝送のデモを試す」から、空気中を通す送信をすぐに試せます。画面は日本語表示で、スマートフォンの画面幅にも対応しています。</p></section>
+<section id="section-3"><span class="index">03 / Modes</span><h2>用途に合わせた5つのモード</h2><ul><li><strong>おまかせ</strong> — 小さなMIDIファイルに変換します。共有やダウンロード向けです。</li><li><strong>高密度</strong> — 最も詰め込んだMIDIで、ファイルを一番小さくします。</li><li><strong>音楽的</strong> — 4声のリズムを持つ、より音楽らしいMIDIを作ります。</li><li><strong>空気伝送</strong> — スピーカーからマイクへ通すためのWAVです。CRC-32、ハミング符号、インターリーブ、多数決復元を組み合わせた誤り訂正を行います。</li><li><strong>暗号化</strong> — 空気伝送に加え、Argon2idとChaCha20-Poly1305でパスワード暗号化します。正しいパスワードがないと内容は表示されません。</li></ul>
 <p>プロジェクトをMIDIに変換すると、ファイルごとにトラックが分かれ、拡張子に応じた楽器で鳴ります（例: TypeScript・JavaScriptはクラリネット、Rust・C++はストリングス、Pythonはチェロ、Goはフレンチホルン、CSS・HTMLはフルート）。</p></section>
 <section id="section-4"><span class="index">04 / Privacy</span><h2>端末内で処理する理由</h2><p>変換・誤り訂正・暗号化・復元は、RustをWebAssemblyへコンパイルしたエンジンでブラウザ内で実行します。データをEnludusのサーバーへアップロードしない構成です。</p>
 <p>個人の制作物から社内のコードまで扱いやすくするための設計上の判断です。機密性の高いデータを扱う場合は、利用環境やブラウザ拡張機能も確認してください。</p></section>
 <section id="section-5"><span class="index">05 / Roadmap</span><h2>現在の検証状況</h2><p>テキストの実録音による復元は確認済みです。ソースファイルやプロジェクトの実録音、雑音や残響のある環境、各種音声コーデック、オンライン通話越しの伝送は、順に検証を進めています。</p>
 <p>録音をどこから始めても復元できるループ再生方式も開発中です。最新の対応範囲は実際の画面をご確認ください。</p></section>
 <section id="faq"><div class="index">Q & A</div><h2>よくある質問</h2><dl class="faq"><dt>データはアップロードされますか？</dt><dd>変換も復元もブラウザ内で実行され、Enludusのサーバーへ送信しない設計です。</dd>
-<dt>本当に音だけでデータを送れますか？</dt><dd>Reliableモードで作ったWAVを再生し、別の端末で録音した音声（WAV・M4A・MP3など）を読み込むと復元できます。テキストは実機で確認済みで、ファイルやプロジェクトは検証を継続しています。</dd>
+<dt>本当に音だけでデータを送れますか？</dt><dd>空気伝送モードで作ったWAVを再生し、別の端末で録音した音声（WAV・M4A・MP3など）を読み込むと復元できます。テキストは実機で確認済みで、ファイルやプロジェクトは検証を継続しています。</dd>
 <dt>どのくらいの時間がかかりますか？</dt><dd>データ量と信頼性の設定によります。画面に予想再生時間が表示されます。短いメッセージでも、誤り訂正を強めると数分かかることがあります。</dd>
 <dt>どの言語に対応していますか？</dt><dd>TypeScript、JavaScript、Python、Rust、Go、C/C++、Java、Kotlin、Swift、Ruby、シェル、CSS、HTML、Markdown、JSON、YAML、SQLなど、多くの形式を読み込めます。</dd></dl></section>
 <div class="note"><strong>製品情報について</strong><p>本ページは公開中のサービス情報と製品の実装・仕様をもとに、Enludusが作成した独自の紹介記事です。機能や対応環境は更新されるため、実際の利用条件は各サービスの画面をご確認ください。</p></div>
