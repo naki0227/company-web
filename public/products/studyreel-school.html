@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="ja"><head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>StudyReel 塾・教室向け — 生徒の家での勉強時間が毎日わかる | Enludus</title>
+<meta name="description" content="生徒が家でどれだけ勉強したかを、塾・教室の先生が毎日確かめられます。生徒が QR コードを読んで始め、勉強時間だけを見せる仕組みです。動画や写真は見えません。1か月無料でお試しできます。"/>
+<meta name="robots" content="index,follow"/>
+<link rel="canonical" href="https://enludus.com/products/studyreel-school"/>
+<meta property="og:type" content="article"/><meta property="og:site_name" content="Enludus"/>
+<meta property="og:title" content="StudyReel 塾・教室向け | Enludus"/><meta property="og:description" content="生徒の家での勉強時間が、先生の iPhone で毎日わかる。動画や写真は見えず、生徒がいつでも止められます。"/><meta property="og:url" content="https://enludus.com/products/studyreel-school"/>
+<meta name="theme-color" content="#ffffff"/>
+<link rel="stylesheet" href="/products/product.css"/>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"StudyReel 塾・教室向け","description":"生徒の家での勉強時間を、塾・教室の先生が毎日確かめられる仕組み。","applicationCategory":"EducationalApplication","operatingSystem":"iOS 18","url":"https://enludus.com/products/studyreel-school","author":{"@type":"Organization","name":"Enludus"},"inLanguage":"ja","offers":{"@type":"Offer","price":"0","priceCurrency":"JPY","description":"1か月無料のお試し"}}</script>
+<style>
+/* 塾向けのページ。サイト全体と同じ「温かい」型（lp-anatomy §7-2）：紙色の地・茶の文字・ロゴの橙と空色。
+   常に動くのは見本の画面の「勉強中」の点だけ。動きを減らす設定では止める */
+.sch-hero{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:clamp(24px,4vw,48px);align-items:center}
+.sch-hero h1{font-size:clamp(26px,3.6vw,38px);word-break:keep-all;line-height:1.45;margin:.25em 0 .5em}
+.sch-hero h1 em{font-style:normal;background:linear-gradient(transparent 62%,var(--orange-t) 62%)}
+.sch-mock{position:relative;transform:rotate(1.6deg);border-radius:30px;background:var(--white);box-shadow:-8px 8px 0 0 var(--orange-t),0 18px 40px rgba(73,35,29,.12);padding:22px 20px 16px;margin-right:6px}
+.sch-mock:before{content:"";position:absolute;top:-14px;left:42%;width:110px;height:30px;background:rgba(91,184,230,.45);transform:rotate(-4deg)}
+.sch-mock-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px}
+.sch-mock-head b{font-size:16px}.sch-mock-head span{font-size:12px;color:var(--label)}
+.sch-row{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;padding:11px 4px;border-top:2px dashed var(--paper-b)}
+.sch-row:first-of-type{border-top:0}
+.sch-ava{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:var(--sky-t);font-family:var(--round);font-weight:600;color:var(--navy)}
+.sch-row p{margin:0;font-size:14px;line-height:1.5}.sch-row small{display:block;color:var(--label);font-size:12px}
+.sch-row .now{color:#2f8f4e}.sch-row .now:before{content:"";display:inline-block;width:8px;height:8px;margin-right:6px;border-radius:50%;background:#34c759;vertical-align:1px;animation:sch-pulse 1.6s ease-in-out infinite}
+.sch-row .num{text-align:right;font-family:var(--round);font-weight:600;font-size:15px;white-space:nowrap}.sch-row .num small{font-family:inherit;font-weight:500}
+.sch-bars{display:flex;gap:6px;align-items:flex-end;height:34px;margin-top:4px}.sch-bars i{flex:1;border-radius:6px;background:var(--sky)}.sch-bars i.off{background:var(--paper-b)}
+@keyframes sch-pulse{50%{opacity:.25}}
+.sch-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:10px}
+.sch-card{padding:22px 20px;border-radius:24px;background:var(--paper-a)}
+.sch-card h3{margin:.3em 0 .4em;font-size:17px;line-height:1.55}.sch-card p{margin:0;font-size:14px;line-height:1.85}
+.sch-card .ill{width:44px;height:44px}
+.sch-safe{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 22px;list-style:none;padding:0;margin:8px 0 0}
+.sch-safe li{position:relative;padding-left:30px;font-size:15px}.sch-safe li:before{content:"";position:absolute;left:0;top:.45em;width:16px;height:16px;border-radius:50%;background:var(--sky-t);box-shadow:inset 0 0 0 4px var(--sky)}
+.sch-price{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:12px}
+.sch-plan{position:relative;padding:24px 20px;border-radius:24px;border:2px solid var(--paper-b);background:var(--white)}
+.sch-plan.pick{border-color:var(--orange);box-shadow:-6px 6px 0 0 var(--orange-t)}
+.sch-plan .tag{position:absolute;top:-13px;left:18px;padding:0 12px;border-radius:12px;background:var(--orange);color:var(--white);font-size:12px;font-weight:700;line-height:24px}
+.sch-plan h3{margin:0;font-size:16px}.sch-plan .yen{margin:.35em 0 .1em;font-family:var(--round);font-size:30px;font-weight:600;color:var(--orange-dark);font-variant-numeric:tabular-nums}
+.sch-plan .yen small{font-size:14px;color:var(--label);font-weight:500}.sch-plan p{margin:0;font-size:13px;color:var(--sub);line-height:1.8}
+.sch-cta{margin-top:18px;padding:clamp(24px,4vw,36px);border-radius:30px;background:var(--navy);color:var(--white);text-align:center}
+.sch-cta h2{margin:.2em 0 .4em;color:var(--white)}.sch-cta p{color:rgba(255,255,255,.85);margin:0 0 18px}
+.sch-cta .actions{justify-content:center}.sch-cta .actions .secondary{color:var(--white);background:transparent;border-color:rgba(255,255,255,.6)}
+.sch-hero>*{min-width:0}.sch-hero .actions,.sch-cta .actions{flex-wrap:wrap}
+@media (max-width:760px){.sch-hero{grid-template-columns:1fr}.sch-mock{transform:none;margin:8px 0 0}.sch-cards,.sch-price{grid-template-columns:1fr}.sch-safe{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){.sch-row .now:before{animation:none}}
+</style>
+<script defer src="/_vercel/insights/script.js"></script></head><body>
+<header><a href="/ja" class="brand" aria-label="Enludus トップページ">Enludus</a><nav><a href="/ja#products">製品一覧</a><a href="mailto:contact@enludus.com?subject=StudyReel%20%E5%A1%BE%E3%83%BB%E6%95%99%E5%AE%A4%E5%90%91%E3%81%91%E3%81%AE%E3%81%8A%E8%A9%A6%E3%81%97">お問い合わせ</a></nav></header>
+<main class="wrap">
+<nav class="crumb" aria-label="パンくず"><a href="/ja">Enludus</a> / <a href="/products/studyreel">StudyReel</a> / 塾・教室向け</nav>
+
+<div class="hero sch-hero">
+  <div>
+    <div class="eyebrow">StudyReel for School / 塾・教室向け</div>
+    <h1>生徒が家でどれだけ<br/>勉強したか、<br/><em>毎日わかる。</em></h1>
+    <p class="lead">生徒が自分の iPhone で勉強時間を記録すると、先生の iPhone に「今日・今週・連続日数」が届きます。授業のない日の様子が分かるので、声をかける時機を逃しません。</p>
+    <p class="status">iPhone / iPad（iOS 18 以降）· 生徒は無料版のまま使えます · 1か月無料でお試し</p>
+    <div class="actions"><a class="primary" href="mailto:contact@enludus.com?subject=StudyReel%20%E5%A1%BE%E3%83%BB%E6%95%99%E5%AE%A4%E5%90%91%E3%81%91%E3%81%AE%E3%81%8A%E8%A9%A6%E3%81%97&amp;body=%E5%A1%BE%E3%83%BB%E6%95%99%E5%AE%A4%E3%81%AE%E5%90%8D%E5%89%8D%EF%BC%9A%0A%E7%94%9F%E5%BE%92%E3%81%AE%E4%BA%BA%E6%95%B0%EF%BC%88%E3%81%8A%E3%81%8A%E3%82%88%E3%81%9D%EF%BC%89%EF%BC%9A%0A">1か月無料で試す（メール）</a><a class="secondary" href="/products/studyreel-school-guide.pdf" download>資料をダウンロード（PDF）</a></div>
+  </div>
+  <figure class="sch-mock" aria-label="先生の画面の見本：生徒ごとの今日と今週の勉強時間">
+    <div class="sch-mock-head"><b>中3 A クラス</b><span>11月3日（月）</span></div>
+    <div class="sch-row"><span class="sch-ava">は</span><p>はると <small class="now">いま勉強中</small></p><span class="num">2:32<small> 今日</small><br/><small>今週 9:40 · 連続 21日</small></span></div>
+    <div class="sch-row"><span class="sch-ava">み</span><p>みお <small>最後に勉強：今日 18:05</small></p><span class="num">1:04<small> 今日</small><br/><small>今週 7:15 · 連続 5日</small></span></div>
+    <div class="sch-row"><span class="sch-ava">そ</span><p>そうた <small>最後に勉強：3日前</small></p><span class="num">0:00<small> 今日</small><br/><small>今週 1:20 · 連続 0日</small></span></div>
+    <div class="sch-row"><span class="sch-ava">ゆ</span><p>ゆう <small>今週の曜日ごと</small></p><div class="sch-bars" aria-hidden="true"><i style="height:55%"></i><i style="height:80%"></i><i style="height:40%"></i><i style="height:95%"></i><i style="height:70%"></i><i class="off" style="height:12%"></i><i class="off" style="height:12%"></i></div></div>
+    <figcaption style="margin-top:8px;font-size:12px;color:var(--label)">見本の画面です。名前と数字は例です。</figcaption>
+  </figure>
+</div>
+
+<div class="layout"><article>
+<section id="problem"><span class="index">01 / こんな悩みに</span><h2>家での勉強が、授業の日にしか分からない</h2>
+<p>宿題や自習をどれだけやったかは、生徒に聞いても「やりました」で終わりがちです。気づいたときにはしばらく止まっていた、ということも起こります。</p>
+<p>StudyReel では、生徒が勉強を始めて終えるたびに時間が記録され、先生の画面にそのまま並びます。3日止まっている生徒にだけ一言かける、といった使い方ができます。</p></section>
+
+<section id="features"><span class="index">02 / できること</span><h2>先生の iPhone でできること</h2>
+<div class="sch-cards">
+  <div class="sch-card"><svg class="ill" viewBox="0 0 48 48" aria-hidden="true"><rect x="6" y="8" width="36" height="32" rx="8" fill="#ddf1fb" stroke="#33261e" stroke-width="2.5"/><path d="M13 19h22M13 27h16M13 34h10" stroke="#33261e" stroke-width="2.5" stroke-linecap="round"/><circle cx="36" cy="33" r="4" fill="#34c759"/></svg><h3>クラスの一覧</h3><p>生徒ごとに、いま勉強中か・今日と今週の時間・連続日数・最後に勉強した日。勉強を始めたら通知することもできます。</p></div>
+  <div class="sch-card"><svg class="ill" viewBox="0 0 48 48" aria-hidden="true"><rect x="6" y="8" width="36" height="32" rx="8" fill="#fbe1cf" stroke="#33261e" stroke-width="2.5"/><path d="M14 33V25M21 33V18M28 33V22M35 33V15" stroke="#c95424" stroke-width="4" stroke-linecap="round"/></svg><h3>4週間の推移と教科</h3><p>週ごとの合計を4週間分。生徒が「教科ごとの時間も見せる」をオンにしたときは、今週の教科ごとの時間も見られます。</p></div>
+  <div class="sch-card"><svg class="ill" viewBox="0 0 48 48" aria-hidden="true"><path d="M13 6h16l9 9v27H13z" fill="#fff" stroke="#33261e" stroke-width="2.5" stroke-linejoin="round"/><path d="M29 6v9h9" fill="none" stroke="#33261e" stroke-width="2.5" stroke-linejoin="round"/><path d="M18 24h14M18 30h14M18 36h9" stroke="#5bb8e6" stroke-width="2.5" stroke-linecap="round"/></svg><h3>CSV で書き出し</h3><p>クラスの数字を表計算ソフトで開ける形で保存できます。面談や保護者会の資料づくりに使えます。</p></div>
+</div></section>
+
+<section id="start"><span class="index">03 / 始め方</span><h2>QR コードを読むだけで始まります</h2>
+<ol class="step-list">
+<li><strong>塾コードを受け取る</strong><br/>このページのメールからお申し込みください。Enludus が塾・教室ごとの塾コードをお送りします。</li>
+<li><strong>先生の iPhone に塾コードを入れる</strong><br/>StudyReel の「保護者・塾に共有」から塾コードを入れると、教室の QR コードが出ます。クラスごとに分けられます。</li>
+<li><strong>生徒が QR コードを読んで「見せる」を押す</strong><br/>生徒は自分の StudyReel で QR コードを読みます。先生が受け入れると、一覧に並びます。</li>
+<li><strong>あとは毎日見るだけ</strong><br/>生徒がいつもどおり勉強を記録すると、先生の画面が更新されます。</li>
+</ol></section>
+
+<section id="privacy"><span class="index">04 / 生徒と保護者の安心</span><h2>見せるのは勉強時間だけ</h2>
+<ul class="sch-safe">
+<li>始めるのは生徒です。QR コードを読んで「見せる」を押したときだけ届き、いつでも止められます</li>
+<li>動画・写真・メモ・教材は見えません。見えるのは時間と連続日数、生徒が許したときの教科の時間だけです</li>
+<li>生徒どうしは、お互いの数字を見られません</li>
+<li>記録は生徒自身の iCloud に置かれ、Enludus のサーバーには置きません</li>
+</ul>
+<div class="note"><strong>教室での伝え方のおすすめ</strong><p>「見張るため」ではなく「止まったときに声をかけるため」と伝えると、生徒も続けやすくなります。ほかの生徒との順位は出ません。くわしくは <a href="/products/studyreel-privacy">プライバシーポリシー</a> をご覧ください。</p></div></section>
+
+<section id="price"><span class="index">05 / 料金</span><h2>生徒は無料。塾・教室ごとの月額です</h2>
+<div class="sch-price">
+  <div class="sch-plan"><h3>お試し</h3><div class="yen">0<small> 円 / 1か月</small></div><p>生徒30人まで。すべての機能をそのまま試せます。終わったあと自動で請求されることはありません。</p></div>
+  <div class="sch-plan pick"><span class="tag">個別指導・小さな教室に</span><h3>ベーシック</h3><div class="yen">3,000<small> 円 / 月</small></div><p>生徒30人まで。クラスごとに分けて見られます。</p></div>
+  <div class="sch-plan"><h3>スタンダード</h3><div class="yen">8,000<small> 円 / 月</small></div><p>生徒100人まで。100人を超えるときはご相談ください。</p></div>
+</div>
+<p style="font-size:13px;color:var(--sub);margin-top:14px">税込。お支払いは請求書（銀行振込）です。生徒は StudyReel の無料版のまま使えます（StudyReel Pro は要りません）。</p></section>
+
+<section id="faq"><div class="index">Q &amp; A</div><h2>よくある質問</h2><dl class="faq">
+<dt>Android の生徒は使えますか？</dt><dd>いまは iPhone・iPad だけです。</dd>
+<dt>生徒が記録を忘れたら？</dt><dd>撮影をしないで時間だけ記録することも、あとから手で時間を足すこともできます。</dd>
+<dt>先生の端末は何が必要ですか？</dt><dd>StudyReel を入れた iPhone か iPad と、iCloud へのサインインです。</dd>
+<dt>途中でやめられますか？</dt><dd>はい。翌月から止められます。生徒の記録は生徒の端末に残ります。</dd>
+<dt>保護者にも見せられますか？</dt><dd>はい。保護者は同じ仕組みで、家族として見られます（無料。教科ごとの時間と4週間の推移は StudyReel Pro）。</dd>
+</dl></section>
+
+<div class="sch-cta"><h2>まずは1か月、無料で試してみてください</h2><p>塾・教室の名前と、生徒のおおよその人数を書いて送っていただければ、塾コードをお送りします。</p>
+<div class="actions"><a class="primary" href="mailto:contact@enludus.com?subject=StudyReel%20%E5%A1%BE%E3%83%BB%E6%95%99%E5%AE%A4%E5%90%91%E3%81%91%E3%81%AE%E3%81%8A%E8%A9%A6%E3%81%97&amp;body=%E5%A1%BE%E3%83%BB%E6%95%99%E5%AE%A4%E3%81%AE%E5%90%8D%E5%89%8D%EF%BC%9A%0A%E7%94%9F%E5%BE%92%E3%81%AE%E4%BA%BA%E6%95%B0%EF%BC%88%E3%81%8A%E3%81%8A%E3%82%88%E3%81%9D%EF%BC%89%EF%BC%9A%0A">お試しを申し込む（メール）</a><a class="secondary" href="/products/studyreel-school-guide.pdf" download>資料をダウンロード（PDF）</a></div></div>
+</article>
+<aside><div class="aside-title">このページの内容</div><a href="#problem">こんな悩みに</a><a href="#features">できること</a><a href="#start">始め方</a><a href="#privacy">生徒と保護者の安心</a><a href="#price">料金</a><a href="#faq">よくある質問</a><a href="/products/studyreel">StudyReel について</a><a href="/products/studyreel-privacy">プライバシーポリシー</a></aside></div>
+</main>
+<footer><div>© 2026 Enludus · Independent software development</div><div><a href="/ja">ホーム</a><a href="/privacy">プライバシーポリシー</a><a href="mailto:contact@enludus.com">お問い合わせ</a></div></footer>
+</body></html>

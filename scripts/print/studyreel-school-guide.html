@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="UTF-8"/>
+<title>StudyReel 塾・教室向けのご案内</title>
+<!-- 配る資料（A4 縦 2ページ）。node scripts/print/render.mjs で public/products/studyreel-school-guide.pdf に書き出す -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Zen+Maru+Gothic:wght@500;700&display=swap"/>
+<style>
+@page{size:A4;margin:0}
+:root{--paper:#f4efe8;--paper-b:#eadfd1;--text:#33261e;--sub:#5a4a40;--label:#8a766a;--orange:#c95424;--orange-t:#fbe1cf;--sky:#5bb8e6;--sky-t:#ddf1fb;--navy:#1d2a3a;--round:"Fredoka","Zen Maru Gothic",sans-serif}
+*{box-sizing:border-box}
+html,body{margin:0;font-family:"Zen Maru Gothic",sans-serif;color:var(--text);font-weight:500;letter-spacing:.03em;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.page{width:210mm;height:297mm;padding:16mm 15mm;background:var(--paper);position:relative;overflow:hidden;page-break-after:always}
+.page:last-child{page-break-after:auto}
+.brand{display:flex;justify-content:space-between;align-items:baseline;font-family:var(--round);font-weight:600;font-size:13px;color:var(--label)}
+.brand b{color:var(--orange);font-size:15px}
+.eyebrow{margin-top:9mm;font-family:var(--round);font-weight:600;color:var(--orange);font-size:13px}
+h1{margin:2mm 0 4mm;font-size:30px;line-height:1.45}
+h1 em{font-style:normal;background:linear-gradient(transparent 62%,var(--orange-t) 62%)}
+.lead{font-size:13.5px;line-height:1.9;color:var(--sub);margin:0}
+.grid{display:grid;grid-template-columns:1.05fr .95fr;gap:9mm;align-items:start}
+.card{background:#fff;border-radius:18px;padding:6mm;box-shadow:0 3px 0 rgba(73,35,29,.1)}
+h2{font-size:17px;margin:0 0 3mm}
+.idx{font-family:var(--round);font-weight:600;color:var(--orange);font-size:12px}
+p,li{font-size:12.5px;line-height:1.85}
+.mock{background:#fff;border-radius:18px;padding:5mm 4.5mm 3mm;box-shadow:-5px 5px 0 0 var(--orange-t);transform:rotate(1.4deg)}
+.mock-head{display:flex;justify-content:space-between;font-size:12px}.mock-head span{color:var(--label);font-size:10.5px}
+.row{display:grid;grid-template-columns:auto 1fr auto;gap:8px;align-items:center;padding:7px 2px;border-top:1.5px dashed var(--paper-b)}
+.row:first-of-type{border-top:0}
+.ava{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:var(--sky-t);font-family:var(--round);font-weight:600;font-size:12px}
+.row p{margin:0;font-size:11.5px;line-height:1.45}.row small{display:block;color:var(--label);font-size:9.5px}
+.now{color:#2f8f4e}.now:before{content:"";display:inline-block;width:6px;height:6px;margin-right:4px;border-radius:50%;background:#34c759}
+.num{text-align:right;font-family:var(--round);font-weight:600;font-size:12px}
+.three{display:grid;grid-template-columns:repeat(3,1fr);gap:4mm;margin-top:8mm}
+.three .card h3{font-size:13.5px;margin:0 0 2mm}.three .card p{margin:0;font-size:11.5px;line-height:1.75}
+.steps{counter-reset:s;list-style:none;padding:0;margin:0}
+.steps li{counter-increment:s;position:relative;padding:0 0 3.2mm 11mm}
+.steps li:before{content:counter(s,decimal-leading-zero);position:absolute;left:0;top:0;font-family:var(--round);font-weight:600;color:var(--orange);font-size:15px}
+.steps b{display:block;font-size:13px}
+.safe{list-style:none;padding:0;margin:0}.safe li{position:relative;padding-left:7mm;margin-bottom:1.6mm}
+.safe li:before{content:"";position:absolute;left:0;top:.5em;width:3.4mm;height:3.4mm;border-radius:50%;background:var(--sky-t);box-shadow:inset 0 0 0 1mm var(--sky)}
+.price{display:grid;grid-template-columns:repeat(3,1fr);gap:4mm}
+.plan{background:#fff;border-radius:16px;padding:5mm 4.5mm;border:1.5px solid var(--paper-b)}
+.plan.pick{border-color:var(--orange);box-shadow:-4px 4px 0 0 var(--orange-t)}
+.plan h3{margin:0;font-size:13px}.yen{font-family:var(--round);font-weight:600;font-size:22px;color:#a3431a;margin:1mm 0}
+.yen small{font-size:11px;color:var(--label);font-weight:500}.plan p{margin:0;font-size:10.5px;line-height:1.7;color:var(--sub)}
+.contact{position:absolute;left:15mm;right:15mm;bottom:15mm;background:var(--navy);color:#fff;border-radius:18px;padding:6mm 7mm;display:flex;justify-content:space-between;align-items:center;gap:6mm}
+.contact h2{color:#fff;margin:0 0 1mm;font-size:16px}.contact p{margin:0;color:rgba(255,255,255,.85);font-size:11.5px}
+.contact .mail{font-family:var(--round);font-weight:600;font-size:16px;white-space:nowrap}
+.foot{position:absolute;left:15mm;right:15mm;bottom:7mm;font-size:9px;color:var(--label);display:flex;justify-content:space-between}
+</style></head><body>
+
+<section class="page">
+  <div class="brand"><b>StudyReel</b><span>塾・教室向けのご案内 · Enludus</span></div>
+  <div class="grid">
+    <div>
+      <div class="eyebrow">StudyReel for School</div>
+      <h1>生徒が家でどれだけ<br/>勉強したか、<br/><em>毎日わかる。</em></h1>
+      <p class="lead">生徒が自分の iPhone で勉強時間を記録すると、先生の iPhone に「今日・今週・連続日数」が届きます。授業のない日の様子が分かるので、止まっている生徒に早めに声をかけられます。</p>
+    </div>
+    <div class="mock" style="margin-top:12mm">
+      <div class="mock-head"><b>中3 A クラス</b><span>11月3日（月）</span></div>
+      <div class="row"><span class="ava">は</span><p>はると <small class="now">いま勉強中</small></p><span class="num">2:32<br/><small>今週 9:40 · 連続21日</small></span></div>
+      <div class="row"><span class="ava">み</span><p>みお <small>最後に勉強：今日 18:05</small></p><span class="num">1:04<br/><small>今週 7:15 · 連続5日</small></span></div>
+      <div class="row"><span class="ava">そ</span><p>そうた <small>最後に勉強：3日前</small></p><span class="num">0:00<br/><small>今週 1:20 · 連続0日</small></span></div>
+      <p style="margin:2mm 0 0;font-size:9.5px;color:var(--label)">見本の画面です。名前と数字は例です。</p>
+    </div>
+  </div>
+
+  <div class="three">
+    <div class="card"><h3>クラスの一覧</h3><p>生徒ごとに、いま勉強中か・今日と今週の時間・連続日数・最後に勉強した日。勉強を始めたら通知も。</p></div>
+    <div class="card"><h3>4週間の推移と教科</h3><p>週ごとの合計を4週間分。生徒が許したときは、今週の教科ごとの時間も。</p></div>
+    <div class="card"><h3>CSV で書き出し</h3><p>クラスの数字を表計算ソフトで開ける形で保存。面談や保護者会の資料に。</p></div>
+  </div>
+
+  <div class="grid" style="margin-top:8mm">
+    <div class="card"><span class="idx">始め方</span><h2>QR コードを読むだけ</h2>
+      <ol class="steps">
+        <li><b>塾コードを受け取る</b>メールでお申し込みいただくと、Enludus から塾コードをお送りします。</li>
+        <li><b>先生の iPhone に塾コードを入れる</b>「保護者・塾に共有」から入れると、教室の QR コードが出ます。</li>
+        <li><b>生徒が QR を読んで「見せる」</b>先生が受け入れると、一覧に並びます。</li>
+        <li><b>あとは毎日見るだけ</b>生徒がいつもどおり記録すると、更新されます。</li>
+      </ol>
+    </div>
+    <div class="card"><span class="idx">生徒と保護者の安心</span><h2>見せるのは勉強時間だけ</h2>
+      <ul class="safe">
+        <li>始めるのは生徒。いつでも止められます</li>
+        <li>動画・写真・メモ・教材は見えません</li>
+        <li>生徒どうしは、お互いの数字を見られません</li>
+        <li>記録は生徒自身の iCloud に置かれ、Enludus のサーバーには置きません</li>
+        <li>順位は出ません。「止まったときに声をかけるため」の仕組みです</li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot"><span>enludus.com/products/studyreel-school</span><span>1 / 2</span></div>
+</section>
+
+<section class="page">
+  <div class="brand"><b>StudyReel</b><span>塾・教室向けのご案内 · Enludus</span></div>
+  <div class="eyebrow">料金</div>
+  <h1 style="font-size:24px">生徒は無料。塾・教室ごとの月額です</h1>
+  <div class="price">
+    <div class="plan"><h3>お試し</h3><div class="yen">0<small> 円 / 1か月</small></div><p>生徒30人まで。すべての機能を試せます。自動で請求されることはありません。</p></div>
+    <div class="plan pick"><h3>ベーシック</h3><div class="yen">3,000<small> 円 / 月</small></div><p>生徒30人まで。個別指導・小さな教室に。</p></div>
+    <div class="plan"><h3>スタンダード</h3><div class="yen">8,000<small> 円 / 月</small></div><p>生徒100人まで。それ以上はご相談ください。</p></div>
+  </div>
+  <p style="color:var(--sub);font-size:11.5px">税込。お支払いは請求書（銀行振込）です。生徒は StudyReel の無料版のまま使えます（StudyReel Pro は要りません）。</p>
+
+  <div class="card" style="margin-top:6mm"><span class="idx">よくある質問</span>
+    <p><b>Android の生徒は？</b> いまは iPhone・iPad だけです。<br/>
+    <b>生徒が記録を忘れたら？</b> 撮影しないで時間だけ記録したり、あとから手で時間を足したりできます。<br/>
+    <b>先生の端末は？</b> StudyReel を入れた iPhone か iPad と、iCloud へのサインインが必要です。<br/>
+    <b>途中でやめられますか？</b> はい。翌月から止められます。生徒の記録は生徒の端末に残ります。<br/>
+    <b>保護者にも見せられますか？</b> はい。同じ仕組みで家族として見られます（無料。教科ごと・4週間の推移は StudyReel Pro）。</p>
+  </div>
+
+  <div class="card" style="margin-top:6mm"><span class="idx">こんな使い方</span>
+    <ul class="safe" style="margin-top:2mm">
+      <li>毎朝、一覧で「3日以上止まっている生徒」にだけ一言かける</li>
+      <li>週1回の面談で、4週間の推移を一緒に見ながら次の週の目標を決める</li>
+      <li>保護者会の前に CSV で書き出して、家での勉強時間を資料にする</li>
+      <li>試験前は「勉強を始めたら通知」をオンにして、追い込みの様子を見守る</li>
+    </ul>
+  </div>
+
+  <p style="margin-top:5mm;font-size:11.5px;color:var(--sub)">StudyReel は、勉強しているところをタイムラプスで撮れる iPhone アプリです（顔は自動でモザイク）。生徒は撮影しないで時間だけ記録することもできます。日本語・英語・韓国語・中国語に対応しています。</p>
+
+  <div class="contact">
+    <div><h2>まずは1か月、無料でお試しください</h2><p>塾・教室の名前と、生徒のおおよその人数を書いて送ってください。塾コードをお送りします。</p></div>
+    <div class="mail">contact@enludus.com</div>
+  </div>
+  <div class="foot"><span>Enludus · enludus.com</span><span>2 / 2 · 2026年11月</span></div>
+</section>
+</body></html>
