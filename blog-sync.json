@@ -3,7 +3,7 @@
   "checkedAt": "2026-11-04",
   "repos": {
     "naki0227/StudyReel": {
-      "sha": "d6a916414326f24eee1894a16e021257f6618510",
+      "sha": "9adaf998afb2e9e43d663cb8f99c1b77920a7306",
       "posts": [
         "studyreel-behind",
         "studyreel-recording-and-backup",
@@ -23,7 +23,7 @@
       ]
     },
     "naki0227/gojuon-minesweeper": {
-      "sha": "2104ac15477505c9fff83c1daaf43e777b0e4968",
+      "sha": "fe1cec79de9be39e2410ca97dc0aec88074e77cd",
       "posts": [
         "gojuon-minesweeper",
         "gojuon-minesweeper-tech"
@@ -51,7 +51,7 @@
       ]
     },
     "naki0227/lp-anatomy": {
-      "sha": "4dfff69593860e850052281ca83f1ea24fe1d9bf",
+      "sha": "ebee18a27dae568a9dc1635cd861ee064b0bc617",
       "posts": [
         "lp-anatomy"
       ]
@@ -71,7 +71,7 @@
       ]
     },
     "naki0227/mini-game": {
-      "sha": "4ff071bb383b55cc086fb90faffef01e621a9372",
+      "sha": "b5bb6f037d825f6333be1a1e3c48f434770cee19",
       "posts": [
         "asobi-yokocho",
         "asobi-yokocho-tech"
@@ -150,7 +150,7 @@
       "posts": []
     },
     "naki0227/encura": {
-      "sha": "3a6de4db2dfbf8ddcf876f8b412741532e906f34",
+      "sha": "27c0ff4881467213142278eb759e90033ccddd1c",
       "posts": []
     },
     "naki0227/kiro": {
@@ -162,7 +162,7 @@
       "posts": []
     },
     "naki0227/low_polygon": {
-      "sha": "27eac36537efb065ba7e523273db7699596434ae",
+      "sha": "f75406fa656aa1097d4b9a56951f6848600ae8c1",
       "posts": [
         "low-polygon"
       ]
