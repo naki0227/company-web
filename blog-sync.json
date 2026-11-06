@@ -13,7 +13,8 @@
         "studyreel-1-6",
         "studyreel-1-8",
         "studyreel-1-9",
-        "studyreel-1-10"
+        "studyreel-1-10",
+        "studyreel-2-0"
       ]
     },
     "naki0227/useful-map": {
@@ -24,7 +25,7 @@
       ]
     },
     "naki0227/gojuon-minesweeper": {
-      "sha": "abca4391af58f1e4019b40077132a25dab5e77e1",
+      "sha": "a8bf579fc55e030792ffccd8ea9562ebbf8c725a",
       "posts": [
         "gojuon-minesweeper",
         "gojuon-minesweeper-tech"
@@ -52,7 +53,7 @@
       ]
     },
     "naki0227/lp-anatomy": {
-      "sha": "dd511577113c6bed718806f77d1f83fbf967c0b9",
+      "sha": "9988d5ac495a30ef5f305bf655ee1b5e9e0eb805",
       "posts": [
         "lp-anatomy"
       ]
@@ -151,7 +152,7 @@
       "posts": []
     },
     "naki0227/encura": {
-      "sha": "10059d62507dc5a1ac31f8c11a8e06e0852c4288",
+      "sha": "11383bda391b3705daf2de89683c9d6b5c7ad6ea",
       "posts": []
     },
     "naki0227/kiro": {
@@ -163,7 +164,7 @@
       "posts": []
     },
     "naki0227/low_polygon": {
-      "sha": "6adbb188897dcb4416b7d20e58bcb78ff5781999",
+      "sha": "0e214d6f7f8dc503e95a6da19e95f0460c55cab9",
       "posts": [
         "low-polygon"
       ]
@@ -195,7 +196,7 @@
   "appStore": {
     "StudyReel": {
       "id": "6756177589",
-      "version": "1.10"
+      "version": "2.0"
     },
     "UsefulMap": {
       "id": "6801771854",
