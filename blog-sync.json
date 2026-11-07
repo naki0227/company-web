@@ -1,6 +1,6 @@
 {
   "note": "Last commit / App Store version that the blog has caught up with. Updated by each daily blog PR (see BLOG_SYNC.md).",
-  "checkedAt": "2026-11-06",
+  "checkedAt": "2026-11-07",
   "repos": {
     "naki0227/StudyReel": {
       "sha": "9adaf998afb2e9e43d663cb8f99c1b77920a7306",
@@ -25,7 +25,7 @@
       ]
     },
     "naki0227/gojuon-minesweeper": {
-      "sha": "a8bf579fc55e030792ffccd8ea9562ebbf8c725a",
+      "sha": "f47e1a568dfe386df63824508f5a8b45b61479df",
       "posts": [
         "gojuon-minesweeper",
         "gojuon-minesweeper-tech"
@@ -53,7 +53,7 @@
       ]
     },
     "naki0227/lp-anatomy": {
-      "sha": "9988d5ac495a30ef5f305bf655ee1b5e9e0eb805",
+      "sha": "d053a13894bd932374ec1f68ab5f792df4023846",
       "posts": [
         "lp-anatomy"
       ]
@@ -73,7 +73,7 @@
       ]
     },
     "naki0227/mini-game": {
-      "sha": "abffaf82a9f51c1e9afeb8c06564ec37b11b68a3",
+      "sha": "a5227c81e672329997fff6ce201245645bdc5b80",
       "posts": [
         "asobi-yokocho",
         "asobi-yokocho-tech"
@@ -152,7 +152,7 @@
       "posts": []
     },
     "naki0227/encura": {
-      "sha": "11383bda391b3705daf2de89683c9d6b5c7ad6ea",
+      "sha": "777ee70a0ff149d6f4a02cbd333f9fc4ff5ee1ad",
       "posts": []
     },
     "naki0227/kiro": {
@@ -164,7 +164,7 @@
       "posts": []
     },
     "naki0227/low_polygon": {
-      "sha": "0e214d6f7f8dc503e95a6da19e95f0460c55cab9",
+      "sha": "1615c5de658f0a83712a408514cc8b225f4b2e6e",
       "posts": [
         "low-polygon"
       ]
