@@ -35,6 +35,8 @@ const STATIC_PATHS = [
   "/products/career",
   "/products/logiscore",
   "/products/gojuon-minesweeper",
+  "/products/tamahebi",
+  "/products/tamahebi-privacy",
 ];
 
 function esc(value: string) {
