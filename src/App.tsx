@@ -178,10 +178,17 @@ function Slider() {
   const n = items.length;
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
+  // A pause the visitor chose with the button (povo: every auto-advancing slider has one). Hover/focus only pause while they last.
+  // Reduced motion / Save-Data start stopped; the visitor can still press play.
+  const [stopped, setStopped] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (still() || paused) return;
+    if (still()) setStopped(true);
+  }, []);
+
+  useEffect(() => {
+    if (paused || stopped) return;
     const el = ref.current;
     let visible = true;
     const io = new IntersectionObserver(([e]) => (visible = e.isIntersecting));
@@ -193,7 +200,7 @@ function Slider() {
       window.clearInterval(id);
       io.disconnect();
     };
-  }, [n, paused]);
+  }, [n, paused, stopped]);
 
   return (
     <div
@@ -205,6 +212,9 @@ function Slider() {
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       onFocus={() => setPaused(true)}
+      onBlur={(e) => {
+        if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setPaused(false);
+      }}
     >
       <div className="slider-track">
         {items.map((p, i) => {
@@ -251,6 +261,16 @@ function Slider() {
         </div>
         <button type="button" className="slider-btn" aria-label="Next" onClick={() => setIndex((i) => (i + 1) % n)}>
           →
+        </button>
+        <button
+          type="button"
+          className="slider-btn slider-pause"
+          aria-label={stopped ? "Play slideshow" : "Pause slideshow"}
+          onClick={() => setStopped((v) => !v)}
+        >
+          <svg viewBox="0 0 10 10" aria-hidden="true">
+            <path d={stopped ? "M2 0l8 5-8 5z" : "M1 0h3v10H1zM6 0h3v10H6z"} fill="currentColor" />
+          </svg>
         </button>
       </div>
     </div>
