@@ -1,9 +1,9 @@
 {
   "note": "Last commit / App Store version that the blog has caught up with. Updated by each daily blog PR (see BLOG_SYNC.md).",
-  "checkedAt": "2026-11-08",
+  "checkedAt": "2026-11-13",
   "repos": {
     "naki0227/StudyReel": {
-      "sha": "9adaf998afb2e9e43d663cb8f99c1b77920a7306",
+      "sha": "50a2bfff1a721ffba606d2c48df6acf0b3e0882b",
       "posts": [
         "studyreel-behind",
         "studyreel-recording-and-backup",
@@ -14,7 +14,8 @@
         "studyreel-1-8",
         "studyreel-1-9",
         "studyreel-1-10",
-        "studyreel-2-0"
+        "studyreel-2-0",
+        "studyreel-2-0-1"
       ]
     },
     "naki0227/useful-map": {
@@ -25,7 +26,7 @@
       ]
     },
     "naki0227/gojuon-minesweeper": {
-      "sha": "57ef135c6f9b0ada5b0f2f101d13650ca6f6f50a",
+      "sha": "5a4fe682d33b0156f165e7b329a384769b866c1d",
       "posts": [
         "gojuon-minesweeper",
         "gojuon-minesweeper-tech"
@@ -53,7 +54,7 @@
       ]
     },
     "naki0227/lp-anatomy": {
-      "sha": "53bc972d613d5718b1fcf798ef6eb45522d8a6d5",
+      "sha": "bbccbce2373fb4899444ba55b89165f39a37fbdf",
       "posts": [
         "lp-anatomy"
       ]
@@ -73,7 +74,7 @@
       ]
     },
     "naki0227/mini-game": {
-      "sha": "6f319521cd88f6bc4179297b63d63e31a5dc9d2a",
+      "sha": "a474b02b4457e231a81f791a47131d7cbd7bd6d9",
       "posts": [
         "asobi-yokocho",
         "asobi-yokocho-tech"
@@ -152,7 +153,7 @@
       "posts": []
     },
     "naki0227/encura": {
-      "sha": "966559dd77dfab32b01a67210409a1040f0ce16c",
+      "sha": "ab73b54b4fd01b79a98d8def2c1a5ecea4a9067a",
       "posts": []
     },
     "naki0227/kiro": {
@@ -164,7 +165,7 @@
       "posts": []
     },
     "naki0227/low_polygon": {
-      "sha": "6db3e1d06911b59bf605ebee6fc6dea2cb05aa12",
+      "sha": "d22e424a6ada87367fffd8cde8573bb03f91ee33",
       "posts": [
         "low-polygon"
       ]
@@ -182,7 +183,7 @@
       "posts": []
     },
     "naki0227/umeda_underground_map": {
-      "sha": "0614135833feee7cb582879475cbe62698c00832",
+      "sha": "b7fbf2b7af30a9cdab1dbd4f4e1c2c9d37a43379",
       "posts": [
         "umeda-underground-map"
       ]
@@ -196,7 +197,7 @@
   "appStore": {
     "StudyReel": {
       "id": "6756177589",
-      "version": "2.0"
+      "version": "2.0.1"
     },
     "UsefulMap": {
       "id": "6801771854",
