@@ -1,41 +1,46 @@
 {
   "note": "Last commit / App Store version that the blog has caught up with. Updated by each daily blog PR (see BLOG_SYNC.md).",
-  "checkedAt": "2026-10-25",
+  "checkedAt": "2026-11-13",
   "repos": {
     "naki0227/StudyReel": {
-      "sha": "9191d98dc6fe2c3feb9405d79643c29f048e621e",
+      "sha": "50a2bfff1a721ffba606d2c48df6acf0b3e0882b",
       "posts": [
         "studyreel-behind",
         "studyreel-recording-and-backup",
         "beyond-working-code",
         "studyreel-1-5",
         "studyreel-1-7",
-        "studyreel-1-6"
+        "studyreel-1-6",
+        "studyreel-1-8",
+        "studyreel-1-9",
+        "studyreel-1-10",
+        "studyreel-2-0",
+        "studyreel-2-0-1"
       ]
     },
     "naki0227/useful-map": {
-      "sha": "8301b48e929b07b83e221ecd0a78205b48305eb4",
+      "sha": "3190a7d84115ce9d9c93e53844a426862c4d012b",
       "posts": [
         "useful-map",
         "useful-map-routing"
       ]
     },
     "naki0227/gojuon-minesweeper": {
-      "sha": "136f6d3db83eb710e7439bf64a351ec430b274c7",
+      "sha": "5a4fe682d33b0156f165e7b329a384769b866c1d",
       "posts": [
         "gojuon-minesweeper",
         "gojuon-minesweeper-tech"
       ]
     },
     "naki0227/job-match-analysis": {
-      "sha": "af944740643e0fad0db4b09f1eca5f64299c4eca",
+      "sha": "7f2274e4113935b242514502a5b8cff2dcfcaf06",
       "posts": [
         "career",
         "career-matching"
       ]
     },
     "naki0227/logiscore": {
-      "sha": "d7a162aaba6e54187e13a582e820a26e198cfb8c",
+      "sha": "a7368efa15e5267b9856d5669f7efa16afa8dfb8",
       "posts": [
         "logiscore-sound",
         "logiscore-sound-transport"
@@ -49,7 +54,7 @@
       ]
     },
     "naki0227/lp-anatomy": {
-      "sha": "fc9099aed91cdb3f6d3d0cc76e7bf860cc0b5538",
+      "sha": "bbccbce2373fb4899444ba55b89165f39a37fbdf",
       "posts": [
         "lp-anatomy"
       ]
@@ -69,7 +74,7 @@
       ]
     },
     "naki0227/mini-game": {
-      "sha": "cccf641a6d929b2a972ad00f0c0293e001535a21",
+      "sha": "a474b02b4457e231a81f791a47131d7cbd7bd6d9",
       "posts": [
         "asobi-yokocho",
         "asobi-yokocho-tech"
@@ -148,7 +153,7 @@
       "posts": []
     },
     "naki0227/encura": {
-      "sha": "0cf4264bb76e9669740a451ca60cd1de0c0f611a",
+      "sha": "ab73b54b4fd01b79a98d8def2c1a5ecea4a9067a",
       "posts": []
     },
     "naki0227/kiro": {
@@ -160,7 +165,7 @@
       "posts": []
     },
     "naki0227/low_polygon": {
-      "sha": "5e52c07716839f21b2525ed52135c16d58643b4e",
+      "sha": "d22e424a6ada87367fffd8cde8573bb03f91ee33",
       "posts": [
         "low-polygon"
       ]
@@ -174,11 +179,11 @@
       "posts": []
     },
     "naki0227/preplay": {
-      "sha": "b7695d864dbb5e3addc2e24dd85dd03b4f2cf444",
+      "sha": "65617e17a8e7b7402e95119d9d1755c9dac4b0bf",
       "posts": []
     },
     "naki0227/umeda_underground_map": {
-      "sha": "96fe45d7dd3e7d1aab3ac532b87703d71d7d583e",
+      "sha": "b7fbf2b7af30a9cdab1dbd4f4e1c2c9d37a43379",
       "posts": [
         "umeda-underground-map"
       ]
@@ -192,7 +197,7 @@
   "appStore": {
     "StudyReel": {
       "id": "6756177589",
-      "version": "1.7"
+      "version": "2.0.1"
     },
     "UsefulMap": {
       "id": "6801771854",
@@ -200,7 +205,7 @@
     },
     "GojuonMinesweeper": {
       "id": "6819539119",
-      "version": "1.0.2"
+      "version": "1.0.3"
     }
   }
 }
