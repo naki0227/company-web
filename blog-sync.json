@@ -1,6 +1,6 @@
 {
   "note": "Last commit / App Store version that the blog has caught up with. Updated by each daily blog PR (see BLOG_SYNC.md).",
-  "checkedAt": "2026-11-21",
+  "checkedAt": "2026-11-22",
   "repos": {
     "naki0227/StudyReel": {
       "sha": "50a2bfff1a721ffba606d2c48df6acf0b3e0882b",
@@ -26,7 +26,7 @@
       ]
     },
     "naki0227/gojuon-minesweeper": {
-      "sha": "5590e6d950c196b9a54c8db9f4ad507b541ae872",
+      "sha": "a3af83d6a688baa1bfa54bf3744a9aee1fc97c54",
       "posts": [
         "gojuon-minesweeper",
         "gojuon-minesweeper-tech"
@@ -54,7 +54,7 @@
       ]
     },
     "naki0227/lp-anatomy": {
-      "sha": "3e591e86ecf2513c2bd206a8cc31196a9bfab4d3",
+      "sha": "7b37c86f46b2c9b647e05700ca7b3c0cf49d12cc",
       "posts": [
         "lp-anatomy"
       ]
@@ -153,7 +153,7 @@
       "posts": []
     },
     "naki0227/encura": {
-      "sha": "6eb02c2a40b3166eeb14a3ae8a105c8d8d7ad75a",
+      "sha": "64eb4e50db6bc0c6beb902fdd391dc5c7e705445",
       "posts": []
     },
     "naki0227/kiro": {
@@ -165,7 +165,7 @@
       "posts": []
     },
     "naki0227/low_polygon": {
-      "sha": "e752787e8ca0ca9e05a2f01e93b3ccfeec995e2c",
+      "sha": "34bd428c29bb7634af0fcef7c6882b92e936fd44",
       "posts": [
         "low-polygon"
       ]
