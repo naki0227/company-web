@@ -1,6 +1,6 @@
 {
   "note": "Last commit / App Store version that the blog has caught up with. Updated by each daily blog PR (see BLOG_SYNC.md).",
-  "checkedAt": "2026-11-25",
+  "checkedAt": "2026-11-26",
   "repos": {
     "naki0227/StudyReel": {
       "sha": "50a2bfff1a721ffba606d2c48df6acf0b3e0882b",
@@ -54,7 +54,7 @@
       ]
     },
     "naki0227/lp-anatomy": {
-      "sha": "be29dac6393726305b7ff87c9261b75d37ae3b2c",
+      "sha": "bd0d2c845ef65cc4df5926b648faf6db44f9439f",
       "posts": [
         "lp-anatomy"
       ]
@@ -153,7 +153,7 @@
       "posts": []
     },
     "naki0227/encura": {
-      "sha": "a256ba4cf911b09c466769f21de8a779c7c2720c",
+      "sha": "85e7844bd72cd00cd962fc61e17b0d70d1bb33de",
       "posts": []
     },
     "naki0227/kiro": {
@@ -165,7 +165,7 @@
       "posts": []
     },
     "naki0227/low_polygon": {
-      "sha": "6f8c6b19dfad6acecdcca00a37814e86f09e1647",
+      "sha": "5a0ea531881350ddc13795446ed8fc0301834591",
       "posts": [
         "low-polygon"
       ]
