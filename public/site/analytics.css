@@ -1,0 +1,30 @@
+.analytics-settings {
+  position: fixed;
+  bottom: max(0.75rem, env(safe-area-inset-bottom));
+  right: 0.75rem;
+  z-index: 1000;
+  max-width: min(24rem, calc(100vw - 1.5rem));
+  color: #292522;
+  font: 14px/1.5 system-ui, sans-serif;
+  text-align: right;
+}
+.analytics-settings button {
+  font: inherit;
+  cursor: pointer;
+  border: 1px solid #756d65;
+  border-radius: 4px;
+  padding: 0.35rem 0.7rem;
+  background: #fff;
+  color: #292522;
+}
+.analytics-settings section {
+  margin-top: 0.25rem;
+  padding: 0.8rem;
+  background: #fff;
+  border: 1px solid #756d65;
+  border-radius: 6px;
+  text-align: left;
+}
+.analytics-settings section[hidden] { display: none; }
+.analytics-settings p { margin: 0 0 0.5rem; }
+.analytics-settings a { color: #174c8b; text-decoration: underline; }

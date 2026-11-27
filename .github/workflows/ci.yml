@@ -18,4 +18,5 @@ jobs:
           node-version-file: .node-version
       - run: npm install
       - run: npm run lint
+      - run: npm test
       - run: npm run build
